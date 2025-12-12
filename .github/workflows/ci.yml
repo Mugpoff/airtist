@@ -15,6 +15,17 @@ env:
   FORCE_COLOR: 3
 
 jobs:
+  knip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup
+        uses: ./packages/github/setup
+
+      - name: Knip
+        run: bun knip
+
   check:
     runs-on: ubuntu-latest
     steps:
