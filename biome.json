@@ -14,6 +14,10 @@
           "level": "warn",
           "options": { "functions": ["cn", "tv"] }
         }
+      },
+      "a11y": {
+        "noStaticElementInteractions": "off",
+        "noLabelWithoutControl": "off"
       }
     }
   },
@@ -22,6 +26,11 @@
   },
   "javascript": {
     "formatter": { "semicolons": "asNeeded" }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
   },
   "vcs": {
     "enabled": true,

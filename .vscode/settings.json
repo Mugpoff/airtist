@@ -12,6 +12,9 @@
     "next/router.d.ts",
     "next/dist/client/router.d.ts"
   ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
