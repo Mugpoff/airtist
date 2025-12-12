@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup
-        uses: ./tooling/github/setup
+        uses: ./packages/github/setup
 
       - name: Check
         run: bun check:ws:ci
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup
-        uses: ./tooling/github/setup
+        uses: ./packages/github/setup
 
       - name: Typecheck
         run: bun typecheck
