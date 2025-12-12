@@ -12,7 +12,8 @@
     "clean:ws": "turbo run clean",
     "check:ws": "biome check .",
     "check:ws:ci": "biome ci .",
-    "check-types": "turbo run check-types"
+    "lint:ws": "pnpm dlx sherif@latest",
+    "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.8",

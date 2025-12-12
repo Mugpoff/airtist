@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["*"]
+  push:
+    branches: ["main"]
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  FORCE_COLOR: 3
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: ./tooling/github/setup
+
+      - name: Check
+        run: bun check:ws:ci
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: ./tooling/github/setup
+
+      - name: Typecheck
+        run: bun typecheck
