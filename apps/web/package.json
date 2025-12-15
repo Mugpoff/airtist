@@ -1,8 +1,7 @@
 {
   "name": "web",
-  "version": "0.1.0",
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
@@ -10,7 +9,13 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@repo/auth": "*",
+    "@repo/cache": "*",
+    "@repo/config": "*",
+    "@repo/trpc": "*",
     "@repo/ui": "*",
+    "@trpc/client": "11.7.2",
+    "@trpc/server": "11.7.2",
     "next": "16.0.10",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
