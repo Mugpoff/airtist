@@ -12,10 +12,10 @@
     "clean:ws": "turbo run clean",
     "check:ws": "biome check .",
     "check:ws:ci": "biome ci .",
-    "lint:ws": "pnpm dlx sherif@latest",
+    "lint:ws": "bunx sherif@latest",
     "typecheck": "turbo run typecheck",
     "knip": "knip",
-    "postinstall": "pnpm lint:ws"
+    "postinstall": "bun lint:ws"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.8",
