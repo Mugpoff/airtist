@@ -31,6 +31,8 @@
       "name": "@repo/auth",
       "version": "0.0.0",
       "dependencies": {
+        "@repo/cache": "*",
+        "@repo/config": "*",
         "better-auth": "^1.4.7",
       },
       "devDependencies": {
