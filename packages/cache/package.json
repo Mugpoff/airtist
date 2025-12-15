@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./*": "./src/*.ts"
+    ".": "./src/index.ts",
+    "./env": "./src/env.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",

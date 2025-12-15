@@ -9,8 +9,7 @@ export const cacheClient = {
       set: (id: string, value: string, ttl = 60) =>
         client.setex(`users:auth:${id}`, ttl, value),
       get: (id: string) => client.get(`users:auth:${id}`),
-      invalidate: (id: string) =>
-        client.del(`users:auth:${id}`).then(() => null),
+      delete: (id: string) => client.del(`users:auth:${id}`).then(() => null),
     },
   },
 }
