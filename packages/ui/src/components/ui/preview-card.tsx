@@ -1,8 +1,7 @@
 "use client"
 
 import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card"
-
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const PreviewCard = PreviewCardPrimitive.Root
 
@@ -46,10 +45,10 @@ function PreviewCardPopup({
 }
 
 export {
-  PreviewCard,
   PreviewCard as HoverCard,
-  PreviewCardTrigger,
-  PreviewCardTrigger as HoverCardTrigger,
-  PreviewCardPopup,
   PreviewCardPopup as HoverCardContent,
+  PreviewCardTrigger as HoverCardTrigger,
+  PreviewCard,
+  PreviewCardPopup,
+  PreviewCardTrigger,
 }

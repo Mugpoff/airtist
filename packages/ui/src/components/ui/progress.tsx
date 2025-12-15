@@ -1,8 +1,7 @@
 "use client"
 
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
-
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 function Progress({
   className,
@@ -74,8 +73,8 @@ function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
 
 export {
   Progress,
+  ProgressIndicator,
   ProgressLabel,
   ProgressTrack,
-  ProgressIndicator,
   ProgressValue,
 }

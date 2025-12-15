@@ -1,3 +1,4 @@
+import { type Button, buttonVariants } from "@/components/ui/button"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import {
@@ -6,8 +7,7 @@ import {
   MoreHorizontalIcon,
 } from "lucide-react"
 import type * as React from "react"
-import { type Button, buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -125,9 +125,9 @@ function PaginationEllipsis({
 export {
   Pagination,
   PaginationContent,
-  PaginationLink,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
   PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 }

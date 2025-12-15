@@ -1,8 +1,7 @@
 "use client"
 
 import { Field as FieldPrimitive } from "@base-ui/react/field"
-
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 function Field({ className, ...props }: FieldPrimitive.Root.Props) {
   return (
@@ -52,9 +51,9 @@ const FieldValidity = FieldPrimitive.Validity
 
 export {
   Field,
-  FieldLabel,
+  FieldControl,
   FieldDescription,
   FieldError,
-  FieldControl,
+  FieldLabel,
   FieldValidity,
 }

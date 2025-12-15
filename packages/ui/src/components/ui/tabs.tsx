@@ -1,8 +1,7 @@
 "use client"
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
-
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 type TabsVariant = "default" | "underline"
 
@@ -82,9 +81,9 @@ function TabsPanel({ className, ...props }: TabsPrimitive.Panel.Props) {
 
 export {
   Tabs,
+  TabsPanel as TabsContent,
   TabsList,
+  TabsPanel,
   TabsTab,
   TabsTab as TabsTrigger,
-  TabsPanel,
-  TabsPanel as TabsContent,
 }

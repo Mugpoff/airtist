@@ -4,5 +4,5 @@ export default function HomePage() {
       <h1>Home</h1>
       <p>Next + tRPC is wired.</p>
     </main>
-  );
+  )
 }

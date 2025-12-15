@@ -1,9 +1,9 @@
+import { Separator } from "@/components/ui/separator"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import type * as React from "react"
-import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const groupVariants = cva(
   "flex w-fit *:focus-visible:z-10 has-[>[data-slot=group]]:gap-2 *:has-focus-visible:z-10",

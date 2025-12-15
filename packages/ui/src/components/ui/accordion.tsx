@@ -2,8 +2,7 @@
 
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import { ChevronDownIcon } from "lucide-react"
-
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 function Accordion(props: AccordionPrimitive.Root.Props) {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />
@@ -59,8 +58,8 @@ function AccordionPanel({
 
 export {
   Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionPanel,
   AccordionPanel as AccordionContent,
+  AccordionItem,
+  AccordionPanel,
+  AccordionTrigger,
 }

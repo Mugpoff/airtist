@@ -1,9 +1,9 @@
 "use client"
 
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { XIcon } from "lucide-react"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const Dialog = DialogPrimitive.Root
 
@@ -157,17 +157,17 @@ function DialogPanel({ className, ...props }: React.ComponentProps<"div">) {
 
 export {
   Dialog,
-  DialogTrigger,
-  DialogPortal,
-  DialogClose,
   DialogBackdrop,
-  DialogBackdrop as DialogOverlay,
-  DialogPopup,
+  DialogClose,
   DialogPopup as DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogBackdrop as DialogOverlay,
   DialogPanel,
+  DialogPopup,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
   DialogViewport,
 }

@@ -1,8 +1,7 @@
 "use client"
 
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
-
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const PopoverCreateHandle = PopoverPrimitive.createHandle
 
@@ -93,12 +92,12 @@ function PopoverDescription({
 }
 
 export {
-  PopoverCreateHandle,
   Popover,
-  PopoverTrigger,
-  PopoverPopup,
-  PopoverPopup as PopoverContent,
-  PopoverTitle,
-  PopoverDescription,
   PopoverClose,
+  PopoverPopup as PopoverContent,
+  PopoverCreateHandle,
+  PopoverDescription,
+  PopoverPopup,
+  PopoverTitle,
+  PopoverTrigger,
 }

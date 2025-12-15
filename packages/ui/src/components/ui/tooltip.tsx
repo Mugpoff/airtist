@@ -1,8 +1,7 @@
 "use client"
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
-
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const TooltipCreateHandle = TooltipPrimitive.createHandle
 
@@ -56,10 +55,10 @@ function TooltipPopup({
 }
 
 export {
-  TooltipCreateHandle,
-  TooltipProvider,
   Tooltip,
-  TooltipTrigger,
-  TooltipPopup,
   TooltipPopup as TooltipContent,
+  TooltipCreateHandle,
+  TooltipPopup,
+  TooltipProvider,
+  TooltipTrigger,
 }

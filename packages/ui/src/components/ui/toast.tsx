@@ -1,5 +1,6 @@
 "use client"
 
+import { buttonVariants } from "@/components/ui/button"
 import { Toast } from "@base-ui/react/toast"
 import {
   CircleAlertIcon,
@@ -8,8 +9,7 @@ import {
   LoaderCircleIcon,
   TriangleAlertIcon,
 } from "lucide-react"
-import { buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const toastManager = Toast.createToastManager()
 const anchoredToastManager = Toast.createToastManager()
@@ -260,9 +260,9 @@ function AnchoredToasts() {
 }
 
 export {
+  anchoredToastManager,
+  AnchoredToastProvider,
+  toastManager,
   ToastProvider,
   type ToastPosition,
-  toastManager,
-  AnchoredToastProvider,
-  anchoredToastManager,
 }

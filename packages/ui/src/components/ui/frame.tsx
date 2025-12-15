@@ -1,6 +1,5 @@
 import type * as React from "react"
-
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 function Frame({
   className,
@@ -80,9 +79,9 @@ function FrameFooter({ className, ...props }: React.ComponentProps<"footer">) {
 
 export {
   Frame,
-  FramePanel,
-  FrameHeader,
-  FrameTitle,
   FrameDescription,
   FrameFooter,
+  FrameHeader,
+  FramePanel,
+  FrameTitle,
 }
