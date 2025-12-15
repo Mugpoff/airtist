@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "ai-picture",
@@ -12,9 +13,14 @@
     },
     "apps/web": {
       "name": "web",
-      "version": "0.1.0",
       "dependencies": {
+        "@repo/auth": "*",
+        "@repo/cache": "*",
+        "@repo/config": "*",
+        "@repo/trpc": "*",
         "@repo/ui": "*",
+        "@trpc/client": "11.7.2",
+        "@trpc/server": "11.7.2",
         "next": "16.0.10",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
@@ -69,6 +75,19 @@
     "packages/github": {
       "name": "@repo/github",
       "version": "0.0.0",
+    },
+    "packages/trpc": {
+      "name": "@repo/trpc",
+      "version": "0.1.0",
+      "dependencies": {
+        "@trpc/client": "11.7.2",
+        "@trpc/server": "11.7.2",
+        "zod": "^4.2.0",
+      },
+      "devDependencies": {
+        "@repo/typescript-config": "*",
+        "typescript": "5.9.2",
+      },
     },
     "packages/typescript-config": {
       "name": "@repo/typescript-config",
@@ -273,6 +292,8 @@
 
     "@repo/github": ["@repo/github@workspace:packages/github"],
 
+    "@repo/trpc": ["@repo/trpc@workspace:packages/trpc"],
+
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
 
     "@repo/ui": ["@repo/ui@workspace:packages/ui"],
@@ -282,6 +303,10 @@
     "@swc/helpers": ["@swc/helpers@0.5.15", "", { "dependencies": { "tslib": "^2.8.0" } }, "sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g=="],
 
     "@t3-oss/env-core": ["@t3-oss/env-core@0.13.10", "", { "peerDependencies": { "arktype": "^2.1.0", "typescript": ">=5.0.0", "valibot": "^1.0.0-beta.7 || ^1.0.0", "zod": "^3.24.0 || ^4.0.0" }, "optionalPeers": ["arktype", "typescript", "valibot", "zod"] }, "sha512-NNFfdlJ+HmPHkLi2HKy7nwuat9SIYOxei9K10lO2YlcSObDILY7mHZNSHsieIM3A0/5OOzw/P/b+yLvPdaG52g=="],
+
+    "@trpc/client": ["@trpc/client@11.7.2", "", { "peerDependencies": { "@trpc/server": "11.7.2", "typescript": ">=5.7.2" } }, "sha512-OQxqUMfpDvjcszo9dbnqWQXnW2L5IbrKSz2H7l8s+mVM3EvYw7ztQ/gjFIN3iy0NcamiQfd4eE6qjcb9Lm+63A=="],
+
+    "@trpc/server": ["@trpc/server@11.7.2", "", { "peerDependencies": { "typescript": ">=5.7.2" } }, "sha512-AgB26PXY69sckherIhCacKLY49rxE2XP5h38vr/KMZTbLCL1p8IuIoKPjALTcugC2kbyQ7Lbqo2JDVfRSmPmfQ=="],
 
     "@tybys/wasm-util": ["@tybys/wasm-util@0.10.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg=="],
 
