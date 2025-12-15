@@ -1,10 +1,9 @@
-import { Button } from "@repo/ui/components/ui/button"
+import { SignInForm } from "@/components/forms/sign-in-form"
 
 export default function SignInPage() {
   return (
-    <main className="">
-      <h1>Sign In</h1>
-      <Button>Sign Innnnn</Button>
+    <main className="flex min-h-screen items-center justify-center p-4">
+      <SignInForm />
     </main>
   )
 }

@@ -4,7 +4,8 @@
   "private": true,
   "exports": {
     "./globals.css": "./src/styles/globals.css",
-    "./components/*": "./src/components/*.tsx",
+    "./components/*": "./src/components/ui/*.tsx",
+    "./fields/*": "./src/components/fields/*.tsx",
     "./utils/*": "./src/utils/*.ts"
   },
   "scripts": {
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
+    "react-hook-form": "^7.68.0",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
