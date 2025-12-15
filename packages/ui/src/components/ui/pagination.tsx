@@ -1,4 +1,3 @@
-import { type Button, buttonVariants } from "@/components/ui/button"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import {
@@ -8,6 +7,7 @@ import {
 } from "lucide-react"
 import type * as React from "react"
 import { cn } from "../../lib/utils"
+import { type Button, buttonVariants } from "./button"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
