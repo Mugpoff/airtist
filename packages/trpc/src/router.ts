@@ -1,9 +1,9 @@
-import { generateImage } from "./handlers/generate-image"
-import { createTRPCRouter, publicProcedure } from "./trpc"
+import { imageRouter } from "./routers/image-router"
+import { createTRPCRouter, mergeRouters, publicProcedure } from "./trpc"
 
 export const appRouter = createTRPCRouter({
   health: publicProcedure.query(() => "ok"),
-  generateImage: generateImage,
+  image: mergeRouters(imageRouter),
 })
 
 export type AppRouter = typeof appRouter

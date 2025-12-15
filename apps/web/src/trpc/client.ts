@@ -6,10 +6,11 @@ const getBaseUrl = () => {
   return "http://localhost:3000"
 }
 
-export const trpc = createTRPCProxyClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: `${getBaseUrl()}/api/trpc`,
-    }),
-  ],
-})
+export const trpc: ReturnType<typeof createTRPCProxyClient<AppRouter>> =
+  createTRPCProxyClient<AppRouter>({
+    links: [
+      httpBatchLink({
+        url: `${getBaseUrl()}/api/trpc`,
+      }),
+    ],
+  })
