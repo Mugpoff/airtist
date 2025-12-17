@@ -14,8 +14,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.1.0",
-    "@prisma/client": "^7.1.0",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
     "@t3-oss/env-core": "^0.13.10",
     "prisma-zod-generator": "^2.1.2",
     "zod": "^4.2.1"
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@repo/typescript-config": "*",
     "@types/node": "^25.0.3",
-    "prisma": "^7.1.0",
+    "prisma": "^7.2.0",
     "typescript": "5.9.2"
   }
 }
