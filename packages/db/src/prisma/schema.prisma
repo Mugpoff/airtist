@@ -2,10 +2,12 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client"
-    engineType      = "client"
-    output          = "../generated/prisma"
-    previewFeatures = ["relationJoins", "strictUndefinedChecks", "typedSql"]
+    provider               = "prisma-client"
+    engineType             = "client"
+    output                 = "../generated/prisma"
+    previewFeatures        = ["relationJoins", "strictUndefinedChecks"]
+    generatedFileExtension = "ts"
+    importFileExtension    = "ts"
 }
 
 generator zod {

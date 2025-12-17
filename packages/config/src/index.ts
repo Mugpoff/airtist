@@ -10,6 +10,7 @@ export const config = {
   },
   env: {
     isSeed: !!process.env.SEED,
+    isDevelopment: process.env.NODE_ENV === "development",
     isProduction: process.env.NODE_ENV === "production",
   },
   auth: {

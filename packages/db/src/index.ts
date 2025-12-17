@@ -1,4 +1,5 @@
 import { PrismaPg } from "@prisma/adapter-pg"
+import { config } from "@repo/config"
 import { env } from "./env"
 import { PrismaClient } from "./generated/prisma/client"
 
@@ -14,9 +15,9 @@ export const db =
   globalThis.prisma ??
   new PrismaClient({
     adapter,
-    log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+    log: config.env.isDevelopment ? ["query", "error", "warn"] : ["error"],
   })
 
-if (process.env.NODE_ENV !== "production") globalThis.prisma = db
+if (config.env.isDevelopment) globalThis.prisma = db
 
 export * from "./generated/prisma/client"
