@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@repo/ui/base/button"
+import { Form } from "@repo/ui/base/form"
 import { EmailField } from "@repo/ui/fields/email-field"
 import { PasswordField } from "@repo/ui/fields/password-field"
 import { Logo } from "@repo/ui/icons/Logo"
@@ -11,7 +12,7 @@ import { z } from "zod"
 
 const signInSchema = z.object({
   email: z.email(),
-  password: z.string(),
+  password: z.string().min(1),
 })
 
 export const SignInForm = () => {
@@ -32,7 +33,6 @@ export const SignInForm = () => {
 
   return (
     <div className="flex w-full max-w-md flex-col items-center gap-8">
-      {/* Logo */}
       <div className="flex flex-col items-center gap-4">
         <Logo className="size-10" />
         <h1 className="font-semibold text-2xl tracking-tight">
@@ -40,11 +40,7 @@ export const SignInForm = () => {
         </h1>
       </div>
 
-      {/* Form */}
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex w-full flex-col gap-6"
-      >
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <EmailField name="email" control={control} />
         <PasswordField name="password" control={control} />
 
@@ -56,9 +52,8 @@ export const SignInForm = () => {
         >
           {isSubmitting ? "Signing in..." : "Login"}
         </Button>
-      </form>
+      </Form>
 
-      {/* Footer */}
       <p className="max-w-xs text-center text-muted-foreground text-xs">
         By clicking continue, you agree to our{" "}
         <Link
