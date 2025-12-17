@@ -48,7 +48,14 @@ export const SignInForm = () => {
               title: t("auth.errors.INVALID_EMAIL_OR_PASSWORD"),
               type: "error",
             })
+
+            return
           }
+
+          toastManager.add({
+            title: t("auth.errors.UNKNOWN"),
+            type: "error",
+          })
         },
       },
     )

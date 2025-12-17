@@ -14,7 +14,8 @@
   },
   "auth": {
     "errors": {
-      "INVALID_EMAIL_OR_PASSWORD": "Invalid email or password"
+      "INVALID_EMAIL_OR_PASSWORD": "Invalid email or password",
+      "UNKNOWN": "An unexpected error occurred. Please try again."
     },
     "signIn": {
       "title": "Welcome to AI Picture",

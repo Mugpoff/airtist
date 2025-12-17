@@ -14,7 +14,8 @@
   },
   "auth": {
     "errors": {
-      "INVALID_EMAIL_OR_PASSWORD": "E-mail ou mot de passe invalide"
+      "INVALID_EMAIL_OR_PASSWORD": "E-mail ou mot de passe invalide",
+      "UNKNOWN": "Une erreur inattendue s'est produite. Veuillez réessayer."
     },
     "signIn": {
       "title": "Bienvenue sur AI Picture",
