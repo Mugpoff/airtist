@@ -1,0 +1,15 @@
+{
+  "global": {
+    "email": "Email",
+    "password": "Password"
+  },
+  "validation": {},
+  "auth": {
+    "signIn": {
+      "title": "Welcome to AI Picture",
+      "submitButton": "Login",
+      "submitting": "Signing in...",
+      "privacy": "By clicking continue, you agree to our <termsOfService>Terms of Service</termsOfService> and <privacyPolicy>Privacy Policy</privacyPolicy>."
+    }
+  }
+}

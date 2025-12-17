@@ -40,3 +40,6 @@ data/
 # Prisma
 generated/
 .prisma-zod-generator-manifest.json
+
+# next-intl
+*.d.json.ts

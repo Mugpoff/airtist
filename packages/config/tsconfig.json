@@ -1,5 +1,4 @@
 {
   "extends": "@repo/typescript-config/base.json",
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src", "node_modules/@repo/typescript-config/global.d.ts"]
 }

@@ -1,5 +1,7 @@
 import { config } from "@repo/config"
 import type { Metadata } from "next"
+import { NextIntlClientProvider } from "next-intl"
+import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
 import type { ReactNode } from "react"
 
@@ -30,11 +32,18 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout(props: { children: ReactNode }) {
+export default async function RootLayout(props: { children: ReactNode }) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body>
-        <ThemeProvider attribute="class">{props.children}</ThemeProvider>
+        <ThemeProvider attribute="class">
+          <NextIntlClientProvider messages={messages}>
+            {props.children}
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -5,8 +5,14 @@
     "paths": {
       "@/*": ["*"]
     },
+    "allowArbitraryExtensions": true,
     "plugins": [{ "name": "next" }]
   },
-  "include": ["src", "next.config.ts", "next-env.d.ts", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src",
+    "next.config.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "node_modules/@repo/typescript-config/global.d.ts"
+  ]
 }
