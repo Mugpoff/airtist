@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./globals.css": "./src/styles/globals.css",
-    "./components/*": "./src/components/ui/*.tsx",
-    "./fields/*": "./src/components/fields/*.tsx",
-    "./utils/*": "./src/utils/*.ts"
+    "./*": "./src/components/*.tsx",
+    "./hooks": "./src/hooks/*.ts",
+    "./utils": "./src/lib/*.ts",
+    "./globals.css": "./src/styles/globals.css"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",

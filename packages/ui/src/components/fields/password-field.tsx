@@ -2,8 +2,8 @@
 
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 import { Controller } from "react-hook-form"
-import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field"
-import { PasswordInput, type PasswordInputProps } from "../ui/password-input"
+import { Field, FieldDescription, FieldError, FieldLabel } from "../base/field"
+import { PasswordInput, type PasswordInputProps } from "../base/password-input"
 
 export const PasswordField = <
   TFieldValues extends FieldValues = FieldValues,

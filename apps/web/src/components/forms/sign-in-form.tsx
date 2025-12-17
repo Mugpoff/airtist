@@ -1,33 +1,31 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@repo/ui/components/button"
+import { Button } from "@repo/ui/base/button"
 import { EmailField } from "@repo/ui/fields/email-field"
 import { PasswordField } from "@repo/ui/fields/password-field"
-import { Package } from "lucide-react"
+import { Logo } from "@repo/ui/icons/Logo"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const signInSchema = z.object({
-  email: z.email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  email: z.email(),
+  password: z.string(),
 })
 
-type SignInFormData = z.infer<typeof signInSchema>
-
-export function SignInForm() {
+export const SignInForm = () => {
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<SignInFormData>({
+  } = useForm({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "" },
     mode: "onTouched",
   })
 
-  const onSubmit = async (data: SignInFormData) => {
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     console.log("Sign in:", data)
     // TODO: Implement sign in logic
   }
@@ -36,19 +34,10 @@ export function SignInForm() {
     <div className="flex w-full max-w-md flex-col items-center gap-8">
       {/* Logo */}
       <div className="flex flex-col items-center gap-4">
-        <Package className="size-8" strokeWidth={1.5} />
+        <Logo className="size-10" />
         <h1 className="font-semibold text-2xl tracking-tight">
           Welcome to AI Picture
         </h1>
-        <p className="text-muted-foreground text-sm">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/auth/sign-up"
-            className="text-foreground underline underline-offset-4"
-          >
-            Sign up
-          </Link>
-        </p>
       </div>
 
       {/* Form */}

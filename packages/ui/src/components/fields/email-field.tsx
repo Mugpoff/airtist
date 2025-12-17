@@ -2,8 +2,8 @@
 
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 import { Controller } from "react-hook-form"
-import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field"
-import { Input, type InputProps } from "../ui/input"
+import { Field, FieldDescription, FieldError, FieldLabel } from "../base/field"
+import { Input, type InputProps } from "../base/input"
 
 export const EmailField = <
   TFieldValues extends FieldValues = FieldValues,
