@@ -12,6 +12,7 @@ ai-picture/
 │   ├── auth/                # Authentication (better-auth)
 │   ├── cache/               # Caching layer (Dragonfly/Redis)
 │   ├── config/              # Shared configuration
+│   ├── db/                  # Database layer (Prisma + PostgreSQL)
 │   ├── trpc/                # Typesafe API layer (tRPC)
 │   ├── ui/                  # UI component library (coss-ui + Base UI)
 │   └── typescript-config/   # Shared TypeScript configs
@@ -77,7 +78,15 @@ docker compose up -d
 
 This starts PostgreSQL, Dragonfly, and MinIO.
 
-### 5. Start development servers
+### 5. Execute database migrations
+
+```bash
+bun db migrate dev
+```
+
+This will execute all pending database migrations, if any or init your database.
+
+### 6. Start development servers
 
 ```bash
 bun dev

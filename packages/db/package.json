@@ -1,27 +1,29 @@
 {
-  "name": "@repo/auth",
+  "name": "@repo/db",
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./client": "./src/client.ts",
-    "./server": "./src/server.ts",
+    ".": "./src/index.ts",
+    "./sql/*": "./src/generated/prisma/sql/*",
+    "./browser": "./src/generated/prisma/browser.ts",
     "./env": "./src/env.ts"
   },
   "scripts": {
+    "prisma": "prisma",
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/cache": "*",
-    "@repo/config": "*",
-    "@repo/db": "*",
+    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.1.0",
     "@t3-oss/env-core": "^0.13.10",
-    "better-auth": "^1.4.7",
+    "prisma-zod-generator": "^2.1.2",
     "zod": "^4.2.1"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
     "@types/node": "^22.15.3",
+    "prisma": "^7.1.0",
     "typescript": "5.9.2"
   }
 }

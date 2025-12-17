@@ -15,7 +15,8 @@
     "lint:ws": "bunx sherif@latest",
     "typecheck": "turbo run typecheck",
     "knip": "knip",
-    "postinstall": "bun lint:ws"
+    "postinstall": "bun lint:ws",
+    "db": "bun --env-file=.env --elide-lines=0 run -F @repo/db prisma --"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.8",

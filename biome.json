@@ -36,5 +36,8 @@
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
+  },
+  "files": {
+    "includes": ["**", "!packages/db/src/schemas"]
   }
 }

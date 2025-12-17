@@ -1,0 +1,50 @@
+model Users {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name          String
+  email         String
+  emailVerified Boolean @default(false)
+  image         String?
+
+  accounts Accounts[]
+
+  @@unique([email])
+  @@map("users")
+}
+
+model Accounts {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  accountId             String
+  providerId            String
+
+  userId String @db.Uuid
+  users  Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verifications {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+
+  identifier String
+  value      String
+
+  @@index([identifier])
+  @@map("verifications")
+}
