@@ -31,7 +31,7 @@ export const SignInForm = () => {
     formState: { isSubmitting },
   } = useForm({
     resolver: zodResolver(signInSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "john@doe.com", password: "Password123!" },
     mode: "onTouched",
   })
 
