@@ -43,7 +43,7 @@ export const PasswordField = <
             {...props}
           />
           {description && <FieldDescription>{description}</FieldDescription>}
-          <FieldError match={!!error}>{error?.message}</FieldError>
+          {error && <FieldError message={error.message} />}
         </Field>
       )}
     />

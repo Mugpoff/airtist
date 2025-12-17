@@ -1,6 +1,7 @@
 "use client"
 
 import { Field as FieldPrimitive } from "@base-ui/react/field"
+import { type AppConfig, type MessageKeys, useTranslations } from "next-intl"
 import { cn } from "../../lib/utils"
 
 function Field({ className, ...props }: FieldPrimitive.Root.Props) {
@@ -36,13 +37,27 @@ function FieldDescription({
   )
 }
 
-function FieldError({ className, ...props }: FieldPrimitive.Error.Props) {
+function FieldError({
+  className,
+  message,
+  ...props
+}: Omit<FieldPrimitive.Error.Props, "children"> & { message?: string }) {
+  const t = useTranslations()
+  const messageKey = message as MessageKeys<AppConfig["Messages"], "validation">
+
+  if (!t.has(messageKey)) {
+    return null
+  }
+
   return (
     <FieldPrimitive.Error
       className={cn("text-destructive-foreground text-xs", className)}
       data-slot="field-error"
+      match={!!message}
       {...props}
-    />
+    >
+      {t(messageKey)}
+    </FieldPrimitive.Error>
   )
 }
 

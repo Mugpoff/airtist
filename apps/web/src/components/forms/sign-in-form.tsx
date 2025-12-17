@@ -1,5 +1,6 @@
 "use client"
 
+import { zodMessages } from "@/utils/zod-messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@repo/ui/base/button"
 import { Form } from "@repo/ui/base/form"
@@ -12,8 +13,10 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const signInSchema = z.object({
-  email: z.email(),
-  password: z.string().min(1),
+  email: z
+    .email(zodMessages.email.invalid)
+    .nonempty(zodMessages.email.required),
+  password: z.string().nonempty(zodMessages.password.required),
 })
 
 export const SignInForm = () => {

@@ -3,7 +3,15 @@
     "email": "E-mail",
     "password": "Mot de passe"
   },
-  "validation": {},
+  "validation": {
+    "email": {
+      "required": "L'e-mail est requis",
+      "invalid": "Veuillez entrer une adresse e-mail valide"
+    },
+    "password": {
+      "required": "Le mot de passe est requis"
+    }
+  },
   "auth": {
     "signIn": {
       "title": "Bienvenue sur AI Picture",

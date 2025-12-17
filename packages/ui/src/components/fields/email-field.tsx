@@ -44,7 +44,7 @@ export const EmailField = <
             {...props}
           />
           {description && <FieldDescription>{description}</FieldDescription>}
-          <FieldError match={!!error}>{error?.message}</FieldError>
+          {error && <FieldError message={error.message} />}
         </Field>
       )}
     />
