@@ -8,6 +8,6 @@ export const handler = (req: Request) =>
     router: appRouter,
     createContext: () =>
       createTrpcContext({
-        userId: null,
+        headers: req.headers,
       }),
   })

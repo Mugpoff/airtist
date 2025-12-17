@@ -1,6 +1,6 @@
-import { cacheClient } from "@repo/cache"
-import { config } from "@repo/config"
-import { db } from "@repo/db"
+import { cacheClient } from "../../cache/src"
+import { config } from "../../config/src"
+import { db } from "../../db/src"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 

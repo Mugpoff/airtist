@@ -1,5 +1,5 @@
 import z from "zod"
-import { publicProcedure } from "@/trpc"
+import { publicProcedure } from "../trpc"
 
 const generateImageInputSchema = z.object({
   prompt: z.string().min(1),
