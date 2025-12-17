@@ -1,7 +1,7 @@
 import { initTRPC } from "@trpc/server"
-import type { TrpcContext } from "@/context"
+import type { createTrpcContext } from "@/context"
 
-const t = initTRPC.context<TrpcContext>().create()
+const t = initTRPC.context<typeof createTrpcContext>().create()
 
 export const createTRPCRouter = t.router
 export const publicProcedure = t.procedure

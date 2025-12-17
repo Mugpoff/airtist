@@ -33,3 +33,5 @@ export const auth = betterAuth({
   advanced: { database: { generateId: "uuid" } },
   experimental: { joins: true },
 })
+
+export type Session = (typeof auth)["$Infer"]["Session"]
