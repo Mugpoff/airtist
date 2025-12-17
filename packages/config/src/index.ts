@@ -5,7 +5,12 @@ export const config = {
     url: "https://aipicture.app",
   },
   metadata: {
-    keywords: ["AI", "image generation", "artificial intelligence", "pictures"],
+    keywords: [
+      "AI",
+      "image generation",
+      "artificial intelligence",
+      "pictures",
+    ] as string[],
     author: "AI Picture Team",
   },
   env: {
@@ -14,6 +19,8 @@ export const config = {
     isProduction: process.env.NODE_ENV === "production",
   },
   auth: {
+    minPasswordLength: 8,
+    maxPasswordLength: 50,
     cookieMaxAge: 7 * 24 * 60 * 60,
   },
   i18n: {

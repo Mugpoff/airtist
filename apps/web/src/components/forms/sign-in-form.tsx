@@ -2,13 +2,16 @@
 
 import { zodMessages } from "@/utils/zod-messages"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { authClient } from "@repo/auth/client"
 import { Button } from "@repo/ui/base/button"
 import { Form } from "@repo/ui/base/form"
+import { toastManager } from "@repo/ui/base/toast"
 import { EmailField } from "@repo/ui/fields/email-field"
 import { PasswordField } from "@repo/ui/fields/password-field"
 import { Logo } from "@repo/ui/icons/Logo"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -21,7 +24,7 @@ const signInSchema = z.object({
 
 export const SignInForm = () => {
   const t = useTranslations()
-
+  const router = useRouter()
   const {
     control,
     handleSubmit,
@@ -33,8 +36,22 @@ export const SignInForm = () => {
   })
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    console.log("Sign in:", data)
-    // TODO: Implement sign in logic
+    await authClient.signIn.email(
+      { email: data.email, password: data.password },
+      {
+        onSuccess: () => {
+          router.push("/")
+        },
+        onError: (ctx) => {
+          if (ctx.error.code === "INVALID_EMAIL_OR_PASSWORD") {
+            toastManager.add({
+              title: t("auth.errors.INVALID_EMAIL_OR_PASSWORD"),
+              type: "error",
+            })
+          }
+        },
+      },
+    )
   }
 
   return (

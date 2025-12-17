@@ -1,8 +1,10 @@
+import { env as cacheEnv } from "@repo/cache/env"
+import { env as dbEnv } from "@repo/db/env"
 import { createEnv } from "@t3-oss/env-core"
 import { z } from "zod"
 
 export const env = createEnv({
-  extends: [],
+  extends: [dbEnv, cacheEnv],
 
   /**
    * Specify your shared environment variables schema here.
