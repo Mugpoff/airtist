@@ -16,7 +16,7 @@
     "@repo/config": "*",
     "@t3-oss/env-core": "^0.13.10",
     "better-auth": "^1.4.7",
-    "zod": "^4.2.0"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
