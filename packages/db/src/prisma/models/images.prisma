@@ -1,0 +1,17 @@
+model GeneratedImages {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+
+  prompt String
+  model  String
+  width  Int    @default(1024)
+  height Int    @default(1024)
+
+  imageData Bytes
+  mimeType  String @default("image/png")
+
+  userId String? @db.Uuid
+  user   Users?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("generated_images")
+}

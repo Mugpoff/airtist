@@ -10,17 +10,23 @@ export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted', 'ReadC
 
 export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevelSchema>;
 
-// File: UsersScalarFieldEnum.schema.ts
+// File: GeneratedImagesScalarFieldEnum.schema.ts
 
-export const UsersScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'name', 'email', 'emailVerified', 'image'])
+export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'width', 'height', 'imageData', 'mimeType', 'userId'])
 
-export type UsersScalarFieldEnum = z.infer<typeof UsersScalarFieldEnumSchema>;
+export type GeneratedImagesScalarFieldEnum = z.infer<typeof GeneratedImagesScalarFieldEnumSchema>;
 
 // File: RelationLoadStrategy.schema.ts
 
 export const RelationLoadStrategySchema = z.enum(['query', 'join'])
 
 export type RelationLoadStrategy = z.infer<typeof RelationLoadStrategySchema>;
+
+// File: UsersScalarFieldEnum.schema.ts
+
+export const UsersScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'name', 'email', 'emailVerified', 'image'])
+
+export type UsersScalarFieldEnum = z.infer<typeof UsersScalarFieldEnumSchema>;
 
 // File: AccountsScalarFieldEnum.schema.ts
 
@@ -51,6 +57,23 @@ export type QueryMode = z.infer<typeof QueryModeSchema>;
 export const NullsOrderSchema = z.enum(['first', 'last'])
 
 export type NullsOrder = z.infer<typeof NullsOrderSchema>;
+
+// File: GeneratedImages.schema.ts
+
+export const GeneratedImagesSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  prompt: z.string(),
+  model: z.string(),
+  width: z.number().int().default(1024),
+  height: z.number().int().default(1024),
+  imageData: z.string().regex(/^[A-Za-z0-9+/]*={0,2}$/, "Must be valid base64 string").max(22369622, "Base64 string too long"),
+  mimeType: z.string().default("image/png"),
+  userId: z.string().nullish(),
+});
+
+export type GeneratedImagesType = z.infer<typeof GeneratedImagesSchema>;
+
 
 // File: Users.schema.ts
 

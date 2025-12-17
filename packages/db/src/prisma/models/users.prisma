@@ -9,6 +9,7 @@ model Users {
   image         String?
 
   accounts Accounts[]
+  images   GeneratedImages[]
 
   @@unique([email])
   @@map("users")
