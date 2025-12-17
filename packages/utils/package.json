@@ -1,0 +1,23 @@
+{
+  "name": "@repo/utils",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/config": "*",
+    "accept-language-parser": "^1.5.0",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@types/accept-language-parser": "^1.5.8",
+    "@types/node": "^25.0.3",
+    "typescript": "5.9.2"
+  }
+}

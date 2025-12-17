@@ -15,4 +15,12 @@ export const config = {
   auth: {
     cookieMaxAge: 7 * 24 * 60 * 60,
   },
-}
+  i18n: {
+    availableLocales: ["en", "fr"],
+    defaultLocale: "en",
+    cookie: {
+      name: "Language",
+      maxAge: 60 * 60 * 24 * 7,
+    },
+  },
+} as const
