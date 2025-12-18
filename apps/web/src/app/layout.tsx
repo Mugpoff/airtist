@@ -1,5 +1,3 @@
-import { AuthStoreProvider } from "@/stores/auth-store"
-import { getSession } from "@/utils/get-session"
 import { config } from "@repo/config"
 import { AnchoredToastProvider, ToastProvider } from "@repo/ui/base/toast"
 import type { Metadata } from "next"
@@ -7,6 +5,8 @@ import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
 import type { ReactNode } from "react"
+import { AuthStoreProvider } from "@/stores/auth-store"
+import { getSession } from "@/utils/get-session"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -41,7 +41,7 @@ export default async function RootLayout(props: { children: ReactNode }) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body>
+      <body className="overflow-hidden bg-sidebar font-sans text-foreground antialiased">
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
             <ToastProvider>

@@ -1,7 +1,5 @@
 "use client"
 
-import { useAuth } from "@/stores/auth-store"
-import { zodMessages } from "@/utils/zod-messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@repo/auth/client"
 import { Form } from "@repo/ui/base/form"
@@ -10,11 +8,13 @@ import { EmailField } from "@repo/ui/fields/email-field"
 import { PasswordField } from "@repo/ui/fields/password-field"
 import { SubmitButton } from "@repo/ui/fields/submit-button"
 import { Logo } from "@repo/ui/icons/Logo"
-import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useAuth } from "@/stores/auth-store"
+import { zodMessages } from "@/utils/zod-messages"
 
 const signInSchema = z.object({
   email: z
