@@ -5,14 +5,21 @@ import { NextResponse } from "next/server"
 
 export async function proxy(request: NextRequest) {
   const session = await auth.api.getSession({ headers: await headers() })
+  const isAuthPage = request.nextUrl.pathname.startsWith("/auth")
 
-  if (session) {
+  // Signed in users trying to access auth pages → redirect to home
+  if (session && isAuthPage) {
     return NextResponse.redirect(new URL("/", request.url))
+  }
+
+  // Non-logged in users trying to access protected pages → redirect to sign-in
+  if (!session && !isAuthPage) {
+    return NextResponse.redirect(new URL("/auth/sign-in", request.url))
   }
 
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/auth/:path*"],
+  matcher: ["/", "/auth/:path*"],
 }

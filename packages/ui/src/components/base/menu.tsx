@@ -63,6 +63,7 @@ function MenuGroup(props: MenuPrimitive.Group.Props) {
 function MenuItem({
   className,
   inset,
+  closeOnClick = true,
   variant = "default",
   ...props
 }: MenuPrimitive.Item.Props & {
@@ -75,6 +76,7 @@ function MenuItem({
         "flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-inset:ps-8 data-[variant=destructive]:text-destructive-foreground data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:text-sm [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
+      closeOnClick={closeOnClick}
       data-inset={inset}
       data-slot="menu-item"
       data-variant={variant}
@@ -87,11 +89,13 @@ function MenuCheckboxItem({
   className,
   children,
   checked,
+  closeOnClick = true,
   ...props
 }: MenuPrimitive.CheckboxItem.Props) {
   return (
     <MenuPrimitive.CheckboxItem
       checked={checked}
+      closeOnClick={closeOnClick}
       className={cn(
         "grid in-data-[side=none]:min-w-[calc(var(--anchor-width)+1.25rem)] cursor-default grid-cols-[1rem_1fr] items-center gap-2 rounded-sm py-1 ps-2 pe-4 text-base outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:text-sm [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
@@ -114,6 +118,7 @@ function MenuRadioGroup(props: MenuPrimitive.RadioGroup.Props) {
 function MenuRadioItem({
   className,
   children,
+  closeOnClick = true,
   ...props
 }: MenuPrimitive.RadioItem.Props) {
   return (
@@ -122,6 +127,7 @@ function MenuRadioItem({
         "grid in-data-[side=none]:min-w-[calc(var(--anchor-width)+1.25rem)] cursor-default grid-cols-[1rem_1fr] items-center gap-2 rounded-sm py-1 ps-2 pe-4 text-base outline-none data-disabled:pointer-events-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:opacity-64 sm:text-sm [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
+      closeOnClick={closeOnClick}
       data-slot="menu-radio-item"
       {...props}
     >
