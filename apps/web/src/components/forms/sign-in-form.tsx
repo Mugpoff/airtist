@@ -3,11 +3,11 @@
 import { zodMessages } from "@/utils/zod-messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@repo/auth/client"
-import { Button } from "@repo/ui/base/button"
 import { Form } from "@repo/ui/base/form"
 import { toastManager } from "@repo/ui/base/toast"
 import { EmailField } from "@repo/ui/fields/email-field"
 import { PasswordField } from "@repo/ui/fields/password-field"
+import { SubmitButton } from "@repo/ui/fields/submit-button"
 import { Logo } from "@repo/ui/icons/Logo"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
@@ -25,11 +25,7 @@ const signInSchema = z.object({
 export const SignInForm = () => {
   const t = useTranslations()
   const router = useRouter()
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "john@doe.com", password: "Password123!" },
     mode: "onTouched",
@@ -73,16 +69,13 @@ export const SignInForm = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <EmailField name="email" control={control} />
         <PasswordField name="password" control={control} />
-        <Button
-          type="submit"
-          size="lg"
+        <SubmitButton
           className="w-full"
-          disabled={isSubmitting}
+          submittingText={t("auth.signIn.submitting")}
+          size="lg"
         >
-          {isSubmitting
-            ? t("auth.signIn.submitting")
-            : t("auth.signIn.submitButton")}
-        </Button>
+          {t("auth.signIn.submitButton")}
+        </SubmitButton>
       </Form>
 
       <p className="max-w-xs text-center text-muted-foreground text-xs">
