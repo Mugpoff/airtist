@@ -1,5 +1,6 @@
 "use client"
 
+import { useAuth } from "@/stores/auth-store"
 import { zodMessages } from "@/utils/zod-messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@repo/auth/client"
@@ -23,11 +24,12 @@ const signInSchema = z.object({
 })
 
 export const SignInForm = () => {
+  const { signIn } = useAuth()
   const t = useTranslations()
   const router = useRouter()
-  const { control, handleSubmit } = useForm({
+  const form = useForm({
     resolver: zodResolver(signInSchema),
-    defaultValues: { email: "john@doe.com", password: "Password123!" },
+    defaultValues: { email: "john@example.com", password: "Password123!" },
     mode: "onTouched",
   })
 
@@ -35,7 +37,8 @@ export const SignInForm = () => {
     await authClient.signIn.email(
       { email: data.email, password: data.password },
       {
-        onSuccess: () => {
+        onSuccess: (ctx) => {
+          signIn(ctx.data.user)
           router.push("/")
         },
         onError: (ctx) => {
@@ -66,9 +69,9 @@ export const SignInForm = () => {
         </h1>
       </div>
 
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <EmailField name="email" control={control} />
-        <PasswordField name="password" control={control} />
+      <Form onSubmit={form.handleSubmit(onSubmit)} form={form}>
+        <EmailField name="email" control={form.control} />
+        <PasswordField name="password" control={form.control} />
         <SubmitButton
           className="w-full"
           submittingText={t("auth.signIn.submitting")}

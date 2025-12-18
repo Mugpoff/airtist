@@ -8,6 +8,7 @@ type State = {
   user: Session["user"] | null
   session: Session["session"] | null
 
+  signIn: (user: Session["user"]) => void
   signOut: () => void
 }
 
@@ -18,6 +19,9 @@ const createAuthStore = (session: Session | null) =>
     user: session?.user ?? null,
     session: session?.session ?? null,
 
+    signIn: (user: Session["user"]) => {
+      set({ user })
+    },
     signOut: () => {
       set({ user: null, session: null })
     },
@@ -66,14 +70,4 @@ export const useUser = () => {
   }
 
   return useStore(store, (state) => state.user)
-}
-
-export const useSession = () => {
-  const store = useContext(AuthContext)
-
-  if (!store) {
-    throw new Error("useSession must be used within a AuthContext")
-  }
-
-  return useStore(store, (state) => state.session)
 }

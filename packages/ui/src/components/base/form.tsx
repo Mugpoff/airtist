@@ -1,15 +1,26 @@
 "use client"
 
 import { Form as FormPrimitive } from "@base-ui/react/form"
+import {
+  type FieldValues,
+  FormProvider,
+  type UseFormReturn,
+} from "react-hook-form"
 import { cn } from "../../lib/utils"
 
-function Form({ className, ...props }: FormPrimitive.Props) {
+function Form<TFieldValues extends FieldValues = FieldValues>({
+  className,
+  form,
+  ...props
+}: FormPrimitive.Props & { form: UseFormReturn<TFieldValues> }) {
   return (
-    <FormPrimitive
-      className={cn("flex w-full flex-col gap-6", className)}
-      data-slot="form"
-      {...props}
-    />
+    <FormProvider {...form}>
+      <FormPrimitive
+        className={cn("flex w-full flex-col gap-6", className)}
+        data-slot="form"
+        {...props}
+      />
+    </FormProvider>
   )
 }
 
