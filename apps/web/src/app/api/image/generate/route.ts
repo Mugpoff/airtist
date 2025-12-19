@@ -29,7 +29,6 @@ const sizeFromAspectRatio = (aspectRatio?: string) => {
       return { width: 1344, height: 768 }
     case "21:9":
       return { width: 1536, height: 672 }
-    case "1:1":
     default:
       return { width: 1024, height: 1024 }
   }

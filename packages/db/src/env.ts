@@ -14,7 +14,5 @@ export const env = createEnv({
   client: {},
   runtimeEnv: process.env,
   skipValidation:
-    isPrisma ||
-    !!process.env.CI ||
-    process.env.npm_lifecycle_event === "lint",
+    isPrisma || !!process.env.CI || process.env.npm_lifecycle_event === "lint",
 })

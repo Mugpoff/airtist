@@ -12,7 +12,7 @@ export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevel
 
 // File: GeneratedImagesScalarFieldEnum.schema.ts
 
-export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'width', 'height', 'imageData', 'mimeType', 'userId'])
+export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'userId'])
 
 export type GeneratedImagesScalarFieldEnum = z.infer<typeof GeneratedImagesScalarFieldEnumSchema>;
 
@@ -65,9 +65,13 @@ export const GeneratedImagesSchema = z.object({
   createdAt: z.date(),
   prompt: z.string(),
   model: z.string(),
+  requestId: z.string().nullish(),
+  aspectRatio: z.string().nullish(),
   width: z.number().int().default(1024),
   height: z.number().int().default(1024),
-  imageData: z.string().regex(/^[A-Za-z0-9+/]*={0,2}$/, "Must be valid base64 string").max(22369622, "Base64 string too long"),
+  imageUrl: z.string().nullish(),
+  objectKey: z.string().nullish(),
+  imageData: z.string().regex(/^[A-Za-z0-9+/]*={0,2}$/, "Must be valid base64 string").max(22369622, "Base64 string too long").nullish(),
   mimeType: z.string().default("image/png"),
   userId: z.string().nullish(),
 });

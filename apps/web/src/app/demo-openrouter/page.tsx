@@ -1,5 +1,7 @@
 "use client"
 
+import { Button } from "@repo/ui/base/Button"
+import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 
 type ImageItem = {
@@ -108,6 +110,7 @@ export default function DemoOpenRouterPage() {
     setSelected(data.item)
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we only want to load images on mount
   useEffect(() => {
     void loadImages()
   }, [])
@@ -210,7 +213,7 @@ export default function DemoOpenRouterPage() {
             </select>
           </label>
 
-          <button
+          <Button
             onClick={onGenerate}
             disabled={loading}
             style={{
@@ -225,9 +228,9 @@ export default function DemoOpenRouterPage() {
             }}
           >
             {loading ? "Generating..." : "Generate"}
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={() => void loadImages()}
             disabled={loadingList}
             style={{
@@ -242,7 +245,7 @@ export default function DemoOpenRouterPage() {
             }}
           >
             {loadingList ? "Loading..." : "Refresh"}
-          </button>
+          </Button>
         </div>
 
         {error && (
@@ -271,7 +274,7 @@ export default function DemoOpenRouterPage() {
         }}
       >
         {current?.imageUrl ? (
-          <img
+          <Image
             src={current.imageUrl}
             alt="Generated"
             style={{ maxWidth: "100%", height: "auto", borderRadius: 12 }}
@@ -325,7 +328,7 @@ export default function DemoOpenRouterPage() {
           }}
         >
           {items.map((it) => (
-            <button
+            <Button
               key={it.id}
               onClick={() => void loadDetail(it.id)}
               style={{
@@ -340,10 +343,12 @@ export default function DemoOpenRouterPage() {
               }}
             >
               {it.imageUrl ? (
-                <img
+                <Image
                   src={it.imageUrl}
                   alt={it.prompt}
                   style={{ width: "100%", height: 220, objectFit: "cover" }}
+                  width={220}
+                  height={220}
                 />
               ) : (
                 <div
@@ -365,7 +370,7 @@ export default function DemoOpenRouterPage() {
                 <div style={{ fontSize: 12, fontWeight: 600 }}>{it.model}</div>
                 <div style={{ fontSize: 12, opacity: 0.9 }}>{it.prompt}</div>
               </div>
-            </button>
+            </Button>
           ))}
         </div>
       </section>

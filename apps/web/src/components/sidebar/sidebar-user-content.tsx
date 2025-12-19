@@ -1,6 +1,5 @@
 "use client"
 
-import { useAuth } from "@/stores/auth-store"
 import { authClient } from "@repo/auth/client"
 import { config } from "@repo/config"
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/base/avatar"
@@ -24,9 +23,10 @@ import {
   MoonIcon,
   SunIcon,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useLocale } from "next-intl"
 import { useTheme } from "next-themes"
-import { useRouter } from "next/navigation"
+import { useAuth } from "@/stores/auth-store"
 
 const LANGUAGE_LABELS: Record<string, string> = {
   en: "English",
