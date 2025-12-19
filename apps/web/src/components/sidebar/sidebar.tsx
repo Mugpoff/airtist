@@ -2,6 +2,7 @@
 
 import { ScrollArea } from "@repo/ui/base/scroll-area"
 import { useTranslations } from "next-intl"
+import { SidebarDropzone } from "./sidebar-dropzone"
 import { SidebarUserContent } from "./sidebar-user-content"
 
 export const Sidebar = () => {
@@ -10,7 +11,8 @@ export const Sidebar = () => {
   return (
     <div className="my-6 ml-6 flex h-auto w-(--sidebar-width) flex-col gap-4 [--sidebar-width:320px]">
       <SidebarUserContent />
-      <ScrollArea scrollFade className="shrink grow basis-auto">
+      <ScrollArea className="shrink grow basis-auto" scrollFade scrollbarGutter>
+        <SidebarDropzone />
         <h1>Hello from the client!</h1>
         <p>Translation:{t("validation.email.required")}</p>
         <p>1 Element in the ScrollArea</p>

@@ -23,5 +23,14 @@
       "submitting": "Connexion en cours...",
       "privacy": "En cliquant sur continuer, vous acceptez nos <termsOfService>Conditions d'utilisation</termsOfService> et notre <privacyPolicy>Politique de confidentialité</privacyPolicy>."
     }
+  },
+  "home": {
+    "sidebar": {
+      "dropzone": {
+        "title": "Téléverser un fichier",
+        "description": "Glissez-déposez ou cliquez pour téléverser",
+        "accepts": "Accepte PNG, JPEG, WebP ou ZIP."
+      }
+    }
   }
 }

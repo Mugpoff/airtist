@@ -23,5 +23,14 @@
       "submitting": "Signing in...",
       "privacy": "By clicking continue, you agree to our <termsOfService>Terms of Service</termsOfService> and <privacyPolicy>Privacy Policy</privacyPolicy>."
     }
+  },
+  "home": {
+    "sidebar": {
+      "dropzone": {
+        "title": "Upload a file",
+        "description": "Drag and drop or click to upload",
+        "accepts": "Accepts PNG, JPEG, WebP or ZIP."
+      }
+    }
   }
 }
