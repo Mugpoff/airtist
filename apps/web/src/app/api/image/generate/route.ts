@@ -9,6 +9,32 @@ type Body = {
   aspectRatio?: unknown
 }
 
+const sizeFromAspectRatio = (aspectRatio?: string) => {
+  switch (aspectRatio) {
+    case "2:3":
+      return { width: 832, height: 1248 }
+    case "3:2":
+      return { width: 1248, height: 832 }
+    case "3:4":
+      return { width: 864, height: 1184 }
+    case "4:3":
+      return { width: 1184, height: 864 }
+    case "4:5":
+      return { width: 896, height: 1152 }
+    case "5:4":
+      return { width: 1152, height: 896 }
+    case "9:16":
+      return { width: 768, height: 1344 }
+    case "16:9":
+      return { width: 1344, height: 768 }
+    case "21:9":
+      return { width: 1536, height: 672 }
+    case "1:1":
+    default:
+      return { width: 1024, height: 1024 }
+  }
+}
+
 export const POST = async (req: Request) => {
   const apiKey = process.env.OPENROUTER_API_KEY
 
@@ -96,13 +122,16 @@ export const POST = async (req: Request) => {
 
   const objectKey = `images/${crypto.randomUUID()}.png`
   const publicUrl = await uploadPng(objectKey, bytes)
+  const size = sizeFromAspectRatio(aspectRatio)
 
   const row = await db.generatedImages.create({
     data: {
       prompt,
       model,
-      width: 1024,
-      height: 1024,
+      requestId: requestId || null,
+      aspectRatio: aspectRatio ?? null,
+      width: size.width,
+      height: size.height,
       mimeType: "image/png",
       imageUrl: publicUrl,
       objectKey,
@@ -112,6 +141,8 @@ export const POST = async (req: Request) => {
       createdAt: true,
       prompt: true,
       model: true,
+      requestId: true,
+      aspectRatio: true,
       width: true,
       height: true,
       mimeType: true,

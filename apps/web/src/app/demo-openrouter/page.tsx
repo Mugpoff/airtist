@@ -7,6 +7,8 @@ type ImageItem = {
   createdAt: string
   prompt: string
   model: string
+  requestId: string | null
+  aspectRatio: string | null
   width: number
   height: number
   mimeType: string
@@ -36,6 +38,16 @@ type ListResponse =
       error: string
     }
 
+type DetailResponse =
+  | {
+      ok: true
+      item: ImageItem
+    }
+  | {
+      ok: false
+      error: string
+    }
+
 export default function DemoOpenRouterPage() {
   const [prompt, setPrompt] = useState(
     "A cute shiba inu astronaut, studio lighting, 4k",
@@ -43,11 +55,11 @@ export default function DemoOpenRouterPage() {
   const [aspectRatio, setAspectRatio] = useState("1:1")
   const [model, setModel] = useState("google/gemini-2.5-flash-image-preview")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [requestId, setRequestId] = useState<string | null>(null)
-  const [current, setCurrent] = useState<ImageItem | null>(null)
-  const [items, setItems] = useState<ImageItem[]>([])
   const [loadingList, setLoadingList] = useState(false)
+  const [items, setItems] = useState<ImageItem[]>([])
+  const [current, setCurrent] = useState<ImageItem | null>(null)
+  const [selected, setSelected] = useState<ImageItem | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const payload = useMemo(
     () => ({
@@ -79,6 +91,23 @@ export default function DemoOpenRouterPage() {
     }
   }
 
+  const loadDetail = async (id: string) => {
+    setError(null)
+    const res = await fetch(`/api/image/${id}`, { method: "GET" })
+    const data = (await res.json().catch(() => null)) as DetailResponse | null
+
+    if (!res.ok || !data || !("ok" in data) || data.ok !== true) {
+      const msg =
+        data && "error" in data && typeof data.error === "string"
+          ? data.error
+          : "Failed to load image"
+      setError(msg)
+      return
+    }
+
+    setSelected(data.item)
+  }
+
   useEffect(() => {
     void loadImages()
   }, [])
@@ -86,7 +115,6 @@ export default function DemoOpenRouterPage() {
   const onGenerate = async () => {
     setLoading(true)
     setError(null)
-    setRequestId(null)
     setCurrent(null)
 
     try {
@@ -105,17 +133,11 @@ export default function DemoOpenRouterPage() {
           data && "error" in data && typeof data.error === "string"
             ? data.error
             : "Generation failed"
-        const rid =
-          data && "requestId" in data && typeof data.requestId === "string"
-            ? data.requestId
-            : null
         setError(msg)
-        setRequestId(rid)
         return
       }
 
       setCurrent(data.image)
-      setRequestId(data.requestId)
       await loadImages()
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error")
@@ -126,10 +148,6 @@ export default function DemoOpenRouterPage() {
 
   return (
     <main style={{ padding: 24, display: "grid", gap: 16 }}>
-      <h1 style={{ fontSize: 20, fontWeight: 600 }}>
-        OpenRouter Demo (DB + MinIO)
-      </h1>
-
       <div style={{ display: "grid", gap: 8, maxWidth: 1000 }}>
         <label style={{ display: "grid", gap: 6 }}>
           <span>Prompt</span>
@@ -223,11 +241,11 @@ export default function DemoOpenRouterPage() {
               cursor: loadingList ? "not-allowed" : "pointer",
             }}
           >
-            {loadingList ? "Loading..." : "Refresh list"}
+            {loadingList ? "Loading..." : "Refresh"}
           </button>
         </div>
 
-        {(error || requestId) && (
+        {error && (
           <pre
             style={{
               padding: 12,
@@ -237,7 +255,7 @@ export default function DemoOpenRouterPage() {
               whiteSpace: "pre-wrap",
             }}
           >
-            {JSON.stringify({ error, requestId }, null, 2)}
+            {error}
           </pre>
         )}
       </div>
@@ -247,7 +265,7 @@ export default function DemoOpenRouterPage() {
           borderRadius: 12,
           border: "1px solid #333",
           padding: 12,
-          minHeight: 300,
+          minHeight: 320,
           display: "grid",
           placeItems: "center",
         }}
@@ -266,9 +284,38 @@ export default function DemoOpenRouterPage() {
       </section>
 
       <section style={{ display: "grid", gap: 12 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 600 }}>
-          History ({items.length})
-        </h2>
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            alignItems: "baseline",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+          }}
+        >
+          <h2 style={{ fontSize: 16, fontWeight: 600 }}>
+            History ({items.length})
+          </h2>
+          {selected && (
+            <div style={{ fontSize: 12, opacity: 0.8 }}>
+              Selected: {selected.id}
+            </div>
+          )}
+        </div>
+
+        {selected && (
+          <pre
+            style={{
+              padding: 12,
+              borderRadius: 8,
+              border: "1px solid #333",
+              overflowX: "auto",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {JSON.stringify(selected, null, 2)}
+          </pre>
+        )}
 
         <div
           style={{
@@ -278,12 +325,18 @@ export default function DemoOpenRouterPage() {
           }}
         >
           {items.map((it) => (
-            <div
+            <button
               key={it.id}
+              onClick={() => void loadDetail(it.id)}
               style={{
+                textAlign: "left",
                 border: "1px solid #333",
                 borderRadius: 12,
                 overflow: "hidden",
+                padding: 0,
+                background: "transparent",
+                color: "inherit",
+                cursor: "pointer",
               }}
             >
               {it.imageUrl ? (
@@ -312,7 +365,7 @@ export default function DemoOpenRouterPage() {
                 <div style={{ fontSize: 12, fontWeight: 600 }}>{it.model}</div>
                 <div style={{ fontSize: 12, opacity: 0.9 }}>{it.prompt}</div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </section>

@@ -2,8 +2,11 @@ model GeneratedImages {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now())
 
-  prompt String
-  model  String
+  prompt      String
+  model       String
+  requestId   String?
+  aspectRatio String?
+
   width  Int    @default(1024)
   height Int    @default(1024)
 
