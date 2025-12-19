@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { publicProcedure } from "../trpc"
+import { protectedProcedure } from "../trpc"
 
 const OpenRouterImage = z.object({
   image_url: z.object({
@@ -17,7 +17,7 @@ const OpenRouterResponse = z.object({
   ),
 })
 
-export const generateImageOpenRouterHandler = publicProcedure
+export const generateImageOpenRouterHandler = protectedProcedure
   .input(
     z.object({
       prompt: z.string().min(1),

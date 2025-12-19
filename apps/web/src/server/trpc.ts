@@ -1,4 +1,4 @@
-import { appRouter, createTrpcContext } from "@repo/trpc"
+import { appRouter, createTRPCContext } from "@repo/trpc"
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
 
 export const handler = (req: Request) =>
@@ -7,7 +7,7 @@ export const handler = (req: Request) =>
     req,
     router: appRouter,
     createContext: () =>
-      createTrpcContext({
+      createTRPCContext({
         headers: req.headers,
       }),
   })

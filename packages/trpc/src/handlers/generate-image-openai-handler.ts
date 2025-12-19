@@ -1,12 +1,12 @@
 import OpenAI from "openai"
 import { z } from "zod"
-import { publicProcedure } from "../trpc"
+import { protectedProcedure } from "../trpc"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 })
 
-export const generateImageOpenAIHandler = publicProcedure
+export const generateImageOpenAIHandler = protectedProcedure
   .input(
     z.object({
       prompt: z.string().min(1),

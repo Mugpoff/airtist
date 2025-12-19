@@ -1,12 +1,12 @@
 import z from "zod"
-import { publicProcedure } from "../trpc"
+import { protectedProcedure } from "../trpc"
 
 const generateImageInputSchema = z.object({
   prompt: z.string().min(1),
   model: z.string().min(1),
 })
 
-export const generateImageHandler = publicProcedure
+export const generateImageHandler = protectedProcedure
   .input(generateImageInputSchema)
   .mutation(async ({ input, ctx: { openRouter } }) => {
     const response = await openRouter.chat.send({
