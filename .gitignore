@@ -43,3 +43,12 @@ generated/
 
 # next-intl
 *.d.json.ts
+
+# generated images
+out.png
+*.png
+
+# generated images
+/out.png
+/packages/trpc/out.png
+/packages/trpc/direct.png

@@ -1,28 +1,20 @@
 import { createEnv } from "@t3-oss/env-core"
 import { z } from "zod"
 
+const isPrisma =
+  process.env.npm_lifecycle_event === "prisma" ||
+  process.argv.some((arg) => arg.includes("prisma"))
+
 export const env = createEnv({
-  /**
-   * Specify your shared environment variables schema here.
-   */
   shared: {},
-
-  /**
-   * Specify your server-side environment variables schema here.
-   * This way you can ensure the app isn't built with invalid env vars.
-   */
   server: {
-    DATABASE_URL: z.url(),
+    DATABASE_URL: z.string().url(),
   },
-
-  /**
-   * Specify your client-side environment variables schema here.
-   * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
-   */
   clientPrefix: "NEXT_PUBLIC_",
   client: {},
-
   runtimeEnv: process.env,
   skipValidation:
-    !!process.env.CI || process.env.npm_lifecycle_event === "lint",
+    isPrisma ||
+    !!process.env.CI ||
+    process.env.npm_lifecycle_event === "lint",
 })

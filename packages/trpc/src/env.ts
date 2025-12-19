@@ -17,7 +17,7 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    OPENROUTER_API_KEY: z.string(),
+    OPENROUTER_API_KEY: z.string().min(1),
   },
 
   /**
