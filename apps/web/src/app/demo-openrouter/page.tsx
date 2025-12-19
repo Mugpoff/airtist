@@ -1,11 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 type Result = {
   ok: boolean
   status: number
   error?: string
+  requestId?: string
+  model?: string
+  aspectRatio?: string | null
   imageUrl?: string
 }
 
@@ -19,37 +22,88 @@ export default function DemoOpenRouterPage() {
   const [result, setResult] = useState<Result | null>(null)
   const [imgSrc, setImgSrc] = useState<string | null>(null)
 
+  const payload = useMemo(
+    () => ({
+      prompt,
+      aspectRatio,
+      model,
+    }),
+    [prompt, aspectRatio, model],
+  )
+
+  useEffect(() => {
+    return () => {
+      if (imgSrc) URL.revokeObjectURL(imgSrc)
+    }
+  }, [imgSrc])
+
   const onGenerate = async () => {
     setLoading(true)
     setResult(null)
-    setImgSrc(null)
+    setImgSrc((prev) => {
+      if (prev) URL.revokeObjectURL(prev)
+      return null
+    })
 
     try {
-      const res = await fetch("/api/image/openrouter", {
+      const metaRes = await fetch("/api/image/openrouter/json", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          prompt,
-          aspectRatio,
-          model,
-        }),
+        body: JSON.stringify(payload),
       })
 
-      if (!res.ok) {
-        const text = await res.text()
+      const metaText = await metaRes.text()
+      const meta = (() => {
+        try {
+          return JSON.parse(metaText) as Result
+        } catch {
+          return {
+            ok: false,
+            status: metaRes.status,
+            error: metaText || "Failed to read metadata",
+          } as Result
+        }
+      })()
+
+      if (!metaRes.ok || !meta.ok) {
         setResult({
           ok: false,
-          status: res.status,
-          error: text || "Request failed",
+          status: metaRes.status,
+          error: meta.error ?? "Request failed",
+          requestId: meta.requestId,
         })
         return
       }
 
-      const blob = await res.blob()
+      const imgRes = await fetch("/api/image/openrouter", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (!imgRes.ok) {
+        const text = await imgRes.text()
+        setResult({
+          ok: false,
+          status: imgRes.status,
+          error: text || "Image request failed",
+          requestId: meta.requestId,
+        })
+        return
+      }
+
+      const blob = await imgRes.blob()
       const url = URL.createObjectURL(blob)
 
       setImgSrc(url)
-      setResult({ ok: true, status: res.status })
+      setResult({
+        ok: true,
+        status: imgRes.status,
+        requestId: meta.requestId,
+        model: meta.model,
+        aspectRatio: meta.aspectRatio ?? null,
+        imageUrl: meta.imageUrl,
+      })
     } catch (e) {
       setResult({
         ok: false,
