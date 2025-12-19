@@ -2,15 +2,39 @@
 
 import { useEffect, useMemo, useState } from "react"
 
-type Result = {
-  ok: boolean
-  status: number
-  error?: string
-  requestId?: string
-  model?: string
-  aspectRatio?: string | null
-  imageUrl?: string
+type ImageItem = {
+  id: string
+  createdAt: string
+  prompt: string
+  model: string
+  width: number
+  height: number
+  mimeType: string
+  imageUrl: string | null
+  objectKey: string | null
 }
+
+type GenerateResponse =
+  | {
+      ok: true
+      requestId: string
+      image: ImageItem
+    }
+  | {
+      ok: false
+      requestId?: string
+      error: string
+    }
+
+type ListResponse =
+  | {
+      ok: true
+      items: ImageItem[]
+    }
+  | {
+      ok: false
+      error: string
+    }
 
 export default function DemoOpenRouterPage() {
   const [prompt, setPrompt] = useState(
@@ -19,8 +43,11 @@ export default function DemoOpenRouterPage() {
   const [aspectRatio, setAspectRatio] = useState("1:1")
   const [model, setModel] = useState("google/gemini-2.5-flash-image-preview")
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<Result | null>(null)
-  const [imgSrc, setImgSrc] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [requestId, setRequestId] = useState<string | null>(null)
+  const [current, setCurrent] = useState<ImageItem | null>(null)
+  const [items, setItems] = useState<ImageItem[]>([])
+  const [loadingList, setLoadingList] = useState(false)
 
   const payload = useMemo(
     () => ({
@@ -31,85 +58,67 @@ export default function DemoOpenRouterPage() {
     [prompt, aspectRatio, model],
   )
 
-  useEffect(() => {
-    return () => {
-      if (imgSrc) URL.revokeObjectURL(imgSrc)
+  const loadImages = async () => {
+    setLoadingList(true)
+    try {
+      const res = await fetch("/api/image", { method: "GET" })
+      const data = (await res.json().catch(() => null)) as ListResponse | null
+
+      if (!res.ok || !data || !("ok" in data) || data.ok !== true) {
+        const msg =
+          data && "error" in data && typeof data.error === "string"
+            ? data.error
+            : "Failed to load images"
+        setError(msg)
+        return
+      }
+
+      setItems(data.items)
+    } finally {
+      setLoadingList(false)
     }
-  }, [imgSrc])
+  }
+
+  useEffect(() => {
+    void loadImages()
+  }, [])
 
   const onGenerate = async () => {
     setLoading(true)
-    setResult(null)
-    setImgSrc((prev) => {
-      if (prev) URL.revokeObjectURL(prev)
-      return null
-    })
+    setError(null)
+    setRequestId(null)
+    setCurrent(null)
 
     try {
-      const metaRes = await fetch("/api/image/openrouter/json", {
+      const res = await fetch("/api/image/generate", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
       })
 
-      const metaText = await metaRes.text()
-      const meta = (() => {
-        try {
-          return JSON.parse(metaText) as Result
-        } catch {
-          return {
-            ok: false,
-            status: metaRes.status,
-            error: metaText || "Failed to read metadata",
-          } as Result
-        }
-      })()
+      const data = (await res
+        .json()
+        .catch(() => null)) as GenerateResponse | null
 
-      if (!metaRes.ok || !meta.ok) {
-        setResult({
-          ok: false,
-          status: metaRes.status,
-          error: meta.error ?? "Request failed",
-          requestId: meta.requestId,
-        })
+      if (!res.ok || !data || !("ok" in data) || data.ok !== true) {
+        const msg =
+          data && "error" in data && typeof data.error === "string"
+            ? data.error
+            : "Generation failed"
+        const rid =
+          data && "requestId" in data && typeof data.requestId === "string"
+            ? data.requestId
+            : null
+        setError(msg)
+        setRequestId(rid)
         return
       }
 
-      const imgRes = await fetch("/api/image/openrouter", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-
-      if (!imgRes.ok) {
-        const text = await imgRes.text()
-        setResult({
-          ok: false,
-          status: imgRes.status,
-          error: text || "Image request failed",
-          requestId: meta.requestId,
-        })
-        return
-      }
-
-      const blob = await imgRes.blob()
-      const url = URL.createObjectURL(blob)
-
-      setImgSrc(url)
-      setResult({
-        ok: true,
-        status: imgRes.status,
-        requestId: meta.requestId,
-        model: meta.model,
-        aspectRatio: meta.aspectRatio ?? null,
-        imageUrl: meta.imageUrl,
-      })
+      setCurrent(data.image)
+      setRequestId(data.requestId)
+      await loadImages()
     } catch (e) {
-      setResult({
-        ok: false,
-        status: 0,
-        error: e instanceof Error ? e.message : "Unknown error",
-      })
+      setError(e instanceof Error ? e.message : "Unknown error")
     } finally {
       setLoading(false)
     }
@@ -117,9 +126,11 @@ export default function DemoOpenRouterPage() {
 
   return (
     <main style={{ padding: 24, display: "grid", gap: 16 }}>
-      <h1 style={{ fontSize: 20, fontWeight: 600 }}>OpenRouter Demo</h1>
+      <h1 style={{ fontSize: 20, fontWeight: 600 }}>
+        OpenRouter Demo (DB + MinIO)
+      </h1>
 
-      <div style={{ display: "grid", gap: 8, maxWidth: 900 }}>
+      <div style={{ display: "grid", gap: 8, maxWidth: 1000 }}>
         <label style={{ display: "grid", gap: 6 }}>
           <span>Prompt</span>
           <textarea
@@ -144,7 +155,7 @@ export default function DemoOpenRouterPage() {
               value={model}
               onChange={(e) => setModel(e.target.value)}
               style={{
-                width: 420,
+                width: 520,
                 padding: 10,
                 borderRadius: 8,
                 border: "1px solid #333",
@@ -197,9 +208,26 @@ export default function DemoOpenRouterPage() {
           >
             {loading ? "Generating..." : "Generate"}
           </button>
+
+          <button
+            onClick={() => void loadImages()}
+            disabled={loadingList}
+            style={{
+              height: 42,
+              alignSelf: "end",
+              padding: "0 14px",
+              borderRadius: 8,
+              border: "1px solid #333",
+              background: loadingList ? "#222" : "transparent",
+              color: "inherit",
+              cursor: loadingList ? "not-allowed" : "pointer",
+            }}
+          >
+            {loadingList ? "Loading..." : "Refresh list"}
+          </button>
         </div>
 
-        {result && (
+        {(error || requestId) && (
           <pre
             style={{
               padding: 12,
@@ -209,12 +237,12 @@ export default function DemoOpenRouterPage() {
               whiteSpace: "pre-wrap",
             }}
           >
-            {JSON.stringify(result, null, 2)}
+            {JSON.stringify({ error, requestId }, null, 2)}
           </pre>
         )}
       </div>
 
-      <div
+      <section
         style={{
           borderRadius: 12,
           border: "1px solid #333",
@@ -224,9 +252,9 @@ export default function DemoOpenRouterPage() {
           placeItems: "center",
         }}
       >
-        {imgSrc ? (
+        {current?.imageUrl ? (
           <img
-            src={imgSrc}
+            src={current.imageUrl}
             alt="Generated"
             style={{ maxWidth: "100%", height: "auto", borderRadius: 12 }}
           />
@@ -235,7 +263,59 @@ export default function DemoOpenRouterPage() {
             {loading ? "Waiting for image..." : "No image yet"}
           </span>
         )}
-      </div>
+      </section>
+
+      <section style={{ display: "grid", gap: 12 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 600 }}>
+          History ({items.length})
+        </h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+            gap: 12,
+          }}
+        >
+          {items.map((it) => (
+            <div
+              key={it.id}
+              style={{
+                border: "1px solid #333",
+                borderRadius: 12,
+                overflow: "hidden",
+              }}
+            >
+              {it.imageUrl ? (
+                <img
+                  src={it.imageUrl}
+                  alt={it.prompt}
+                  style={{ width: "100%", height: 220, objectFit: "cover" }}
+                />
+              ) : (
+                <div
+                  style={{
+                    height: 220,
+                    display: "grid",
+                    placeItems: "center",
+                    opacity: 0.7,
+                  }}
+                >
+                  No URL
+                </div>
+              )}
+
+              <div style={{ padding: 10, display: "grid", gap: 6 }}>
+                <div style={{ fontSize: 12, opacity: 0.8 }}>
+                  {new Date(it.createdAt).toLocaleString()}
+                </div>
+                <div style={{ fontSize: 12, fontWeight: 600 }}>{it.model}</div>
+                <div style={{ fontSize: 12, opacity: 0.9 }}>{it.prompt}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   )
 }
