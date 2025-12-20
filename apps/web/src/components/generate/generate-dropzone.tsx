@@ -1,6 +1,5 @@
 import { ImageUploadIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { cn } from "@repo/ui/utils"
 import { useTranslations } from "next-intl"
 import { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
@@ -28,21 +27,19 @@ export const GenerateDropzone = () => {
   return (
     <div
       {...getRootProps()}
-      className={cn(
-        "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-8 transition-colors",
-        "border-border bg-background hover:bg-accent/50 hover:border-primary/50",
-        "data-drag-active:border-primary data-drag-active:bg-primary/5",
-      )}
+      className="after:-inset-[5px] after:-z-1 relative flex max-h-1/2 min-w-0 flex-1 flex-col rounded-2xl border bg-muted/50 bg-clip-padding shadow-black/5 shadow-sm transition after:pointer-events-none after:absolute after:rounded-[calc(var(--radius-2xl)+4px)] after:border after:border-border/50 after:bg-clip-padding data-drag-active:bg-muted dark:after:bg-background/72"
       data-drag-active={isDragActive || undefined}
     >
-      <input {...getInputProps()} />
-      <div className="flex size-12 items-center justify-center rounded-lg bg-muted">
-        <HugeiconsIcon icon={ImageUploadIcon} />
-      </div>
-      <div className="flex flex-col items-center gap-1 text-center">
-        <h3 className="font-semibold text-foreground">{t("title")}</h3>{" "}
-        <p className="text-muted-foreground text-sm">{t("description")}</p>;
-        <p className="text-muted-foreground/70 text-xs">{t("accepts")}</p>
+      <div className="flex h-full flex-col items-center justify-center gap-3">
+        <input {...getInputProps()} />
+        <div className="flex size-12 items-center justify-center rounded-lg bg-muted">
+          <HugeiconsIcon icon={ImageUploadIcon} />
+        </div>
+        <div className="flex flex-col items-center gap-1 text-center">
+          <h3 className="font-semibold text-foreground">{t("title")}</h3>{" "}
+          <p className="text-muted-foreground text-sm">{t("description")}</p>
+          <p className="text-muted-foreground/70 text-xs">{t("accepts")}</p>
+        </div>
       </div>
     </div>
   )

@@ -45,6 +45,7 @@ function Switch({
     <SwitchPrimitive.Root
       {...props}
       onCheckedChange={handleCheckedChange}
+      nativeButton
       render={
         <motion.button
           data-slot="switch"

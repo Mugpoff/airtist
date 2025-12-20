@@ -33,6 +33,11 @@
         "description": "Drag and drop or click to upload",
         "accepts": "Accepts PNG, JPEG, WebP or ZIP."
       }
+    },
+    "tooltips": {
+      "theme": "Toggle theme",
+      "language": "Change language",
+      "signOut": "Sign out"
     }
   }
 }

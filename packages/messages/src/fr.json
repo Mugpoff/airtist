@@ -33,6 +33,11 @@
         "description": "Glissez-déposez ou cliquez pour téléverser",
         "accepts": "Accepte PNG, JPEG, WebP ou ZIP."
       }
+    },
+    "tooltips": {
+      "theme": "Changer le thème",
+      "language": "Changer la langue",
+      "signOut": "Déconnexion"
     }
   }
 }

@@ -8,8 +8,8 @@ import {
   MenuTrigger,
 } from "@repo/ui/base/menu"
 import { FR, US } from "country-flag-icons/react/3x2"
-import { useLocale, useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
+import { useLocale, useTranslations } from "next-intl"
 
 export const LanguageSelector = () => {
   const locale = useLocale()

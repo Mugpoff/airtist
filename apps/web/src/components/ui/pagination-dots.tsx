@@ -13,7 +13,7 @@ export const PaginationDots = ({ selectedIndex, setSelectedIndex }: Props) => {
           key={index}
           type="button"
           onClick={() => setSelectedIndex(index)}
-          className="rounded-full bg-muted-foreground/30 hover:bg-muted-foreground/50"
+          className="rounded-full bg-muted-foreground/30 hover:cursor-pointer hover:bg-muted-foreground/50"
           animate={{
             height: selectedIndex === index ? 24 : 10,
             width: 10,
@@ -30,7 +30,6 @@ export const PaginationDots = ({ selectedIndex, setSelectedIndex }: Props) => {
           }}
           initial={false}
           whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
           aria-label={`Go to page ${index + 1}`}
         />
       ))}

@@ -14,15 +14,15 @@ export const ThemeSwitch = ({ className }: { className?: string }) => {
     setIsClient(true)
   }, [])
 
+  if (!isClient) return null
+
   return (
-    isClient && (
-      <Switch
-        className={className}
-        leftIcon={<HugeiconsIcon icon={Sun03Icon} />}
-        rightIcon={<HugeiconsIcon icon={Moon02Icon} />}
-        checked={theme === "dark"}
-        onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
-      />
-    )
+    <Switch
+      className={className}
+      leftIcon={<HugeiconsIcon icon={Sun03Icon} />}
+      rightIcon={<HugeiconsIcon icon={Moon02Icon} />}
+      checked={theme === "dark"}
+      onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+    />
   )
 }
