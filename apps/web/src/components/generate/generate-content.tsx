@@ -1,3 +1,6 @@
+"use client"
+
+import { LightRays } from "@repo/ui/backgrounds/light-rays"
 import {
   Tooltip,
   TooltipCreateHandle,
@@ -19,7 +22,20 @@ export const GenerateContent = () => {
   const t = useTranslations("home.tooltips")
 
   return (
-    <div className="flex size-full flex-col justify-center gap-4">
+    <div className="relative flex size-full flex-col justify-center gap-4">
+      <div className="-m-16 absolute top-0 not-dark:hidden h-[600px] w-screen">
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#fff"
+          raysSpeed={0.5}
+          lightSpread={0.8}
+          rayLength={1.2}
+          mouseInfluence={0.1}
+          noiseAmount={0.1}
+          distortion={0.05}
+          followMouse
+        />
+      </div>
       <GenerateDropzone />
       <div className="grid grid-cols-3">
         <div>part 1</div>
