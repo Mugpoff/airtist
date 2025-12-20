@@ -1,3 +1,6 @@
+/**
+ * THIS IS COMPLETELY TEMPORARY. IT WILL BE MOVED TO A tRPC HANDLER.
+ */
 import { db } from "@repo/db"
 
 export const runtime = "nodejs"

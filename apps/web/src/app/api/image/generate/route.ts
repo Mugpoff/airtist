@@ -1,5 +1,8 @@
-import { db } from "@repo/db"
+/**
+ * THIS IS COMPLETELY TEMPORARY. IT WILL BE MOVED TO A tRPC HANDLER.
+ */
 import { uploadPng } from "@/server/minio"
+import { db } from "@repo/db"
 
 export const runtime = "nodejs"
 

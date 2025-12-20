@@ -1,3 +1,6 @@
+/**
+ * THIS IS COMPLETELY TEMPORARY. IT WILL BE MOVED TO A tRPC HANDLER.
+ */
 export const runtime = "nodejs"
 
 export const POST = async (req: Request) => {
