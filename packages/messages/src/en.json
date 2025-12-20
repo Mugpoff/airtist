@@ -1,7 +1,9 @@
 {
   "global": {
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "english": "English",
+    "french": "Français"
   },
   "validation": {
     "email": {
