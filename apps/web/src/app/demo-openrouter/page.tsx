@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@repo/ui/base/Button"
+import { Button } from "@repo/ui/base/button"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 
