@@ -47,34 +47,3 @@ services:
       interval: 5s
       timeout: 3s
       retries: 30
-
-  web:
-    build:
-      context: .
-      dockerfile: apps/web/Dockerfile
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-      dragonfly:
-        condition: service_healthy
-    environment:
-      - NODE_ENV=development
-      - DATABASE_USERNAME=$DATABASE_USERNAME
-      - DATABASE_PASSWORD=$DATABASE_PASSWORD
-      - DATABASE_NAME=$DATABASE_NAME
-      - DATABASE_URL=$DATABASE_URL
-      - MINIO_ROOT_USER=$MINIO_ROOT_USER
-      - MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
-      - MINIO_BUCKET=${MINIO_BUCKET:-ai-picture}
-      - MINIO_ENDPOINT=minio
-      - MINIO_PORT=9000
-      - MINIO_PUBLIC_URL=http://localhost:9000
-      - DRAGONFLY_URL=redis://dragonfly:6379
-      - OPENROUTER_API_KEY=$OPENROUTER_API_KEY
-      - OPENROUTER_HTTP_REFERER=$OPENROUTER_HTTP_REFERER
-      - OPENROUTER_APP_TITLE=$OPENROUTER_APP_TITLE
-    ports:
-      - "3000:3000"
