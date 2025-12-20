@@ -6,6 +6,7 @@ import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
 import type { ReactNode } from "react"
 import { AuthStoreProvider } from "@/stores/auth-store"
+import { TRPCReactProvider } from "@/trpc/react"
 import { getSession } from "@/utils/get-session"
 import "./globals.css"
 
@@ -47,7 +48,7 @@ export default async function RootLayout(props: { children: ReactNode }) {
             <ToastProvider>
               <AnchoredToastProvider>
                 <AuthStoreProvider session={session}>
-                  {props.children}
+                  <TRPCReactProvider>{props.children}</TRPCReactProvider>
                 </AuthStoreProvider>
               </AnchoredToastProvider>
             </ToastProvider>

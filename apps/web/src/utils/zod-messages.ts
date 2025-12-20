@@ -1,5 +1,3 @@
-import type { InferNestedValues } from "./infer-nested-values"
-
 export const zodMessages = {
   email: {
     required: "validation.email.required",
@@ -9,5 +7,3 @@ export const zodMessages = {
     required: "validation.password.required",
   },
 } as const
-
-export type ZodMessages = InferNestedValues<typeof zodMessages>

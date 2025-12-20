@@ -1,11 +1,11 @@
 {
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
-    "baseUrl": "src",
+    "lib": ["ESNext", "dom", "dom.iterable"],
+    "jsx": "preserve",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["./src/*"]
     },
-    "allowArbitraryExtensions": true,
     "plugins": [{ "name": "next" }]
   },
   "include": [
