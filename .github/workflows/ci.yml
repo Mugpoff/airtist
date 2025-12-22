@@ -45,5 +45,8 @@ jobs:
       - name: Setup
         uses: ./packages/github/setup
 
+      - name: Prisma
+        run: bun run --cwd packages/db prisma generate
+
       - name: Typecheck
         run: bun typecheck
