@@ -67,11 +67,19 @@ export const generateImageOpenRouterHandler = protectedProcedure
     const json = await res.json()
 
     if (!res.ok) {
-      throw new Error(
-        typeof json?.error?.message === "string"
-          ? json.error.message
-          : "OpenRouter request failed",
-      )
+      if (
+        typeof json === "object" &&
+        json !== null &&
+        "error" in json &&
+        typeof json.error === "object" &&
+        json.error !== null &&
+        "message" in json.error &&
+        typeof json.error.message === "string"
+      ) {
+        throw new Error(json.error.message)
+      }
+
+      throw new Error("OpenRouter request failed")
     }
 
     const parsed = OpenRouterResponse.parse(json)
