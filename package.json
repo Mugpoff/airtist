@@ -20,8 +20,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.8",
-    "knip": "^5.75.1",
-    "turbo": "^2.6.3",
+    "knip": "^5.76.3",
+    "turbo": "^2.7.1",
     "typescript": "5.9.2"
   },
   "workspaces": [
