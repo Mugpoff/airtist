@@ -11,10 +11,11 @@ import {
 import { ShimmerButton } from "@repo/ui/buttons/shimmer-button"
 import { useTranslations } from "next-intl"
 import type React from "react"
+import { GenerateDropzone } from "@/components/generate/generate-dropzone"
+import { GenerateOptions } from "@/components/generate/generate-options"
+import { LanguageSelector } from "@/components/ui/language-selector"
 import { SignOutButton } from "@/components/ui/sign-out-button"
 import { ThemeSwitch } from "@/components/ui/theme-switch"
-import { LanguageSelector } from "../ui/language-selector"
-import { GenerateDropzone } from "./generate-dropzone"
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>()
 
@@ -38,7 +39,7 @@ export const GenerateContent = () => {
       </div>
       <GenerateDropzone />
       <div className="grid grid-cols-3">
-        <div>part 1</div>
+        <GenerateOptions />
         <div className="flex justify-center">
           <ShimmerButton className="px-12">Generate</ShimmerButton>
         </div>

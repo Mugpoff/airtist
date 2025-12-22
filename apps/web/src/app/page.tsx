@@ -2,13 +2,13 @@
 
 import { motion, useAnimation } from "motion/react"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { CanvasContent } from "@/components/canvas/canvas-content"
+import { Canvas } from "@/components/canvas/canvas"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
 
 const PAGES = [
   { key: "generate", Component: GenerateContent },
-  { key: "canvas", Component: CanvasContent },
+  { key: "canvas", Component: Canvas },
 ] as const
 const SCROLL_THRESHOLD = 50 // Accumulated delta required to trigger page change
 const SCROLL_COOLDOWN = 1000 // Cooldown in ms after page change

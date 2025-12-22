@@ -5,9 +5,7 @@ const port = process.env.MINIO_PORT ?? "9000"
 const bucket = process.env.MINIO_BUCKET ?? "ai-picture"
 const publicBase = process.env.MINIO_PUBLIC_URL ?? `http://localhost:${port}`
 
-export const minioBucket = bucket
-
-export const s3 = new S3Client({
+const s3 = new S3Client({
   region: process.env.MINIO_REGION ?? "us-east-1",
   endpoint: `http://${endpoint}:${port}`,
   credentials: {

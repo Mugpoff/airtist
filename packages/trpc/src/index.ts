@@ -18,6 +18,6 @@ type RouterInputs = inferRouterInputs<AppRouter>
  */
 type RouterOutputs = inferRouterOutputs<AppRouter>
 
-export { createTRPCContext } from "./context"
 export { type AppRouter, appRouter } from "./router"
+export { createTRPCContext } from "./trpc"
 export type { RouterInputs, RouterOutputs }
