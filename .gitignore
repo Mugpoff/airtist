@@ -48,3 +48,4 @@ generated/
 # generated images
 /out.png
 /direct.png
+.mc/
