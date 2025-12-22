@@ -26,7 +26,6 @@ import {
 import type { TRPCClientError } from "@trpc/client"
 import type { inferRouterOutputs } from "@trpc/server"
 import Image from "next/image"
-import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { useTRPC } from "@/trpc/react"
 
@@ -35,8 +34,18 @@ type ImageWithUrl = ImageOutput & { imageUrl: string }
 
 const aspectRatios = ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3"]
 
+const toCdnUrl = (url: string) => {
+  const marker = "/images/"
+  const idx = url.indexOf(marker)
+
+  if (idx === -1) {
+    return url
+  }
+
+  return `/cdn${url.slice(idx)}`
+}
+
 export function GenerateView() {
-  const t = useTranslations()
   const [prompt, setPrompt] = useState(
     "A cute cat astronaut in space, photorealistic",
   )
@@ -73,6 +82,7 @@ export function GenerateView() {
       })
       return
     }
+
     generateImageMutation.mutate({ prompt, aspectRatio })
   }
 
@@ -134,7 +144,7 @@ export function GenerateView() {
         </Card>
 
         <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">
+          <h2 className="font-semibold mb-4 text-2xl tracking-tight">
             Galerie
           </h2>
           {imagesWithUrl.length > 0 ? (
@@ -149,7 +159,7 @@ export function GenerateView() {
                       }}
                     >
                       <Image
-                        src={image.imageUrl}
+                        src={toCdnUrl(image.imageUrl)}
                         alt={image.prompt}
                         fill
                         className="object-cover"
@@ -158,7 +168,7 @@ export function GenerateView() {
                     </div>
                   </CardContent>
                   <CardFooter className="p-4">
-                    <p className="truncate text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm truncate">
                       {image.prompt}
                     </p>
                   </CardFooter>
