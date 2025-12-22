@@ -29,7 +29,6 @@
     "country-flag-icons": "^1.6.4",
     "embla-carousel-react": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
-    "lucide-react": "^0.561.0",
     "motion": "^12.23.26",
     "next": "16.0.10",
     "next-intl": "^4.6.1",

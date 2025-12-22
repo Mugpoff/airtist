@@ -1,6 +1,7 @@
 "use client"
 
-import { EyeIcon, EyeOffIcon } from "lucide-react"
+import { ViewIcon, ViewOffSlashIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { forwardRef, useState } from "react"
 import { Button } from "./button"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./input-group"
@@ -35,9 +36,9 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
               }
             >
               {showPassword ? (
-                <EyeOffIcon className="size-4" />
+                <HugeiconsIcon icon={ViewOffSlashIcon} className="size-4" />
               ) : (
-                <EyeIcon className="size-4" />
+                <HugeiconsIcon icon={ViewIcon} className="size-4" />
               )}
             </TooltipTrigger>
             <TooltipPopup>

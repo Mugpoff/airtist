@@ -1,10 +1,10 @@
 "use client"
 
+import { motion, useAnimation } from "motion/react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { CanvasContent } from "@/components/canvas/canvas-content"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
-import { motion, useAnimation } from "motion/react"
-import { useCallback, useEffect, useRef, useState } from "react"
 
 const PAGES = [
   { key: "generate", Component: GenerateContent },

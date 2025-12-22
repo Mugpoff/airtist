@@ -1,7 +1,8 @@
 "use client"
 
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
-import { CheckIcon, ChevronRightIcon } from "lucide-react"
+import { ArrowRight01Icon, Tick02Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import type * as React from "react"
 import { cn } from "../../lib/utils"
 
@@ -104,7 +105,7 @@ function MenuCheckboxItem({
       {...props}
     >
       <MenuPrimitive.CheckboxItemIndicator className="col-start-1">
-        <CheckIcon />
+        <HugeiconsIcon icon={Tick02Icon} />
       </MenuPrimitive.CheckboxItemIndicator>
       <span className="col-start-2">{children}</span>
     </MenuPrimitive.CheckboxItem>
@@ -132,7 +133,7 @@ function MenuRadioItem({
       {...props}
     >
       <MenuPrimitive.RadioItemIndicator className="col-start-1">
-        <CheckIcon />
+        <HugeiconsIcon icon={Tick02Icon} />
       </MenuPrimitive.RadioItemIndicator>
       <span className="col-start-2">{children}</span>
     </MenuPrimitive.RadioItem>
@@ -205,7 +206,7 @@ function MenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRightIcon className="ms-auto" />
+      <HugeiconsIcon icon={ArrowRight01Icon} className="ms-auto" />
     </MenuPrimitive.SubmenuTrigger>
   )
 }

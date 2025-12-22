@@ -1,7 +1,8 @@
 "use client"
 
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete"
-import { ChevronsUpDownIcon, XIcon } from "lucide-react"
+import { Cancel01Icon, UnfoldMoreIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { cn } from "../../lib/utils"
 import { Input } from "./input"
 import { ScrollArea } from "./scroll-area"
@@ -41,7 +42,7 @@ function AutocompleteInput({
             sizeValue === "sm" ? "end-0" : "end-0.5",
           )}
         >
-          <ChevronsUpDownIcon />
+          <HugeiconsIcon icon={UnfoldMoreIcon} />
         </AutocompleteTrigger>
       )}
       {showClear && (
@@ -51,7 +52,7 @@ function AutocompleteInput({
             sizeValue === "sm" ? "end-0" : "end-0.5",
           )}
         >
-          <XIcon />
+          <HugeiconsIcon icon={Cancel01Icon} />
         </AutocompleteClear>
       )}
     </div>
@@ -219,7 +220,7 @@ function AutocompleteClear({
       data-slot="autocomplete-clear"
       {...props}
     >
-      <XIcon />
+      <HugeiconsIcon icon={Cancel01Icon} />
     </AutocompletePrimitive.Clear>
   )
 }
