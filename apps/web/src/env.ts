@@ -1,37 +1,21 @@
 import { env as authEnv } from "@repo/auth/env"
+import { env as dbEnv } from "@repo/db/env"
 import { env as trpcEnv } from "@repo/trpc/env"
 import { createEnv } from "@t3-oss/env-nextjs"
 import { z } from "zod"
 
 export const env = createEnv({
-  extends: [authEnv, trpcEnv],
-
-  /**
-   * Specify your shared environment variables schema here.
-   */
+  extends: [authEnv, dbEnv, trpcEnv],
   shared: {
     NODE_ENV: z.enum(["development", "production"]).default("development"),
   },
-
-  /**
-   * Specify your server-side environment variables schema here.
-   * This way you can ensure the app isn't built with invalid env vars.
-   */
   server: {},
-
-  /**
-   * Specify your client-side environment variables schema here.
-   * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
-   */
   client: {},
-
-  /**
-   * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
-   */
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
   },
-
   skipValidation:
-    !!process.env.CI || process.env.npm_lifecycle_event === "lint",
+    !!process.env.CI ||
+    (process.env.NODE_ENV === "production" &&
+      process.env.npm_lifecycle_event === "typecheck"),
 })
