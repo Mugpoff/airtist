@@ -1,7 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignoreWorkspaces": ["packages/db"],
-  "ignoreDependencies": ["pg"],
+  "ignoreDependencies": ["pg", "@aws-sdk/client-s3"],
   "ignoreFiles": ["packages/typescript-config/global.d.ts"],
   "ignoreUnresolved": ["^\\.{2,}\\/.*\\/\\*\\*\\/\\*\\.\\{ts,tsx\\}$", "next"]
 }
