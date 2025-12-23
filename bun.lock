@@ -14,6 +14,7 @@
     "apps/web": {
       "name": "web",
       "dependencies": {
+        "@aws-sdk/client-s3": "^3.957.0",
         "@hookform/resolvers": "^5.2.2",
         "@hugeicons/core-free-icons": "^3.1.0",
         "@hugeicons/react": "^1.1.3",
