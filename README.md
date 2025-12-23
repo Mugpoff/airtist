@@ -78,7 +78,19 @@ docker compose up -d
 
 This starts PostgreSQL, Dragonfly, and MinIO.
 
-### 5. Execute database migrations
+### 5. Create default MinIO bucket
+
+You'll need to configure the MinIO instance and create the default bucket with the following commands.
+
+```bash
+# Configure the local alias
+source .env && docker exec -it ai-picture-minio-1 mc alias set local http://localhost:$MINIO_PORT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+
+# Create the bucket
+docker exec -it ai-picture-minio-1 mc mb -p local/$MINIO_BUCKET
+```
+
+### 6. Execute database migrations
 
 ```bash
 bun db migrate dev
@@ -86,7 +98,7 @@ bun db migrate dev
 
 This will execute all pending database migrations, if any or init your database.
 
-### 6. Start development servers
+### 7. Start development servers
 
 ```bash
 bun dev
