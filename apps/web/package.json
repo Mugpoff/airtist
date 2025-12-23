@@ -6,7 +6,7 @@
     "dev": "bun with-env next dev --port 3000",
     "build": "bun with-env next build",
     "start": "bun with-env next start",
-    "typecheck": "bun with-env next typegen && tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {

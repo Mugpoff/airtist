@@ -13,6 +13,6 @@
     "next.config.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "../../packages/typescript-config/global.d.ts"
+    "node_modules/@repo/typescript-config/global.d.ts"
   ]
 }

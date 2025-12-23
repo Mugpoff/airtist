@@ -1,10 +1,6 @@
 import type { NextConfig } from "next"
 import createNextIntlPlugin from "next-intl/plugin"
-import "./src/env"
-
-const minioPublicEndpoint =
-  process.env.MINIO_PUBLIC_ENDPOINT ?? "http://localhost:9000"
-const minioBucket = process.env.MINIO_BUCKET ?? "ai-picture"
+import { env } from "./src/env"
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
@@ -13,7 +9,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/cdn/images/:path*",
-        destination: `${minioPublicEndpoint}/${minioBucket}/images/:path*`,
+        destination: `${env.MINIO_PUBLIC_ENDPOINT}/${env.MINIO_BUCKET}/images/:path*`,
       },
     ]
   },
@@ -21,7 +17,7 @@ const nextConfig: NextConfig = {
 
 const withNextIntl = createNextIntlPlugin({
   experimental: {
-    // Keep messages typing in sync with the shared messages package.
+    // Keep messages typings in sync with the shared messages package.
     createMessagesDeclaration: "../../packages/messages/src/en.json",
   },
 })

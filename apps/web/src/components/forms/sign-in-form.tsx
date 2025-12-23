@@ -11,7 +11,6 @@ import { Logo } from "@repo/ui/icons/Logo"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import type { ReactNode } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useAuth } from "@/stores/auth-store"
@@ -19,7 +18,6 @@ import { zodMessages } from "@/utils/zod-messages"
 
 const signInSchema = z.object({
   email: z
-    .string()
     .email(zodMessages.email.invalid)
     .nonempty(zodMessages.email.required),
   password: z.string().nonempty(zodMessages.password.required),
@@ -85,7 +83,7 @@ export const SignInForm = () => {
 
       <p className="max-w-xs text-center text-muted-foreground text-xs">
         {t.rich("auth.signIn.privacy", {
-          termsOfService: (chunks: ReactNode) => (
+          termsOfService: (chunks) => (
             <Link
               href="/"
               className="text-foreground underline underline-offset-4"
@@ -93,7 +91,7 @@ export const SignInForm = () => {
               {chunks}
             </Link>
           ),
-          privacyPolicy: (chunks: ReactNode) => (
+          privacyPolicy: (chunks) => (
             <Link
               href="/"
               className="text-foreground underline underline-offset-4"

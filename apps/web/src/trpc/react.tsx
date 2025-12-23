@@ -15,6 +15,7 @@ const getQueryClient = () => {
   if (typeof window === "undefined") {
     return createQueryClient()
   }
+
   // biome-ignore lint/suspicious/noAssignInExpressions: it's a valid use case
   return (clientQueryClientSingleton ??= createQueryClient())
 }
