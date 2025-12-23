@@ -12,7 +12,7 @@
     "clean:ws": "turbo run clean",
     "check:ws": "biome check .",
     "check:ws:ci": "biome ci .",
-    "lint:ws": "bunx sherif@latest",
+    "lint:ws": "sherif",
     "typecheck": "turbo run typecheck",
     "knip": "knip",
     "postinstall": "bun lint:ws",
@@ -21,6 +21,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.3.8",
     "knip": "^5.76.3",
+    "sherif": "^1.9.0",
     "turbo": "^2.7.1",
     "typescript": "5.9.2"
   },

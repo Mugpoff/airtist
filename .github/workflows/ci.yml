@@ -37,6 +37,17 @@ jobs:
       - name: Check
         run: bun check:ws:ci
 
+  lint-ws:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup
+        uses: ./packages/github/setup
+
+      - name: Lint
+        run: bun lint:ws
+
   typecheck:
     runs-on: ubuntu-latest
     steps:
