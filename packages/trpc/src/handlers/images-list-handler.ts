@@ -1,7 +1,7 @@
 import { db } from "@repo/db"
-import { publicProcedure } from "../trpc"
+import { protectedProcedure } from "../trpc"
 
-export const imagesListHandler = publicProcedure.query(() => {
+export const imagesListHandler = protectedProcedure.query(() => {
   return db.generatedImages.findMany({
     orderBy: { createdAt: "desc" },
     take: 50,

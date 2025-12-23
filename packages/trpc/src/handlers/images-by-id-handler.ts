@@ -1,9 +1,9 @@
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { publicProcedure } from "../trpc"
+import { protectedProcedure } from "../trpc"
 
-export const imagesByIdHandler = publicProcedure
+export const imagesByIdHandler = protectedProcedure
   .input(z.object({ id: z.string() }))
   .query(async ({ input }) => {
     const image = await db.generatedImages.findUnique({

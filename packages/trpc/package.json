@@ -14,6 +14,7 @@
     "typecheck": "bun --env-file=../../.env tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.957.0",
     "@openrouter/sdk": "^0.3.10",
     "@repo/auth": "*",
     "@repo/cache": "*",
@@ -21,7 +22,6 @@
     "@repo/db": "*",
     "@t3-oss/env-core": "^0.13.10",
     "@trpc/server": "11.7.2",
-    "openai": "^6.15.0",
     "superjson": "^2.2.6",
     "zod": "^4.2.1"
   },

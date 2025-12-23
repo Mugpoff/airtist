@@ -2,7 +2,7 @@ import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { env } from "../env"
-import { publicProcedure } from "../trpc"
+import { protectedProcedure } from "../trpc"
 import { uploadPng } from "../utils/storage-client"
 
 type OpenRouterResponse = {
@@ -39,7 +39,7 @@ const sizeFromAspectRatio = (
   return (aspectRatio && ASPECT_RATIO_MAP[aspectRatio]) || DEFAULT_SIZE
 }
 
-export const imagesGenerateHandler = publicProcedure
+export const imagesGenerateHandler = protectedProcedure
   .input(
     z.object({
       prompt: z.string().trim().min(1),
