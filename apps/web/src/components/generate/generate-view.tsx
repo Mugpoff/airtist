@@ -144,7 +144,7 @@ export function GenerateView() {
         </Card>
 
         <section>
-          <h2 className="font-semibold mb-4 text-2xl tracking-tight">
+          <h2 className="mb-4 font-semibold text-2xl tracking-tight">
             Galerie
           </h2>
           {imagesWithUrl.length > 0 ? (
@@ -168,7 +168,7 @@ export function GenerateView() {
                     </div>
                   </CardContent>
                   <CardFooter className="p-4">
-                    <p className="text-muted-foreground text-sm truncate">
+                    <p className="truncate text-muted-foreground text-sm">
                       {image.prompt}
                     </p>
                   </CardFooter>
