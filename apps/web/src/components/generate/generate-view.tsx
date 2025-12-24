@@ -23,13 +23,13 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query"
+import type { TRPCClientError } from "@trpc/client"
 import {
   createTRPCClient,
   httpBatchStreamLink,
   splitLink,
   unstable_httpSubscriptionLink,
 } from "@trpc/client"
-import type { TRPCClientError } from "@trpc/client"
 import type { inferRouterOutputs } from "@trpc/server"
 import Image from "next/image"
 import Link from "next/link"
@@ -40,15 +40,18 @@ import { useTRPC } from "@/trpc/react"
 
 type ImageOutput = inferRouterOutputs<AppRouter>["images"]["list"][number]
 type ImageWithUrl = ImageOutput & { imageUrl: string }
-type GenerationStep =
-  | "STARTING"
-  | "SENDING_TO_AI"
-  | "WAITING_FOR_AI"
-  | "DOWNLOADING_IMAGE"
-  | "UPLOADING_TO_STORAGE"
-  | "SAVING_TO_DB"
-  | "COMPLETED"
-  | "FAILED"
+type GenerationProgress = {
+  step:
+    | "STARTING"
+    | "SENDING_TO_AI"
+    | "WAITING_FOR_AI"
+    | "DOWNLOADING_IMAGE"
+    | "UPLOADING_TO_STORAGE"
+    | "SAVING_TO_DB"
+    | "COMPLETED"
+    | "FAILED"
+  message?: string
+}
 
 const aspectRatios = ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3"]
 
@@ -100,7 +103,9 @@ export function GenerateView() {
     const subscription = vanillaClient.images.onProgress.subscribe(
       { requestId: currentRequestId },
       {
-        onData: (data) => {
+        onData: (result: any) => {
+          const data = result as GenerationProgress
+
           setGenerationStatus(data.message || data.step)
 
           switch (data.step) {
