@@ -1,21 +1,10 @@
 "use client"
 
-import type { AppRouter } from "@repo/trpc"
-import { Button } from "@repo/ui/base/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/base/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/base/card"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import type { inferRouterOutputs } from "@trpc/server"
 import Image from "next/image"
 import Link from "next/link"
 import { useTRPC } from "@/trpc/react"
-
-type ImageOutput = inferRouterOutputs<AppRouter>["images"]["byId"]
 
 const toCdnUrl = (url: string) => {
   const marker = "/images/"
@@ -42,7 +31,7 @@ export function ImageDetailView({ id }: { id: string }) {
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <Link
         href="/"
-        className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:underline"
+        className="mb-4 inline-flex items-center text-muted-foreground text-sm hover:underline"
       >
         ← Retour à la galerie
       </Link>
@@ -64,19 +53,19 @@ export function ImageDetailView({ id }: { id: string }) {
           </div>
           <div className="space-y-4">
             <div>
-              <h3 className="mb-1 font-medium text-sm text-muted-foreground">
+              <h3 className="mb-1 font-medium text-muted-foreground text-sm">
                 Prompt
               </h3>
               <p className="text-sm">{image.prompt}</p>
             </div>
             <div>
-              <h3 className="mb-1 font-medium text-sm text-muted-foreground">
+              <h3 className="mb-1 font-medium text-muted-foreground text-sm">
                 Modèle
               </h3>
               <p className="text-sm">{image.model}</p>
             </div>
             <div>
-              <h3 className="mb-1 font-medium text-sm text-muted-foreground">
+              <h3 className="mb-1 font-medium text-muted-foreground text-sm">
                 Format
               </h3>
               <p className="text-sm">
@@ -84,7 +73,7 @@ export function ImageDetailView({ id }: { id: string }) {
               </p>
             </div>
             <div>
-              <h3 className="mb-1 font-medium text-sm text-muted-foreground">
+              <h3 className="mb-1 font-medium text-muted-foreground text-sm">
                 Date de création
               </h3>
               <p className="text-sm">
