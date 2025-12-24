@@ -13,7 +13,7 @@ import { config } from "@repo/config"
 import { db } from "@repo/db"
 import { initTRPC, TRPCError } from "@trpc/server"
 import superjson from "superjson"
-import { ZodError, z } from "zod/v4"
+import { ZodError, z } from "zod"
 import { openRouterClient } from "./utils/openrouter-client"
 
 /**
@@ -57,10 +57,20 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       ...shape.data,
       zodError:
         error.cause instanceof ZodError
-          ? z.flattenError(error.cause as ZodError<Record<string, unknown>>)
+          ? error.cause.flatten()
           : null,
     },
   }),
+  sse: {
+    maxDurationMs: 5 * 60 * 1_000, // 5 minutes
+    ping: {
+      enabled: true,
+      intervalMs: 3_000,
+    },
+    client: {
+      reconnectAfterInactivityMs: 5_000,
+    },
+  },
 })
 
 /**

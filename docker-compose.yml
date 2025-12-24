@@ -36,6 +36,7 @@ services:
   dragonfly:
     image: docker.dragonflydb.io/dragonflydb/dragonfly
     restart: unless-stopped
+    command: dragonfly --maxmemory 2gb --proactor_threads=6
     ulimits:
       memlock: -1
     ports:
