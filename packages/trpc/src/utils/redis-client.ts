@@ -2,9 +2,8 @@ import { Redis } from "ioredis"
 import { env } from "../env"
 import { ee, type GenerationProgress } from "./event-emitter"
 
-export const redis = new Redis(env.DRAGONFLY_URL)
-// Subscriber client for pub/sub
-export const redisSubscriber = new Redis(env.DRAGONFLY_URL)
+const redis = new Redis(env.DRAGONFLY_URL)
+const redisSubscriber = new Redis(env.DRAGONFLY_URL)
 
 const PROGRESS_CHANNEL = "generation-progress"
 

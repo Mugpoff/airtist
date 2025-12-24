@@ -15,6 +15,7 @@ import { initTRPC, TRPCError } from "@trpc/server"
 import superjson from "superjson"
 import { ZodError } from "zod"
 import { openRouterClient } from "./utils/openrouter-client"
+import "./utils/redis-client"
 
 /**
  * 1. CONTEXT
