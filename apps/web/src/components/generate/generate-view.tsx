@@ -103,7 +103,7 @@ export function GenerateView() {
     const subscription = vanillaClient.images.onProgress.subscribe(
       { requestId: currentRequestId },
       {
-        onData: (result: any) => {
+        onData: (result: unknown) => {
           const data = result as GenerationProgress
 
           setGenerationStatus(data.message || data.step)

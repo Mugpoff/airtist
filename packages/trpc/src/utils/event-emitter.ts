@@ -1,4 +1,4 @@
-import { EventEmitter, on } from "events"
+import { EventEmitter, on } from "node:events"
 
 export type GenerationStep =
   | "STARTING"

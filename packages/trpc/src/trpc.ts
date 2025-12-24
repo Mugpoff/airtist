@@ -13,7 +13,7 @@ import { config } from "@repo/config"
 import { db } from "@repo/db"
 import { initTRPC, TRPCError } from "@trpc/server"
 import superjson from "superjson"
-import { ZodError, z } from "zod"
+import { ZodError } from "zod"
 import { openRouterClient } from "./utils/openrouter-client"
 
 /**
@@ -43,6 +43,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     openRouter: openRouterClient,
   }
 }
+
 /**
  * 2. INITIALIZATION
  *
@@ -55,14 +56,11 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
     ...shape,
     data: {
       ...shape.data,
-      zodError:
-        error.cause instanceof ZodError
-          ? error.cause.flatten()
-          : null,
+      zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
     },
   }),
   sse: {
-    maxDurationMs: 5 * 60 * 1_000, // 5 minutes
+    maxDurationMs: 5 * 60 * 1_000,
     ping: {
       enabled: true,
       intervalMs: 3_000,
@@ -87,7 +85,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 export const createTRPCRouter = t.router
 
 /**
- * Middleware for timing procedure execution and adding an articifial delay in development.
+ * Middleware for timing procedure execution and adding an artificial delay in development.
  *
  * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
  * network latency that would occur in production but not in local development.
