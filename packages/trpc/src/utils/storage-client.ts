@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3"
 import { env } from "../env"
 
 const s3 = new S3Client({
@@ -22,4 +26,13 @@ export const uploadPng = async (key: string, body: Buffer) => {
   await s3.send(command)
 
   return `${env.MINIO_PUBLIC_ENDPOINT}/${env.MINIO_BUCKET}/${key}`
+}
+
+export const deletePng = async (key: string) => {
+  const command = new DeleteObjectCommand({
+    Bucket: env.MINIO_BUCKET,
+    Key: key,
+  })
+
+  await s3.send(command)
 }
