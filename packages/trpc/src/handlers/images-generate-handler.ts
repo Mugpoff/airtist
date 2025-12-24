@@ -3,6 +3,7 @@ import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { env } from "../env"
 import { protectedProcedure } from "../trpc"
+import { publishProgress } from "../utils/redis-client"
 import { uploadPng } from "../utils/storage-client"
 
 type OpenRouterResponse = {
@@ -45,10 +46,17 @@ export const imagesGenerateHandler = protectedProcedure
       prompt: z.string().trim().min(1),
       model: z.string().trim().optional(),
       aspectRatio: z.string().trim().optional(),
+      clientRequestId: z.string().uuid().optional(),
     }),
   )
   .mutation(async ({ input }) => {
     const model = input.model || "google/gemini-2.5-flash-image-preview"
+    const localRequestId = input.clientRequestId || crypto.randomUUID()
+
+    await publishProgress(localRequestId, {
+      step: "STARTING",
+      message: "Starting generation...",
+    })
 
     const payload = {
       model,
@@ -59,6 +67,11 @@ export const imagesGenerateHandler = protectedProcedure
         ? { image_config: { aspect_ratio: input.aspectRatio } }
         : {}),
     }
+
+    await publishProgress(localRequestId, {
+      step: "SENDING_TO_AI",
+      message: "Sending request to OpenRouter...",
+    })
 
     const upstream = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
@@ -74,7 +87,14 @@ export const imagesGenerateHandler = protectedProcedure
       },
     )
 
-    const requestId = upstream.headers.get("x-request-id") ?? ""
+    await publishProgress(localRequestId, {
+      step: "WAITING_FOR_AI",
+      message: "Waiting for AI response...",
+    })
+
+    const upstreamRequestId = upstream.headers.get("x-request-id") ?? ""
+    const finalRequestId = localRequestId
+
     const json = (await upstream
       .json()
       .catch(() => null)) as OpenRouterResponse | null
@@ -84,6 +104,8 @@ export const imagesGenerateHandler = protectedProcedure
         typeof json?.error?.message === "string"
           ? json.error.message
           : "OpenRouter request failed"
+
+      await publishProgress(finalRequestId, { step: "FAILED", message: msg })
       throw new TRPCError({ code: "BAD_GATEWAY", message: msg })
     }
 
@@ -91,16 +113,29 @@ export const imagesGenerateHandler = protectedProcedure
     const imageUrl = img?.image_url?.url ?? img?.imageUrl?.url
 
     if (typeof imageUrl !== "string") {
+      await publishProgress(finalRequestId, {
+        step: "FAILED",
+        message: "No image in response",
+      })
       throw new TRPCError({
         code: "BAD_GATEWAY",
         message: "No image in OpenRouter response",
       })
     }
 
+    await publishProgress(finalRequestId, {
+      step: "DOWNLOADING_IMAGE",
+      message: "Processing image...",
+    })
+
     const prefix = "base64,"
     const idx = imageUrl.indexOf(prefix)
 
     if (idx === -1) {
+      await publishProgress(finalRequestId, {
+        step: "FAILED",
+        message: "Invalid image format",
+      })
       throw new TRPCError({
         code: "BAD_GATEWAY",
         message: "Invalid image data URL",
@@ -110,15 +145,25 @@ export const imagesGenerateHandler = protectedProcedure
     const b64 = imageUrl.slice(idx + prefix.length)
     const bytes = Buffer.from(b64, "base64")
 
+    await publishProgress(finalRequestId, {
+      step: "UPLOADING_TO_STORAGE",
+      message: "Saving to storage...",
+    })
+
     const objectKey = `images/${crypto.randomUUID()}.png`
     const publicUrl = await uploadPng(objectKey, bytes)
     const size = sizeFromAspectRatio(input.aspectRatio)
+
+    await publishProgress(finalRequestId, {
+      step: "SAVING_TO_DB",
+      message: "Finalizing...",
+    })
 
     const row = await db.generatedImages.create({
       data: {
         prompt: input.prompt,
         model,
-        requestId: requestId || null,
+        requestId: upstreamRequestId || null,
         aspectRatio: input.aspectRatio ?? null,
         width: size.width,
         height: size.height,
@@ -128,5 +173,11 @@ export const imagesGenerateHandler = protectedProcedure
       },
     })
 
-    return { requestId, image: row }
+    await publishProgress(finalRequestId, {
+      step: "COMPLETED",
+      message: "Done!",
+      imageUrl: publicUrl,
+    })
+
+    return { requestId: finalRequestId, image: row }
   })
