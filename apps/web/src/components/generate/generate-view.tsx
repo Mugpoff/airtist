@@ -26,7 +26,9 @@ import {
 import type { TRPCClientError } from "@trpc/client"
 import type { inferRouterOutputs } from "@trpc/server"
 import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
+import { FaRegTrashCan } from "react-icons/fa6"
 import { useTRPC } from "@/trpc/react"
 
 type ImageOutput = inferRouterOutputs<AppRouter>["images"]["list"][number]
@@ -74,6 +76,24 @@ export function GenerateView() {
     },
   })
 
+  const deleteImageMutation = useMutation({
+    ...trpc.images.delete.mutationOptions(),
+    onSuccess: () => {
+      toastManager.add({
+        title: "Image supprimée",
+        type: "success",
+      })
+      queryClient.invalidateQueries({ queryKey: trpc.images.list.queryKey() })
+    },
+    onError: (error: TRPCClientError<AppRouter>) => {
+      toastManager.add({
+        title: "Erreur lors de la suppression",
+        description: error.message,
+        type: "error",
+      })
+    },
+  })
+
   const handleGenerate = () => {
     if (!prompt.trim()) {
       toastManager.add({
@@ -84,6 +104,12 @@ export function GenerateView() {
     }
 
     generateImageMutation.mutate({ prompt, aspectRatio })
+  }
+
+  const handleDelete = (id: string) => {
+    if (confirm("Voulez-vous vraiment supprimer cette image ?")) {
+      deleteImageMutation.mutate({ id })
+    }
   }
 
   const imagesWithUrl = images.filter(
@@ -150,27 +176,45 @@ export function GenerateView() {
           {imagesWithUrl.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {imagesWithUrl.map((image) => (
-                <Card key={image.id} className="overflow-hidden">
-                  <CardContent className="p-0">
-                    <div
-                      className="relative"
-                      style={{
-                        paddingTop: `${(image.height / image.width) * 100}%`,
+                <Card key={image.id} className="group overflow-hidden relative">
+                  <Link href={`/images/${image.id}`} className="block">
+                    <CardContent className="p-0">
+                      <div
+                        className="relative"
+                        style={{
+                          paddingTop: `${(image.height / image.width) * 100}%`,
+                        }}
+                      >
+                        <Image
+                          src={toCdnUrl(image.imageUrl)}
+                          alt={image.prompt}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-105"
+                          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                        />
+                      </div>
+                    </CardContent>
+                  </Link>
+                  <CardFooter className="flex items-center justify-between p-4">
+                    <Link
+                      href={`/images/${image.id}`}
+                      className="truncate text-muted-foreground text-sm flex-1 hover:underline"
+                    >
+                      {image.prompt}
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="ml-2 h-8 w-8 text-muted-foreground hover:text-destructive"
+                      disabled={deleteImageMutation.isPending}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDelete(image.id)
                       }}
                     >
-                      <Image
-                        src={toCdnUrl(image.imageUrl)}
-                        alt={image.prompt}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                      />
-                    </div>
-                  </CardContent>
-                  <CardFooter className="p-4">
-                    <p className="truncate text-muted-foreground text-sm">
-                      {image.prompt}
-                    </p>
+                      <FaRegTrashCan className="size-4" />
+                      <span className="sr-only">Supprimer</span>
+                    </Button>
                   </CardFooter>
                 </Card>
               ))}
