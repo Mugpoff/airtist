@@ -3,7 +3,13 @@
 import type { AppRouter } from "@repo/trpc"
 import type { QueryClient } from "@tanstack/react-query"
 import { QueryClientProvider } from "@tanstack/react-query"
-import { createTRPCClient, httpBatchStreamLink, loggerLink } from "@trpc/client"
+import {
+  createTRPCClient,
+  httpBatchStreamLink,
+  loggerLink,
+  splitLink,
+  unstable_httpSubscriptionLink,
+} from "@trpc/client"
 import { createTRPCContext } from "@trpc/tanstack-react-query"
 import { useState } from "react"
 import SuperJSON from "superjson"
@@ -33,14 +39,21 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
             env.NODE_ENV === "development" ||
             (op.direction === "down" && op.result instanceof Error),
         }),
-        httpBatchStreamLink({
-          transformer: SuperJSON,
-          url: `${getBaseUrl()}/api/trpc`,
-          headers() {
-            const headers = new Headers()
-            headers.set("x-trpc-source", "nextjs-react")
-            return headers
-          },
+        splitLink({
+          condition: (op) => op.type === "subscription",
+          true: unstable_httpSubscriptionLink({
+            url: `${getBaseUrl()}/api/trpc`,
+            transformer: SuperJSON,
+          }),
+          false: httpBatchStreamLink({
+            transformer: SuperJSON,
+            url: `${getBaseUrl()}/api/trpc`,
+            headers() {
+              const headers = new Headers()
+              headers.set("x-trpc-source", "nextjs-react")
+              return headers
+            },
+          }),
         }),
       ],
     }),
