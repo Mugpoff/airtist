@@ -1,5 +1,4 @@
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
-
 import type { AppRouter } from "./router"
 
 /**
@@ -8,7 +7,7 @@ import type { AppRouter } from "./router"
  * type PostByIdInput = RouterInputs['post']['byId']
  *      ^? { id: number }
  */
-type RouterInputs = inferRouterInputs<AppRouter>
+export type RouterInputs = inferRouterInputs<AppRouter>
 
 /**
  * Inference helpers for output types
@@ -16,8 +15,9 @@ type RouterInputs = inferRouterInputs<AppRouter>
  * type AllPostsOutput = RouterOutputs['post']['all']
  *      ^? Post[]
  */
-type RouterOutputs = inferRouterOutputs<AppRouter>
+export type RouterOutputs = inferRouterOutputs<AppRouter>
 
 export { type AppRouter, appRouter } from "./router"
 export { createTRPCContext } from "./trpc"
-export type { RouterInputs, RouterOutputs }
+export * from "./utils/image-models"
+export * from "./utils/studio-constants"
