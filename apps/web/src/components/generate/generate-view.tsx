@@ -145,7 +145,7 @@ export function GenerateView() {
       return
     }
 
-    const ageNum = parseInt(age)
+    const ageNum = parseInt(age, 10)
     const range = STUDIO_AGE_RANGES[category as keyof typeof STUDIO_AGE_RANGES]
     if (range && (ageNum < range.min || ageNum > range.max)) {
       toastManager.add({
