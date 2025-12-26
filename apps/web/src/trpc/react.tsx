@@ -6,6 +6,8 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import {
   createTRPCClient,
   httpBatchStreamLink,
+  httpLink,
+  isNonJsonSerializable,
   loggerLink,
   splitLink,
   unstable_httpSubscriptionLink,
@@ -45,14 +47,29 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
             url: `${getBaseUrl()}/api/trpc`,
             transformer: SuperJSON,
           }),
-          false: httpBatchStreamLink({
-            transformer: SuperJSON,
-            url: `${getBaseUrl()}/api/trpc`,
-            headers() {
-              const headers = new Headers()
-              headers.set("x-trpc-source", "nextjs-react")
-              return headers
-            },
+          false: splitLink({
+            condition: (op) => isNonJsonSerializable(op.input),
+            true: httpLink({
+              url: `${getBaseUrl()}/api/trpc`,
+              transformer: {
+                serialize: (data) => data,
+                deserialize: SuperJSON.deserialize,
+              },
+              headers() {
+                const headers = new Headers()
+                headers.set("x-trpc-source", "nextjs-react")
+                return headers
+              },
+            }),
+            false: httpBatchStreamLink({
+              transformer: SuperJSON,
+              url: `${getBaseUrl()}/api/trpc`,
+              headers() {
+                const headers = new Headers()
+                headers.set("x-trpc-source", "nextjs-react")
+                return headers
+              },
+            }),
           }),
         }),
       ],
@@ -70,6 +87,5 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return window.location.origin
-
   return env.BETTER_AUTH_URL
 }
