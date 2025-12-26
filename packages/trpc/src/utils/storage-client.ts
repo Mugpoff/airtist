@@ -23,7 +23,7 @@ const ALLOWED_IMAGE_MIME_TYPES = new Set([
   "image/heic",
 ])
 
-export const assertAllowedImageMimeType = (mimeType: string) => {
+const assertAllowedImageMimeType = (mimeType: string) => {
   if (!ALLOWED_IMAGE_MIME_TYPES.has(mimeType)) {
     throw new Error(`Unsupported image mime type: ${mimeType}`)
   }
@@ -48,7 +48,7 @@ export const uploadImage = async (
   return `${env.MINIO_PUBLIC_ENDPOINT}/${env.MINIO_BUCKET}/${key}`
 }
 
-export const deleteObject = async (key: string) => {
+const deleteObject = async (key: string) => {
   const command = new DeleteObjectCommand({
     Bucket: env.MINIO_BUCKET,
     Key: key,
