@@ -24,7 +24,7 @@ export const GenerateContent = () => {
 
   return (
     <div className="relative flex size-full flex-col justify-center gap-4">
-      <div className="-m-16 absolute top-0 not-dark:hidden h-[600px] w-screen">
+      <div className="-m-16 pointer-events-none absolute inset-0 flex not-dark:hidden items-center justify-center overflow-hidden">
         <LightRays
           raysOrigin="top-center"
           raysColor="#fff"

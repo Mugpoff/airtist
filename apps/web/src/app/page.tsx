@@ -1,90 +1,63 @@
 "use client"
 
-import { motion, useAnimation } from "motion/react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Canvas } from "@/components/canvas/canvas"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
 
-const PAGES = [
-  { key: "generate", Component: GenerateContent },
-  { key: "canvas", Component: Canvas },
-] as const
-const SCROLL_THRESHOLD = 50 // Accumulated delta required to trigger page change
-const SCROLL_COOLDOWN = 1000 // Cooldown in ms after page change
+const SCROLL_THRESHOLD = 50
+const SCROLL_COOLDOWN = 800
 
 export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(0)
-  const controls = useAnimation()
+  const containerRef = useRef<HTMLDivElement>(null)
   const accumulatedDelta = useRef(0)
-  const isAnimating = useRef(false)
+  const isScrolling = useRef(false)
   const lastScrollTime = useRef(0)
 
-  const goToPage = useCallback(
-    (index: number) => {
-      if (index < 0 || index >= PAGES.length || isAnimating.current) return
+  const goToPage = useCallback((index: number) => {
+    if (index < 0 || index >= 2 || isScrolling.current) return
 
-      isAnimating.current = true
-      setCurrentPage(index)
-      controls
-        .start({
-          y: `-${index * 100}vh`,
-          transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
-        })
-        .then(() => {
-          isAnimating.current = false
-          accumulatedDelta.current = 0
-        })
-    },
-    [controls],
-  )
+    isScrolling.current = true
+    setCurrentPage(index)
 
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
+    containerRef.current?.scrollTo({
+      top: index * window.innerHeight,
+      behavior: "smooth",
+    })
+
+    setTimeout(() => {
+      isScrolling.current = false
+      accumulatedDelta.current = 0
+    }, SCROLL_COOLDOWN)
+  }, [])
+
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
       e.preventDefault()
 
       const now = Date.now()
-      if (now - lastScrollTime.current < SCROLL_COOLDOWN || isAnimating.current)
+      if (now - lastScrollTime.current < SCROLL_COOLDOWN || isScrolling.current)
         return
 
-      // Accumulate scroll delta
       accumulatedDelta.current += e.deltaY
 
-      // Check if threshold is reached
       if (Math.abs(accumulatedDelta.current) >= SCROLL_THRESHOLD) {
         const direction = accumulatedDelta.current > 0 ? 1 : -1
         const nextPage = currentPage + direction
 
-        if (nextPage >= 0 && nextPage < PAGES.length) {
+        if (nextPage >= 0 && nextPage < 2) {
           lastScrollTime.current = now
           goToPage(nextPage)
         }
         accumulatedDelta.current = 0
       }
-    }
+    },
+    [currentPage, goToPage],
+  )
 
-    // Reset accumulated delta after inactivity
-    const resetDelta = () => {
-      accumulatedDelta.current = 0
-    }
-
-    let resetTimeout: NodeJS.Timeout
-    const handleWheelWithReset = (e: WheelEvent) => {
-      handleWheel(e)
-      clearTimeout(resetTimeout)
-      resetTimeout = setTimeout(resetDelta, 150)
-    }
-
-    window.addEventListener("wheel", handleWheelWithReset, { passive: false })
-    return () => {
-      window.removeEventListener("wheel", handleWheelWithReset)
-      clearTimeout(resetTimeout)
-    }
-  }, [currentPage, goToPage])
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
       if (e.key === "ArrowDown" || e.key === "PageDown") {
         e.preventDefault()
         goToPage(currentPage + 1)
@@ -92,29 +65,63 @@ export default function HomePage() {
         e.preventDefault()
         goToPage(currentPage - 1)
       }
+    },
+    [currentPage, goToPage],
+  )
+
+  useEffect(() => {
+    const container = containerRef.current
+
+    if (!container) return
+
+    let resetTimeout: ReturnType<typeof setTimeout>
+
+    const handleWheelWithReset = (e: WheelEvent) => {
+      handleWheel(e)
+      clearTimeout(resetTimeout)
+      resetTimeout = setTimeout(() => {
+        accumulatedDelta.current = 0
+      }, 150)
     }
 
+    container.addEventListener("wheel", handleWheelWithReset, {
+      passive: false,
+    })
+
+    return () => {
+      container.removeEventListener("wheel", handleWheelWithReset)
+
+      clearTimeout(resetTimeout)
+    }
+  }, [handleWheel])
+
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown)
+
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [currentPage, goToPage])
+  }, [handleKeyDown])
 
   return (
-    <main className="relative flex h-screen w-full items-center justify-center overflow-hidden">
-      <motion.div
-        animate={controls}
-        initial={{ y: 0 }}
-        className="flex h-full flex-col"
+    <main
+      ref={containerRef}
+      className="scrollbar-none h-screen w-full overflow-y-auto"
+    >
+      <section
+        key="generate"
+        className="flex h-screen w-full items-center justify-center"
       >
-        {PAGES.map(({ key, Component }) => (
-          <div
-            key={key}
-            className="flex h-screen w-full max-w-6xl shrink-0 items-center justify-center p-16"
-          >
-            <Component />
-          </div>
-        ))}
-      </motion.div>
-
+        <div className="flex size-full max-w-6xl items-center justify-center p-16">
+          <GenerateContent />
+        </div>
+      </section>
+      <section
+        key="canvas"
+        className="flex h-screen w-full items-center justify-center"
+      >
+        <div className="flex size-full max-w-6xl items-center justify-center p-16">
+          <Canvas />
+        </div>
+      </section>
       <PaginationDots selectedIndex={currentPage} setSelectedIndex={goToPage} />
     </main>
   )
