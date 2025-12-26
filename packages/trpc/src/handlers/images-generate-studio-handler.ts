@@ -6,8 +6,10 @@ import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models"
 import { callOpenRouterForImage } from "../utils/openrouter-image"
 import { uploadImage } from "../utils/storage-client"
 import {
+  BACKGROUND_PROMPTS,
   STUDIO_AGE_RANGES,
   STUDIO_CATEGORIES,
+  StudioBackgroundSchema,
   StudioCategorySchema,
 } from "../utils/studio-constants"
 
@@ -57,6 +59,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const height = parseNumber(input.get("height"))
     const age = parseNumber(input.get("age"))
     const categoryRaw = parseString(input.get("category"))
+    const backgroundRaw = parseString(input.get("background"))
     const aspectRatioRaw = parseString(input.get("aspectRatio"))
     const modelRaw = parseString(input.get("model"))
 
@@ -65,6 +68,9 @@ export const imagesGenerateStudioHandler = protectedProcedure
 
     const ethnicity = EthnicitySchema.parse(ethnicityRaw)
     const category = StudioCategorySchema.parse(categoryRaw)
+    const background = StudioBackgroundSchema.parse(
+      backgroundRaw ?? "STUDIO_WHITE",
+    )
     const aspectRatio = AspectRatioSchema.parse(aspectRatioRaw ?? "1:1")
     const model = ImageModelSchema.parse(modelRaw ?? DEFAULT_IMAGE_MODEL)
     const size = ASPECT_RATIO_MAP[aspectRatio]
@@ -87,21 +93,20 @@ export const imagesGenerateStudioHandler = protectedProcedure
 
     const garmentUrls: string[] = []
     for (const file of files) {
+      const mimeType = file.type || ""
       const buf = Buffer.from(await file.arrayBuffer())
-      const url = await uploadImage(
-        `uploads/${crypto.randomUUID()}-${file.name}`,
-        buf,
-        file.type,
-      )
+      const objectKey = `uploads/${crypto.randomUUID()}-${file.name}`
+      const url = await uploadImage(objectKey, buf, mimeType)
       garmentUrls.push(url)
     }
 
     const catLabel = STUDIO_CATEGORIES[category].toLowerCase()
     const ethLabel = ethnicity.toLowerCase()
+    const bgPrompt = BACKGROUND_PROMPTS[background]
 
     const system =
-      "Professional high-end fashion photography. High quality studio lighting. Neutral background. Subject must wear the exact clothing from reference images."
-    const userText = `A high-quality studio photo of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Subject is wearing the clothes from the references. ${prompt}`
+      "Professional high-end fashion e-commerce photography. Minimalist studio setting. No props, no furniture, no nature, no street. Focus solely on the model and clothing. Lighting must be soft, diffuse, and professional studio strobe."
+    const userText = `Subject: Full body shot of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Background: ${bgPrompt}. The model is wearing the exact clothing from the reference images. Pose: Neutral fashion pose, standing straight, facing forward or slightly turned. ${prompt}`
 
     const { bytes, requestId, usage } = await callOpenRouterForImage({
       model,
@@ -121,11 +126,8 @@ export const imagesGenerateStudioHandler = protectedProcedure
       imageConfig: { aspect_ratio: aspectRatio },
     })
 
-    const publicUrl = await uploadImage(
-      `images/${crypto.randomUUID()}.png`,
-      bytes,
-      "image/png",
-    )
+    const outKey = `images/${crypto.randomUUID()}.png`
+    const publicUrl = await uploadImage(outKey, bytes, "image/png")
 
     const row = await db.generatedImages.create({
       data: {
@@ -137,9 +139,9 @@ export const imagesGenerateStudioHandler = protectedProcedure
         height: size.height,
         mimeType: "image/png",
         imageUrl: publicUrl,
-        objectKey: "",
+        objectKey: outKey,
       },
     })
 
-    return { image: row, usage }
+    return { image: row, garmentUrls, usage }
   })

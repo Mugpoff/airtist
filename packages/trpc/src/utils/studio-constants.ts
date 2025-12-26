@@ -37,3 +37,29 @@ export const STUDIO_AGE_RANGES: Record<
   MAN_ADULT: { min: 19, max: 100 },
   WOMAN_ADULT: { min: 19, max: 100 },
 }
+
+export const StudioBackgroundSchema = z.enum([
+  "STUDIO_WHITE",
+  "STUDIO_GREY",
+  "STUDIO_DARK_GREY",
+  "STUDIO_BLACK",
+  "STUDIO_BEIGE",
+])
+
+export type StudioBackground = z.infer<typeof StudioBackgroundSchema>
+
+export const STUDIO_BACKGROUNDS: Record<StudioBackground, string> = {
+  STUDIO_WHITE: "Fond Blanc Pur (E-commerce)",
+  STUDIO_GREY: "Fond Gris Neutre",
+  STUDIO_DARK_GREY: "Fond Gris Anthracite",
+  STUDIO_BLACK: "Fond Noir Artistique",
+  STUDIO_BEIGE: "Fond Beige (Chaleureux)",
+}
+
+export const BACKGROUND_PROMPTS: Record<StudioBackground, string> = {
+  STUDIO_WHITE: "pure white studio background, seamless infinite white",
+  STUDIO_GREY: "neutral grey studio paper background",
+  STUDIO_DARK_GREY: "dark charcoal grey studio background",
+  STUDIO_BLACK: "pitch black studio background, dramatic lighting",
+  STUDIO_BEIGE: "soft warm beige studio wall background",
+}
