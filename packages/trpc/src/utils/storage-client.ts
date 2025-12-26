@@ -15,12 +15,32 @@ const s3 = new S3Client({
   forcePathStyle: true,
 })
 
-export const uploadPng = async (key: string, body: Buffer) => {
+const ALLOWED_IMAGE_MIME_TYPES = new Set([
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "image/avif",
+  "image/heic",
+])
+
+export const assertAllowedImageMimeType = (mimeType: string) => {
+  if (!ALLOWED_IMAGE_MIME_TYPES.has(mimeType)) {
+    throw new Error(`Unsupported image mime type: ${mimeType}`)
+  }
+}
+
+export const uploadImage = async (
+  key: string,
+  body: Buffer,
+  mimeType: string,
+) => {
+  assertAllowedImageMimeType(mimeType)
+
   const command = new PutObjectCommand({
     Bucket: env.MINIO_BUCKET,
     Key: key,
     Body: body,
-    ContentType: "image/png",
+    ContentType: mimeType,
   })
 
   await s3.send(command)
@@ -28,11 +48,19 @@ export const uploadPng = async (key: string, body: Buffer) => {
   return `${env.MINIO_PUBLIC_ENDPOINT}/${env.MINIO_BUCKET}/${key}`
 }
 
-export const deletePng = async (key: string) => {
+export const deleteObject = async (key: string) => {
   const command = new DeleteObjectCommand({
     Bucket: env.MINIO_BUCKET,
     Key: key,
   })
 
   await s3.send(command)
+}
+
+export const uploadPng = async (key: string, body: Buffer) => {
+  return uploadImage(key, body, "image/png")
+}
+
+export const deletePng = async (key: string) => {
+  await deleteObject(key)
 }
