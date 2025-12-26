@@ -1,6 +1,7 @@
 "use client"
 
 import type { AppRouter } from "@repo/trpc"
+import { STUDIO_AGE_RANGES } from "@repo/trpc/constants"
 import { Button } from "@repo/ui/base/button"
 import {
   Card,
@@ -27,7 +28,7 @@ import type { TRPCClientError } from "@trpc/client"
 import type { inferRouterOutputs } from "@trpc/server"
 import Image from "next/image"
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { FaRegTrashCan } from "react-icons/fa6"
 import { useTRPC } from "@/trpc/react"
 
@@ -59,15 +60,6 @@ const toCdnUrl = (url: string) => {
 }
 
 export function GenerateView() {
-  const [prompt, setPrompt] = useState(
-    "Studio fashion model wearing the outfit",
-  )
-  const [ethnicity, setEthnicity] = useState<Ethnicity>("WHITE")
-  const [height, setHeight] = useState("175")
-  const [age, setAge] = useState("25")
-  const [aspectRatio, setAspectRatio] = useState<AspectRatio>("1:1")
-  const [files, setFiles] = useState<File[]>([])
-
   const trpc = useTRPC()
   const queryClient = useQueryClient()
 
@@ -76,7 +68,29 @@ export function GenerateView() {
     trpc.images.models.queryOptions(),
   )
 
+  const [prompt, setPrompt] = useState(
+    "Studio fashion model wearing the outfit",
+  )
   const [model, setModel] = useState<string>(modelsInfo.defaultModel)
+  const [category, setCategory] = useState<string>(
+    modelsInfo.categories[0]?.id ?? "",
+  )
+  const [ethnicity, setEthnicity] = useState<Ethnicity>("WHITE")
+  const [height, setHeight] = useState("175")
+  const [age, setAge] = useState("25")
+  const [aspectRatio, setAspectRatio] = useState<AspectRatio>("1:1")
+  const [files, setFiles] = useState<File[]>([])
+
+  useEffect(() => {
+    const range = STUDIO_AGE_RANGES[category as keyof typeof STUDIO_AGE_RANGES]
+    if (range) {
+      setAge(range.min.toString())
+      if (category.includes("CHILD")) setHeight("130")
+      else if (category.includes("PRETEEN")) setHeight("155")
+      else if (category.includes("TEEN")) setHeight("165")
+      else setHeight("175")
+    }
+  }, [category])
 
   const generateStudioMutation = useMutation({
     ...trpc.images.generateStudio.mutationOptions(),
@@ -131,9 +145,12 @@ export function GenerateView() {
       return
     }
 
-    if (!(modelsInfo.models as string[]).includes(model)) {
+    const ageNum = parseInt(age)
+    const range = STUDIO_AGE_RANGES[category as keyof typeof STUDIO_AGE_RANGES]
+    if (range && (ageNum < range.min || ageNum > range.max)) {
       toastManager.add({
-        title: "Modèle invalide",
+        title: "Âge non autorisé",
+        description: `L'âge pour cette catégorie doit être entre ${range.min} et ${range.max} ans.`,
         type: "error",
       })
       return
@@ -142,6 +159,7 @@ export function GenerateView() {
     const fd = new FormData()
     fd.set("prompt", prompt)
     fd.set("model", model)
+    fd.set("category", category)
     fd.set("ethnicity", ethnicity)
     fd.set("height", height)
     fd.set("age", age)
@@ -185,9 +203,9 @@ export function GenerateView() {
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div className="space-y-2">
-                <label>Model</label>
+                <label>Modèle IA</label>
                 <Select
                   value={model}
                   onValueChange={(value) => {
@@ -202,6 +220,28 @@ export function GenerateView() {
                     {modelsInfo.models.map((m) => (
                       <SelectItem key={m} value={m}>
                         {m}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label>Genre / Âge</label>
+                <Select
+                  value={category}
+                  onValueChange={(value) => {
+                    if (value) setCategory(value)
+                  }}
+                  disabled={isGenerating}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {modelsInfo.categories.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
