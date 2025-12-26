@@ -1,8 +1,9 @@
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { env } from "../env"
 import { protectedProcedure } from "../trpc"
+import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models"
+import { callOpenRouterForImage } from "../utils/openrouter-image"
 import { uploadImage } from "../utils/storage-client"
 
 const EthnicitySchema = z.enum(["ASIAN", "BLACK", "ARAB", "WHITE"])
@@ -55,27 +56,6 @@ const isFile = (v: unknown): v is File => {
   return typeof File !== "undefined" && v instanceof File
 }
 
-type OpenRouterResponse = {
-  choices?: {
-    message?: {
-      images?: {
-        image_url?: { url?: string }
-        imageUrl?: { url?: string }
-      }[]
-    }
-  }[]
-  error?: { message?: string }
-  usage?: {
-    completion_tokens?: number
-    prompt_tokens?: number
-    total_tokens?: number
-    cost?: number
-    prompt_tokens_details?: { cached_tokens?: number }
-    completion_tokens_details?: { reasoning_tokens?: number }
-    cost_details?: { upstream_inference_cost?: number }
-  }
-}
-
 const extFromMime = (mime: string) => {
   if (mime === "image/png") return "png"
   if (mime === "image/jpeg") return "jpg"
@@ -97,9 +77,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const aspectRatioRaw = parseString(
       input.get("aspectRatio") as FormDataValue | null,
     )
-    const model =
-      parseString(input.get("model") as FormDataValue | null) ||
-      "google/gemini-2.5-flash-image"
+    const modelRaw = parseString(input.get("model") as FormDataValue | null)
 
     if (!prompt) {
       throw new TRPCError({
@@ -132,6 +110,14 @@ export const imagesGenerateStudioHandler = protectedProcedure
     }
     const aspectRatio = aspectRatioParsed.data
     const size = ASPECT_RATIO_MAP[aspectRatio]
+
+    const modelParsed = ImageModelSchema.safeParse(
+      modelRaw ?? DEFAULT_IMAGE_MODEL,
+    )
+    if (!modelParsed.success) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "invalid model" })
+    }
+    const model = modelParsed.data
 
     const files = input.getAll("images").filter((v): v is File => isFile(v))
     if (files.length < 1) {
@@ -167,74 +153,25 @@ export const imagesGenerateStudioHandler = protectedProcedure
       "Use the provided reference images as the clothing to be worn by the model.",
     ].join("\n")
 
-    const payload = {
-      model,
-      messages: [
-        { role: "system", content: system },
-        {
-          role: "user",
-          content: [
-            { type: "text", text: userText },
-            ...garmentUrls.map((u) => ({
-              type: "image_url",
-              image_url: { url: u },
-            })),
-          ],
-        },
-      ],
-      modalities: ["image", "text"],
-      stream: false,
-      usage: { include: true },
-      image_config: { aspect_ratio: aspectRatio },
-    }
-
-    const upstream = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
+    const messages = [
+      { role: "system", content: system },
       {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": env.OPENROUTER_HTTP_REFERER,
-          "X-Title": env.OPENROUTER_APP_TITLE,
-        },
-        body: JSON.stringify(payload),
+        role: "user",
+        content: [
+          { type: "text", text: userText },
+          ...garmentUrls.map((u) => ({
+            type: "image_url",
+            image_url: { url: u },
+          })),
+        ],
       },
-    )
+    ]
 
-    const json = (await upstream
-      .json()
-      .catch(() => null)) as OpenRouterResponse | null
-
-    if (!upstream.ok) {
-      const msg =
-        typeof json?.error?.message === "string"
-          ? json.error.message
-          : "OpenRouter request failed"
-      throw new TRPCError({ code: "BAD_GATEWAY", message: msg })
-    }
-
-    const img = json?.choices?.[0]?.message?.images?.[0]
-    const imageUrl = img?.image_url?.url ?? img?.imageUrl?.url
-
-    if (typeof imageUrl !== "string") {
-      throw new TRPCError({
-        code: "BAD_GATEWAY",
-        message: "No image in OpenRouter response",
-      })
-    }
-
-    const prefix = "base64,"
-    const idx = imageUrl.indexOf(prefix)
-    if (idx === -1) {
-      throw new TRPCError({
-        code: "BAD_GATEWAY",
-        message: "Invalid image data URL",
-      })
-    }
-
-    const b64 = imageUrl.slice(idx + prefix.length)
-    const bytes = Buffer.from(b64, "base64")
+    const { bytes, requestId, usage } = await callOpenRouterForImage({
+      model,
+      messages,
+      imageConfig: { aspect_ratio: aspectRatio },
+    })
 
     const outObjectKey = `images/${crypto.randomUUID()}.png`
     const publicUrl = await uploadImage(outObjectKey, bytes, "image/png")
@@ -243,7 +180,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
       data: {
         prompt: userText,
         model,
-        requestId: upstream.headers.get("x-request-id"),
+        requestId: requestId || null,
         aspectRatio,
         width: size.width,
         height: size.height,
@@ -256,6 +193,6 @@ export const imagesGenerateStudioHandler = protectedProcedure
     return {
       image: row,
       garmentUrls,
-      usage: json?.usage ?? null,
+      usage,
     }
   })
