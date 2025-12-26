@@ -5,9 +5,13 @@ import { protectedProcedure } from "../trpc"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models"
 import { callOpenRouterForImage } from "../utils/openrouter-image"
 import { uploadImage } from "../utils/storage-client"
+import {
+  STUDIO_AGE_RANGES,
+  STUDIO_CATEGORIES,
+  StudioCategorySchema,
+} from "../utils/studio-constants"
 
 const EthnicitySchema = z.enum(["ASIAN", "BLACK", "ARAB", "WHITE"])
-
 const AspectRatioSchema = z.enum([
   "1:1",
   "2:3",
@@ -38,161 +42,104 @@ const ASPECT_RATIO_MAP: Record<
 }
 
 type FormDataValue = string | File
-
-const parseNumber = (value: FormDataValue | null) => {
-  if (typeof value !== "string") return null
-  const n = Number(value)
-  if (!Number.isFinite(n)) return null
-  return n
-}
-
-const parseString = (value: FormDataValue | null) => {
-  if (typeof value !== "string") return null
-  const s = value.trim()
-  return s.length ? s : null
-}
-
-const isFile = (v: unknown): v is File => {
-  return typeof File !== "undefined" && v instanceof File
-}
-
-const extFromMime = (mime: string) => {
-  if (mime === "image/png") return "png"
-  if (mime === "image/jpeg") return "jpg"
-  if (mime === "image/webp") return "webp"
-  if (mime === "image/avif") return "avif"
-  if (mime === "image/heic") return "heic"
-  return "bin"
-}
+const parseNumber = (v: FormDataValue | null) =>
+  typeof v === "string" && Number.isFinite(Number(v)) ? Number(v) : null
+const parseString = (v: FormDataValue | null) =>
+  typeof v === "string" && v.trim() ? v.trim() : null
+const isFile = (v: unknown): v is File =>
+  typeof File !== "undefined" && v instanceof File
 
 export const imagesGenerateStudioHandler = protectedProcedure
   .input(z.instanceof(FormData))
   .mutation(async ({ input }) => {
-    const prompt = parseString(input.get("prompt") as FormDataValue | null)
-    const ethnicityRaw = parseString(
-      input.get("ethnicity") as FormDataValue | null,
-    )
-    const height = parseNumber(input.get("height") as FormDataValue | null)
-    const age = parseNumber(input.get("age") as FormDataValue | null)
-    const aspectRatioRaw = parseString(
-      input.get("aspectRatio") as FormDataValue | null,
-    )
-    const modelRaw = parseString(input.get("model") as FormDataValue | null)
+    const prompt = parseString(input.get("prompt"))
+    const ethnicityRaw = parseString(input.get("ethnicity"))
+    const height = parseNumber(input.get("height"))
+    const age = parseNumber(input.get("age"))
+    const categoryRaw = parseString(input.get("category"))
+    const aspectRatioRaw = parseString(input.get("aspectRatio"))
+    const modelRaw = parseString(input.get("model"))
 
-    if (!prompt) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "prompt is required",
-      })
-    }
+    if (!prompt)
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Prompt requis" })
 
-    const ethnicity = EthnicitySchema.safeParse(ethnicityRaw)
-    if (!ethnicity.success) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "invalid ethnicity" })
-    }
-
-    if (height == null || height < 1 || height > 230) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "invalid height" })
-    }
-
-    if (age == null || age < 1 || age > 100) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "invalid age" })
-    }
-
-    const aspectRatioParsed = AspectRatioSchema.safeParse(
-      aspectRatioRaw ?? "1:1",
-    )
-    if (!aspectRatioParsed.success) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "invalid aspectRatio",
-      })
-    }
-    const aspectRatio = aspectRatioParsed.data
+    const ethnicity = EthnicitySchema.parse(ethnicityRaw)
+    const category = StudioCategorySchema.parse(categoryRaw)
+    const aspectRatio = AspectRatioSchema.parse(aspectRatioRaw ?? "1:1")
+    const model = ImageModelSchema.parse(modelRaw ?? DEFAULT_IMAGE_MODEL)
     const size = ASPECT_RATIO_MAP[aspectRatio]
 
-    const modelParsed = ImageModelSchema.safeParse(
-      modelRaw ?? DEFAULT_IMAGE_MODEL,
-    )
-    if (!modelParsed.success) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "invalid model" })
-    }
-    const model = modelParsed.data
-
-    const files = input.getAll("images").filter((v): v is File => isFile(v))
-    if (files.length < 1) {
+    const range = STUDIO_AGE_RANGES[category]
+    if (age === null || age < range.min || age > range.max) {
       throw new TRPCError({
         code: "BAD_REQUEST",
-        message: "at least one image is required",
+        message: `L'âge pour cette catégorie doit être entre ${range.min} et ${range.max} ans.`,
       })
     }
 
-    const garmentUrls: string[] = []
+    if (height === null || height < 50 || height > 230) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Taille invalide" })
+    }
 
+    const files = input.getAll("images").filter(isFile)
+    if (files.length === 0)
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Images requises" })
+
+    const garmentUrls: string[] = []
     for (const file of files) {
-      const mimeType = typeof file.type === "string" ? file.type : ""
       const buf = Buffer.from(await file.arrayBuffer())
-      const ext = extFromMime(mimeType)
-      const objectKey = `uploads/${crypto.randomUUID()}-${file.name || `image.${ext}`}`
-      const url = await uploadImage(objectKey, buf, mimeType)
+      const url = await uploadImage(
+        `uploads/${crypto.randomUUID()}-${file.name}`,
+        buf,
+        file.type,
+      )
       garmentUrls.push(url)
     }
 
-    const system = [
-      "You are a professional fashion photography generator.",
-      "Generate a high-quality studio photograph of a single fashion model.",
-      "Full body, centered, neutral pose, clean background, soft studio lighting.",
-      "The model must wear exactly the clothing shown in the reference images.",
-      "Do not change clothing design, colors, logos, patterns, or materials.",
-      "No extra people, no text, no watermark, no blur.",
-    ].join("\n")
+    const catLabel = STUDIO_CATEGORIES[category].toLowerCase()
+    const ethLabel = ethnicity.toLowerCase()
 
-    const userText = [
-      `Model attributes: ethnicity=${ethnicity.data}, age=${age}, height_cm=${height}.`,
-      `User prompt: ${prompt}`,
-      "Use the provided reference images as the clothing to be worn by the model.",
-    ].join("\n")
-
-    const messages = [
-      { role: "system", content: system },
-      {
-        role: "user",
-        content: [
-          { type: "text", text: userText },
-          ...garmentUrls.map((u) => ({
-            type: "image_url",
-            image_url: { url: u },
-          })),
-        ],
-      },
-    ]
+    const system =
+      "Professional high-end fashion photography. High quality studio lighting. Neutral background. Subject must wear the exact clothing from reference images."
+    const userText = `A high-quality studio photo of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Subject is wearing the clothes from the references. ${prompt}`
 
     const { bytes, requestId, usage } = await callOpenRouterForImage({
       model,
-      messages,
+      messages: [
+        { role: "system", content: system },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: userText },
+            ...garmentUrls.map((url) => ({
+              type: "image_url",
+              image_url: { url },
+            })),
+          ],
+        },
+      ],
       imageConfig: { aspect_ratio: aspectRatio },
     })
 
-    const outObjectKey = `images/${crypto.randomUUID()}.png`
-    const publicUrl = await uploadImage(outObjectKey, bytes, "image/png")
+    const publicUrl = await uploadImage(
+      `images/${crypto.randomUUID()}.png`,
+      bytes,
+      "image/png",
+    )
 
     const row = await db.generatedImages.create({
       data: {
         prompt: userText,
         model,
-        requestId: requestId || null,
+        requestId,
         aspectRatio,
         width: size.width,
         height: size.height,
         mimeType: "image/png",
         imageUrl: publicUrl,
-        objectKey: outObjectKey,
+        objectKey: "",
       },
     })
 
-    return {
-      image: row,
-      garmentUrls,
-      usage,
-    }
+    return { image: row, usage }
   })
