@@ -131,7 +131,7 @@ export function GenerateView() {
       return
     }
 
-    if (!modelsInfo.models.includes(model as any)) {
+    if (!(modelsInfo.models as string[]).includes(model)) {
       toastManager.add({
         title: "Modèle invalide",
         type: "error",

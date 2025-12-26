@@ -57,10 +57,6 @@ const deleteObject = async (key: string) => {
   await s3.send(command)
 }
 
-export const uploadPng = async (key: string, body: Buffer) => {
-  return uploadImage(key, body, "image/png")
-}
-
 export const deletePng = async (key: string) => {
   await deleteObject(key)
 }

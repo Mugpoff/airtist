@@ -2,7 +2,6 @@ import { Redis } from "ioredis"
 import { env } from "../env"
 import { ee, type GenerationProgress } from "./event-emitter"
 
-const redis = new Redis(env.DRAGONFLY_URL)
 const redisSubscriber = new Redis(env.DRAGONFLY_URL)
 
 const PROGRESS_CHANNEL = "generation-progress"
@@ -24,11 +23,3 @@ redisSubscriber.on("message", (channel, message) => {
     }
   }
 })
-
-// Publish progress for a request
-export const publishProgress = async (
-  requestId: string,
-  progress: GenerationProgress,
-) => {
-  await redis.publish(PROGRESS_CHANNEL, JSON.stringify({ requestId, progress }))
-}
