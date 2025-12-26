@@ -72,6 +72,11 @@ export function GenerateView() {
   const queryClient = useQueryClient()
 
   const { data: images } = useSuspenseQuery(trpc.images.list.queryOptions())
+  const { data: modelsInfo } = useSuspenseQuery(
+    trpc.images.models.queryOptions(),
+  )
+
+  const [model, setModel] = useState<string>(modelsInfo.defaultModel)
 
   const generateStudioMutation = useMutation({
     ...trpc.images.generateStudio.mutationOptions(),
@@ -126,13 +131,21 @@ export function GenerateView() {
       return
     }
 
+    if (!modelsInfo.models.includes(model as any)) {
+      toastManager.add({
+        title: "Modèle invalide",
+        type: "error",
+      })
+      return
+    }
+
     const fd = new FormData()
     fd.set("prompt", prompt)
+    fd.set("model", model)
     fd.set("ethnicity", ethnicity)
     fd.set("height", height)
     fd.set("age", age)
     fd.set("aspectRatio", aspectRatio)
-    fd.set("model", "google/gemini-2.5-flash-image")
 
     for (const f of files) {
       fd.append("images", f)
@@ -173,6 +186,28 @@ export function GenerateView() {
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label>Model</label>
+                <Select
+                  value={model}
+                  onValueChange={(value) => {
+                    if (value) setModel(value)
+                  }}
+                  disabled={isGenerating}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {modelsInfo.models.map((m) => (
+                      <SelectItem key={m} value={m}>
+                        {m}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
                 <label>Ethnicity</label>
                 <Select
