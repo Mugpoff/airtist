@@ -75,6 +75,9 @@ export function GenerateView() {
   const [category, setCategory] = useState<string>(
     modelsInfo.categories[0]?.id ?? "",
   )
+  const [background, setBackground] = useState<string>(
+    modelsInfo.backgrounds[0]?.id ?? "",
+  )
   const [ethnicity, setEthnicity] = useState<Ethnicity>("WHITE")
   const [height, setHeight] = useState("175")
   const [age, setAge] = useState("25")
@@ -160,6 +163,7 @@ export function GenerateView() {
     fd.set("prompt", prompt)
     fd.set("model", model)
     fd.set("category", category)
+    fd.set("background", background)
     fd.set("ethnicity", ethnicity)
     fd.set("height", height)
     fd.set("age", age)
@@ -242,6 +246,28 @@ export function GenerateView() {
                     {modelsInfo.categories.map((c) => (
                       <SelectItem key={c.id} value={c.id}>
                         {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label>Arrière-plan</label>
+                <Select
+                  value={background}
+                  onValueChange={(value) => {
+                    if (value) setBackground(value)
+                  }}
+                  disabled={isGenerating}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {modelsInfo.backgrounds.map((b) => (
+                      <SelectItem key={b.id} value={b.id}>
+                        {b.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
