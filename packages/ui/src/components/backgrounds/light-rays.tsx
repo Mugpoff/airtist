@@ -3,6 +3,7 @@
  */
 import { Mesh, Program, Renderer, Triangle } from "ogl"
 import { useEffect, useRef } from "react"
+import { cn } from "../../lib/utils"
 
 export type RaysOrigin =
   | "top-center"
@@ -443,7 +444,10 @@ void main() {
   return (
     <div
       ref={containerRef}
-      className={`pointer-events-none relative z-3 h-full w-full overflow-hidden ${className}`.trim()}
+      className={cn(
+        "pointer-events-none relative z-3 h-full w-full overflow-hidden",
+        className,
+      )}
     />
   )
 }
