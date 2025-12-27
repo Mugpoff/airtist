@@ -1,5 +1,8 @@
 "use client"
 
+import { LanguageSelector } from "@/components/ui/language-selector"
+import { SignOutButton } from "@/components/ui/sign-out-button"
+import { ThemeSwitch } from "@/components/ui/theme-switch"
 import { LightRays } from "@repo/ui/backgrounds/light-rays"
 import {
   Tooltip,
@@ -11,11 +14,8 @@ import {
 import { ShimmerButton } from "@repo/ui/buttons/shimmer-button"
 import { useTranslations } from "next-intl"
 import type React from "react"
-import { GenerateDropzone } from "@/components/generate/generate-dropzone"
-import { GenerateOptions } from "@/components/generate/generate-options"
-import { LanguageSelector } from "@/components/ui/language-selector"
-import { SignOutButton } from "@/components/ui/sign-out-button"
-import { ThemeSwitch } from "@/components/ui/theme-switch"
+import { GenerateDropzone } from "./generate-dropzone"
+import { GenerateSettings } from "./generate-settings"
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>()
 
@@ -23,7 +23,7 @@ export const GenerateContent = () => {
   const t = useTranslations("home.tooltips")
 
   return (
-    <div className="relative flex size-full flex-col justify-center gap-4">
+    <div className="relative flex size-full flex-col justify-center gap-8">
       <div className="-m-16 pointer-events-none absolute inset-0 flex not-dark:hidden items-center justify-center overflow-hidden">
         <LightRays
           raysOrigin="top-center"
@@ -38,8 +38,8 @@ export const GenerateContent = () => {
         />
       </div>
       <GenerateDropzone />
-      <div className="grid grid-cols-3">
-        <GenerateOptions />
+      <div className="grid grid-cols-3 items-center">
+        <GenerateSettings />
         <div className="flex justify-center">
           <ShimmerButton className="px-12">Generate</ShimmerButton>
         </div>
