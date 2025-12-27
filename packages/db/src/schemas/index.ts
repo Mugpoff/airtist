@@ -12,7 +12,7 @@ export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevel
 
 // File: GeneratedImagesScalarFieldEnum.schema.ts
 
-export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'userId'])
+export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'hash', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'userId'])
 
 export type GeneratedImagesScalarFieldEnum = z.infer<typeof GeneratedImagesScalarFieldEnumSchema>;
 
@@ -66,6 +66,7 @@ export const GeneratedImagesSchema = z.object({
   prompt: z.string(),
   model: z.string(),
   requestId: z.string().nullish(),
+  hash: z.string().nullish(),
   aspectRatio: z.string().nullish(),
   width: z.number().int().default(1024),
   height: z.number().int().default(1024),

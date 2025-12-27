@@ -5,6 +5,7 @@ model GeneratedImages {
   prompt      String
   model       String
   requestId   String?
+  hash        String?  @unique
   aspectRatio String?
 
   width  Int    @default(1024)
