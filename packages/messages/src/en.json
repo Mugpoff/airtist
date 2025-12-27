@@ -3,7 +3,25 @@
     "email": "Email",
     "password": "Password",
     "english": "English",
-    "french": "Français"
+    "french": "Français",
+    "age": "Age",
+    "weight": "Weight",
+    "ethnicity": {
+      "title": "Ethnicity",
+      "white": "White",
+      "black": "Black",
+      "asian": "Asian",
+      "latino": "Latino",
+      "mixed": "Mixed"
+    },
+    "gender": {
+      "title": "Gender",
+      "male": "Male",
+      "female": "Female"
+    },
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving..."
   },
   "validation": {
     "email": {
@@ -12,7 +30,24 @@
     },
     "password": {
       "required": "Password is required"
-    }
+    },
+    "weight": {
+      "invalid": "Please enter a valid weight",
+      "min": "Weight must be greater than {min}",
+      "max": "Weight must be less than {max}"
+    },
+    "age": {
+      "invalid": "Please enter a valid age",
+      "min": "Age must be greater than {min}",
+      "max": "Age must be less than {max}"
+    },
+    "ethnicity": {
+      "invalid": "Please select a valid ethnicity"
+    },
+    "gender": {
+      "invalid": "Please select a valid gender"
+    },
+    "selectOption": "Please select an option"
   },
   "auth": {
     "errors": {
@@ -27,17 +62,20 @@
     }
   },
   "home": {
-    "sidebar": {
-      "dropzone": {
-        "title": "Upload a file",
-        "description": "Drag and drop or click to upload",
-        "accepts": "Accepts PNG, JPEG, WebP or ZIP."
-      }
+    "dropzone": {
+      "title": "Upload a file",
+      "description": "Drag and drop or click to upload",
+      "accepts": "Accepts PNG, JPEG, WebP or ZIP."
     },
     "tooltips": {
       "theme": "Toggle theme",
       "language": "Change language",
       "signOut": "Sign out"
+    },
+    "generate": {
+      "title": "Generation Settings",
+      "description": "Make changes to the generation settings here. Click save when you're done.",
+      "settings": "{gender, select, male {Male} other {Female}}, {ethnicity, select, white {White} black {Black} asian {Asian} latino {Latino} other {Mixed}}, {age, plural, =1 {1 year} other {# years}} old, {weight} kg"
     }
   }
 }

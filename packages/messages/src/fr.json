@@ -3,7 +3,25 @@
     "email": "E-mail",
     "password": "Mot de passe",
     "english": "English",
-    "french": "Français"
+    "french": "Français",
+    "age": "Âge",
+    "weight": "Poids",
+    "ethnicity": {
+      "title": "Ethnicité",
+      "white": "Blanc",
+      "black": "Noir",
+      "asian": "Asiatique",
+      "latino": "Latino",
+      "mixed": "Mixte"
+    },
+    "gender": {
+      "title": "Genre",
+      "male": "Homme",
+      "female": "Femme"
+    },
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement en cours..."
   },
   "validation": {
     "email": {
@@ -12,7 +30,24 @@
     },
     "password": {
       "required": "Le mot de passe est requis"
-    }
+    },
+    "weight": {
+      "invalid": "Veuillez entrer un poids valide",
+      "min": "Le poids doit être supérieur à {min}",
+      "max": "Le poids doit être inférieur à {max}"
+    },
+    "age": {
+      "invalid": "Veuillez entrer un âge valide",
+      "min": "L'âge doit être supérieur à {min}",
+      "max": "L'âge doit être inférieur à {max}"
+    },
+    "ethnicity": {
+      "invalid": "Veuillez sélectionner une ethnie valide"
+    },
+    "gender": {
+      "invalid": "Veuillez sélectionner un genre valide"
+    },
+    "selectOption": "Veuillez sélectionner une option"
   },
   "auth": {
     "errors": {
@@ -27,17 +62,20 @@
     }
   },
   "home": {
-    "sidebar": {
-      "dropzone": {
-        "title": "Téléverser un fichier",
-        "description": "Glissez-déposez ou cliquez pour téléverser",
-        "accepts": "Accepte PNG, JPEG, WebP ou ZIP."
-      }
+    "dropzone": {
+      "title": "Téléverser un fichier",
+      "description": "Glissez-déposez ou cliquez pour téléverser",
+      "accepts": "Accepte PNG, JPEG, WebP ou ZIP."
     },
     "tooltips": {
       "theme": "Changer le thème",
       "language": "Changer la langue",
       "signOut": "Déconnexion"
+    },
+    "generate": {
+      "title": "Paramètres de génération",
+      "description": "Faites des modifications aux paramètres de génération ici. Cliquez sur enregistrer lorsque vous avez terminé.",
+      "settings": "{gender, select, male {Homme} other {Femme}}, {ethnicity, select, white {Blanc} black {Noir} asian {Asiatique} latino {Latino} other {Mixte}}, {age, plural, =1 {1 an} other {# ans}}, {weight} kg"
     }
   }
 }

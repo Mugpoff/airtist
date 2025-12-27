@@ -1,8 +1,5 @@
 "use client"
 
-import { LanguageSelector } from "@/components/ui/language-selector"
-import { SignOutButton } from "@/components/ui/sign-out-button"
-import { ThemeSwitch } from "@/components/ui/theme-switch"
 import { LightRays } from "@repo/ui/backgrounds/light-rays"
 import {
   Tooltip,
@@ -14,6 +11,9 @@ import {
 import { ShimmerButton } from "@repo/ui/buttons/shimmer-button"
 import { useTranslations } from "next-intl"
 import type React from "react"
+import { LanguageSelector } from "@/components/ui/language-selector"
+import { SignOutButton } from "@/components/ui/sign-out-button"
+import { ThemeSwitch } from "@/components/ui/theme-switch"
 import { GenerateDropzone } from "./generate-dropzone"
 import { GenerateSettings } from "./generate-settings"
 

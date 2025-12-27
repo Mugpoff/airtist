@@ -31,4 +31,33 @@ export const config = {
       maxAge: 60 * 60 * 24 * 7,
     },
   },
+  generationSettings: {
+    age: {
+      default: 25,
+      min: 1,
+      max: 100,
+    },
+    weight: {
+      default: 70,
+      min: 40,
+      max: 200,
+    },
+    ethnicity: {
+      default: "white",
+      items: [
+        { label: "global.ethnicity.white", value: "white" },
+        { label: "global.ethnicity.black", value: "black" },
+        { label: "global.ethnicity.asian", value: "asian" },
+        { label: "global.ethnicity.latino", value: "latino" },
+        { label: "global.ethnicity.mixed", value: "mixed" },
+      ],
+    },
+    gender: {
+      default: "male",
+      items: [
+        { label: "global.gender.male", value: "male" },
+        { label: "global.gender.female", value: "female" },
+      ],
+    },
+  },
 } as const

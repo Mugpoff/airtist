@@ -12,7 +12,7 @@ const ACCEPTED_FILE_TYPES = {
 }
 
 export const GenerateDropzone = () => {
-  const t = useTranslations("home.sidebar.dropzone")
+  const t = useTranslations("home.dropzone")
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // TODO: Handle file upload
