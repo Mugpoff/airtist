@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "ai-picture",
@@ -133,7 +134,6 @@
         "@repo/db": "*",
         "@t3-oss/env-core": "^0.13.10",
         "@trpc/server": "11.7.2",
-        "ioredis": "^5.8.2",
         "superjson": "^2.2.6",
         "zod": "^4.2.1",
       },
