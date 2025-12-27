@@ -1,7 +1,9 @@
+import { cacheClient } from "@repo/cache"
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { protectedProcedure } from "../trpc"
+import { generateStudioHash, type StudioHashInput } from "../utils/hash"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models"
 import { callOpenRouterForImage } from "../utils/openrouter-image"
 import { uploadImage } from "../utils/storage-client"
@@ -87,6 +89,30 @@ export const imagesGenerateStudioHandler = protectedProcedure
       throw new TRPCError({ code: "BAD_REQUEST", message: "Taille invalide" })
     }
 
+    const hashInput: StudioHashInput = {
+      prompt,
+      model,
+      category,
+      background,
+      ethnicity,
+      age,
+      height,
+      aspectRatio,
+    }
+
+    const hash = generateStudioHash(hashInput)
+
+    let cachedResult: string | null = null
+    try {
+      cachedResult = await cacheClient.images.getByHash(hash)
+    } catch {
+      // cache unavailable, proceed without it
+    }
+
+    if (cachedResult) {
+      return JSON.parse(cachedResult)
+    }
+
     const files = input.getAll("images").filter(isFile)
     if (files.length === 0)
       throw new TRPCError({ code: "BAD_REQUEST", message: "Images requises" })
@@ -140,8 +166,17 @@ export const imagesGenerateStudioHandler = protectedProcedure
         mimeType: "image/png",
         imageUrl: publicUrl,
         objectKey: outKey,
+        hash,
       },
     })
 
-    return { image: row, garmentUrls, usage }
+    const result = { image: row, garmentUrls, usage }
+
+    try {
+      await cacheClient.images.setByHash(hash, JSON.stringify(result))
+    } catch {
+      // cache unavailable, ignore
+    }
+
+    return result
   })
