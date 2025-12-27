@@ -2,7 +2,7 @@
  * Taken from https://reactbits.dev/backgrounds/light-rays
  */
 import { Mesh, Program, Renderer, Triangle } from "ogl"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 export type RaysOrigin =
   | "top-center"
@@ -116,33 +116,9 @@ export const LightRays: React.FC<LightRaysProps> = ({
   const animationIdRef = useRef<number | null>(null)
   const meshRef = useRef<Mesh | null>(null)
   const cleanupFunctionRef = useRef<(() => void) | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
-  const observerRef = useRef<IntersectionObserver | null>(null)
 
   useEffect(() => {
     if (!containerRef.current) return
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        // @ts-expect-error - trusting the component author
-        setIsVisible(entry.isIntersecting)
-      },
-      { threshold: 0.1 },
-    )
-
-    observerRef.current.observe(containerRef.current)
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect()
-        observerRef.current = null
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!isVisible || !containerRef.current) return
 
     if (cleanupFunctionRef.current) {
       cleanupFunctionRef.current()
@@ -398,7 +374,6 @@ void main() {
       }
     }
   }, [
-    isVisible,
     raysOrigin,
     raysColor,
     raysSpeed,
