@@ -8,14 +8,12 @@
  */
 
 import { auth } from "@repo/auth/server"
-import { cacheClient } from "@repo/cache"
 import { config } from "@repo/config"
 import { db } from "@repo/db"
 import { initTRPC, TRPCError } from "@trpc/server"
 import superjson from "superjson"
 import { ZodError } from "zod"
 import { openRouterClient } from "./utils/openrouter-client"
-import "./utils/redis-client"
 
 /**
  * 1. CONTEXT
@@ -40,7 +38,6 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     session,
     db,
     config,
-    cache: cacheClient,
     openRouter: openRouterClient,
   }
 }
@@ -60,16 +57,6 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
     },
   }),
-  sse: {
-    maxDurationMs: 5 * 60 * 1_000,
-    ping: {
-      enabled: true,
-      intervalMs: 3_000,
-    },
-    client: {
-      reconnectAfterInactivityMs: 5_000,
-    },
-  },
 })
 
 /**
@@ -111,8 +98,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 /**
  * Public (unauthed) procedure
  *
- * This is the base piece you use to build new queries and mutations on your
- * tRPC API. It does not guarantee that a user querying is authorized, but you
+ * This is the base piece you use to build new queries and mutations on your tRPC API. It does not guarantee that a user querying is authorized, but you
  * can still access user session data if they are logged in
  */
 export const publicProcedure = t.procedure.use(timingMiddleware)
