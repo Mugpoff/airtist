@@ -1,9 +1,9 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
 import { Canvas } from "@/components/canvas/canvas"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 const SCROLL_THRESHOLD = 50
 const SCROLL_COOLDOWN = 800
@@ -34,6 +34,10 @@ export default function HomePage() {
 
   const handleWheel = useCallback(
     (e: WheelEvent) => {
+      const target = e.target instanceof Element ? e.target : null
+
+      if (target?.closest('[data-slot^="scroll-area-"]')) return
+
       e.preventDefault()
 
       const now = Date.now()
@@ -70,10 +74,6 @@ export default function HomePage() {
   )
 
   useEffect(() => {
-    const container = containerRef.current
-
-    if (!container) return
-
     let resetTimeout: ReturnType<typeof setTimeout>
 
     const handleWheelWithReset = (e: WheelEvent) => {
@@ -84,13 +84,12 @@ export default function HomePage() {
       }, 150)
     }
 
-    container.addEventListener("wheel", handleWheelWithReset, {
+    window.addEventListener("wheel", handleWheelWithReset, {
       passive: false,
     })
 
     return () => {
-      container.removeEventListener("wheel", handleWheelWithReset)
-
+      window.removeEventListener("wheel", handleWheelWithReset)
       clearTimeout(resetTimeout)
     }
   }, [handleWheel])
