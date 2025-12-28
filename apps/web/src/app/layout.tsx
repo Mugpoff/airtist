@@ -45,6 +45,7 @@ const calSans = Cal_Sans({
   subsets: ["latin"],
   variable: "--font-cal-sans",
   weight: "400",
+  display: "swap",
 })
 
 export default async function RootLayout(props: { children: ReactNode }) {
