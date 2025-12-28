@@ -24,10 +24,10 @@ export const GenerateContent = () => {
 
   return (
     <div className="relative size-full">
-      <div className="pointer-events-none absolute inset-0 flex not-dark:hidden items-center justify-center overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden not-dark:opacity-0">
         <LightRays
           raysOrigin="top-center"
-          raysColor="#fff"
+          raysColor="#ffffff"
           raysSpeed={0.5}
           lightSpread={0.8}
           rayLength={1.2}
