@@ -23,8 +23,8 @@ export const GenerateContent = () => {
   const t = useTranslations("home.tooltips")
 
   return (
-    <div className="relative flex size-full flex-col justify-center gap-8">
-      <div className="-m-16 pointer-events-none absolute inset-0 flex not-dark:hidden items-center justify-center overflow-hidden">
+    <div className="relative size-full">
+      <div className="pointer-events-none absolute inset-0 flex not-dark:hidden items-center justify-center overflow-hidden">
         <LightRays
           raysOrigin="top-center"
           raysColor="#fff"
@@ -37,45 +37,47 @@ export const GenerateContent = () => {
           followMouse
         />
       </div>
-      <GenerateDropzone />
-      <div className="grid grid-cols-3 items-center">
-        <GenerateSettings />
-        <div className="flex justify-center">
-          <ShimmerButton className="px-12">Generate</ShimmerButton>
-        </div>
-        <TooltipProvider>
-          <div className="flex items-center justify-end gap-2">
-            <TooltipTrigger
-              handle={tooltipHandle}
-              payload={() => <span>{t("theme")}</span>}
-              render={<div />}
-            >
-              <ThemeSwitch />
-            </TooltipTrigger>
-            <TooltipTrigger
-              handle={tooltipHandle}
-              payload={() => <span>{t("language")}</span>}
-              render={<div />}
-            >
-              <LanguageSelector />
-            </TooltipTrigger>
-            <TooltipTrigger
-              handle={tooltipHandle}
-              payload={() => <span>{t("signOut")}</span>}
-              render={<div />}
-            >
-              <SignOutButton />
-            </TooltipTrigger>
+      <div className="flex size-full max-w-6xl flex-col justify-center gap-8 place-self-center p-16">
+        <GenerateDropzone />
+        <div className="grid grid-cols-3 items-center">
+          <GenerateSettings />
+          <div className="flex justify-center">
+            <ShimmerButton className="px-12">Generate</ShimmerButton>
           </div>
+          <TooltipProvider>
+            <div className="flex items-center justify-end gap-2">
+              <TooltipTrigger
+                handle={tooltipHandle}
+                payload={() => <span>{t("theme")}</span>}
+                render={<div />}
+              >
+                <ThemeSwitch />
+              </TooltipTrigger>
+              <TooltipTrigger
+                handle={tooltipHandle}
+                payload={() => <span>{t("language")}</span>}
+                render={<div />}
+              >
+                <LanguageSelector />
+              </TooltipTrigger>
+              <TooltipTrigger
+                handle={tooltipHandle}
+                payload={() => <span>{t("signOut")}</span>}
+                render={<div />}
+              >
+                <SignOutButton />
+              </TooltipTrigger>
+            </div>
 
-          <Tooltip handle={tooltipHandle}>
-            {({ payload: Payload }) => (
-              <TooltipPopup>
-                {Payload !== undefined && <Payload />}
-              </TooltipPopup>
-            )}
-          </Tooltip>
-        </TooltipProvider>
+            <Tooltip handle={tooltipHandle}>
+              {({ payload: Payload }) => (
+                <TooltipPopup>
+                  {Payload !== undefined && <Payload />}
+                </TooltipPopup>
+              )}
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </div>
     </div>
   )

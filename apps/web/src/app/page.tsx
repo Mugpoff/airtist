@@ -110,17 +110,13 @@ export default function HomePage() {
         key="generate"
         className="flex h-screen w-full items-center justify-center"
       >
-        <div className="flex size-full max-w-6xl items-center justify-center p-16">
-          <GenerateContent />
-        </div>
+        <GenerateContent />
       </section>
       <section
         key="canvas"
         className="flex h-screen w-full items-center justify-center"
       >
-        <div className="flex size-full max-w-6xl items-center justify-center p-16">
-          <Canvas />
-        </div>
+        <Canvas />
       </section>
       <PaginationDots selectedIndex={currentPage} setSelectedIndex={goToPage} />
     </main>
