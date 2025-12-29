@@ -133,7 +133,6 @@ export const imagesGenerateStudioHandler = protectedProcedure
     }
 
     const hash = generateStudioHash(hashInput)
-    const redisKey = `studio:hash:${hash}`
 
     try {
       const cachedId = await cacheClient.images.cacheIdByHash.get(hash)
