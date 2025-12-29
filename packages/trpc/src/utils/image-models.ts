@@ -7,4 +7,5 @@ export const ImageModelSchema = z.enum([
 
 export type ImageModel = z.infer<typeof ImageModelSchema>
 
-export const DEFAULT_IMAGE_MODEL: ImageModel = "google/gemini-2.5-flash-image"
+export const DEFAULT_IMAGE_MODEL: ImageModel =
+  "google/gemini-3-pro-image-preview"
