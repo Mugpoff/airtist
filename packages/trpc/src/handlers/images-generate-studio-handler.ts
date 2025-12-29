@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto"
 import { cacheClient } from "@repo/cache"
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
@@ -20,8 +21,8 @@ const EthnicitySchema = z.enum([
   "BLACK",
   "ARAB",
   "WHITE",
-  "METISSE",
   "LATINO",
+  "METISSE",
 ])
 const AspectRatioSchema = z.enum([
   "1:1",
@@ -60,9 +61,11 @@ const parseString = (v: FormDataValue | null) =>
 const isFile = (v: unknown): v is File =>
   typeof File !== "undefined" && v instanceof File
 
+const sha256 = (buf: Buffer) => createHash("sha256").update(buf).digest("hex")
+
 export const imagesGenerateStudioHandler = protectedProcedure
   .input(z.instanceof(FormData))
-  .mutation(async ({ input }) => {
+  .mutation(async ({ input, ctx }) => {
     const prompt = parseString(input.get("prompt"))
     const ethnicityRaw = parseString(input.get("ethnicity"))
     const height = parseNumber(input.get("height"))
@@ -72,8 +75,9 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const aspectRatioRaw = parseString(input.get("aspectRatio"))
     const modelRaw = parseString(input.get("model"))
 
-    if (!prompt)
+    if (!prompt) {
       throw new TRPCError({ code: "BAD_REQUEST", message: "Prompt requis" })
+    }
 
     const ethnicity = EthnicitySchema.parse(ethnicityRaw)
     const category = StudioCategorySchema.parse(categoryRaw)
@@ -96,7 +100,20 @@ export const imagesGenerateStudioHandler = protectedProcedure
       throw new TRPCError({ code: "BAD_REQUEST", message: "Taille invalide" })
     }
 
-    const hashInput: StudioHashInput = {
+    const files = input.getAll("images").filter(isFile)
+    if (files.length === 0) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Images requises" })
+    }
+
+    const fileDigests: string[] = []
+    for (const file of files) {
+      const buf = Buffer.from(await file.arrayBuffer())
+      fileDigests.push(sha256(buf))
+    }
+
+    const garmentsFingerprint = fileDigests.sort().join("|")
+
+    const hashInput: StudioHashInput & { garmentsFingerprint: string } = {
       prompt,
       model,
       category,
@@ -105,6 +122,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
       age,
       height,
       aspectRatio,
+      garmentsFingerprint,
     }
 
     const hash = generateStudioHash(hashInput)
@@ -112,17 +130,11 @@ export const imagesGenerateStudioHandler = protectedProcedure
     let cachedResult: string | null = null
     try {
       cachedResult = await cacheClient.images.getByHash(hash)
-    } catch {
-      // cache unavailable, proceed without it
-    }
+    } catch {}
 
     if (cachedResult) {
       return JSON.parse(cachedResult)
     }
-
-    const files = input.getAll("images").filter(isFile)
-    if (files.length === 0)
-      throw new TRPCError({ code: "BAD_REQUEST", message: "Images requises" })
 
     const garmentUrls: string[] = []
     for (const file of files) {
@@ -138,7 +150,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const bgPrompt = BACKGROUND_PROMPTS[background]
 
     const system =
-      "Professional high-end fashion e-commerce photography. Minimalist studio setting. No props, no furniture, no nature, no street. Focus solely on the model and clothing. Lighting must be soft, diffuse, and professional studio strobe."
+      "Professional high-end fashion e-commerce photography. Minimalist studio setting. No props, no furniture, no nature, no street. Focus solely on model and clothing. Lighting must be soft, diffuse, and professional studio strobe."
     const userText = `Subject: Full body shot of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Background: ${bgPrompt}. The model is wearing the exact clothing from the reference images. Pose: Neutral fashion pose, standing straight, facing forward or slightly turned. ${prompt}`
 
     const { bytes, requestId, usage } = await callOpenRouterForImage({
@@ -167,13 +179,19 @@ export const imagesGenerateStudioHandler = protectedProcedure
         prompt: userText,
         model,
         requestId,
+        hash,
         aspectRatio,
         width: size.width,
         height: size.height,
         mimeType: "image/png",
         imageUrl: publicUrl,
         objectKey: outKey,
-        hash,
+        userId: ctx.session.user.id,
+        promptTokens: usage?.prompt_tokens,
+        completionTokens: usage?.completion_tokens,
+        totalTokens: usage?.total_tokens,
+        cachedTokens: usage?.prompt_tokens_details?.cached_tokens,
+        cost: usage?.cost ?? null,
       },
     })
 
@@ -181,9 +199,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
 
     try {
       await cacheClient.images.setByHash(hash, JSON.stringify(result))
-    } catch {
-      // cache unavailable, ignore
-    }
+    } catch {}
 
     return result
   })
