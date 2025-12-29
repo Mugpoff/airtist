@@ -26,13 +26,23 @@ export const cacheClient = {
     },
   },
   images: {
-    getByHash: (hash: string) => getClient().get(`studio:hash:${hash}`),
-    setByHash: (hash: string, value: string, ttl = 60 * 60 * 24 * 7) =>
-      getClient().setex(`studio:hash:${hash}`, ttl, value),
+    cacheIdByHash: {
+      get: (hash: string) => getClient().get(`images:studio:hash:${hash}`),
+      set: (hash: string, cacheId: string, ttl = 60 * 60 * 24 * 7) =>
+        getClient().setex(`images:studio:hash:${hash}`, ttl, cacheId),
+      delete: (hash: string) =>
+        getClient()
+          .del(`images:studio:hash:${hash}`)
+          .then(() => null),
+    },
   },
-  metadata: {
-    get: (key: string) => getClient().get(`meta:${key}`),
-    set: (key: string, value: string, ttl = 60 * 60 * 6) =>
-      getClient().setex(`meta:${key}`, ttl, value),
+  models: {
+    get: () => getClient().get("models:images"),
+    set: (value: string, ttl = 60 * 60 * 6) =>
+      getClient().setex("models:images", ttl, value),
+    delete: () =>
+      getClient()
+        .del("models:images")
+        .then(() => null),
   },
 }
