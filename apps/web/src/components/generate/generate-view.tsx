@@ -36,6 +36,8 @@ type ImageOutput =
   inferRouterOutputs<AppRouter>["images"]["list"]["items"][number]
 type ImageWithUrl = ImageOutput & { imageUrl: string }
 
+type ModelsInfo = inferRouterOutputs<AppRouter>["images"]["models"]
+
 const ethnicities = [
   "ASIAN",
   "BLACK",
@@ -76,7 +78,7 @@ export function GenerateView() {
   )
   const { data: modelsInfo } = useSuspenseQuery(
     trpc.images.models.queryOptions(),
-  )
+  ) as { data: ModelsInfo }
 
   console.log("history", history)
   console.log("history.items.length", history.items.length)
@@ -242,7 +244,7 @@ export function GenerateView() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {modelsInfo.models.map((m) => (
+                    {modelsInfo.models.map((m: string) => (
                       <SelectItem key={m} value={m}>
                         {m}
                       </SelectItem>
@@ -264,11 +266,13 @@ export function GenerateView() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {modelsInfo.categories.map((c) => (
-                      <SelectItem key={c.id} value={c.id}>
-                        {c.label}
-                      </SelectItem>
-                    ))}
+                    {modelsInfo.categories.map(
+                      (c: { id: string; label: string }) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.label}
+                        </SelectItem>
+                      ),
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -286,11 +290,13 @@ export function GenerateView() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {modelsInfo.backgrounds.map((b) => (
-                      <SelectItem key={b.id} value={b.id}>
-                        {b.label}
-                      </SelectItem>
-                    ))}
+                    {modelsInfo.backgrounds.map(
+                      (b: { id: string; label: string }) => (
+                        <SelectItem key={b.id} value={b.id}>
+                          {b.label}
+                        </SelectItem>
+                      ),
+                    )}
                   </SelectContent>
                 </Select>
               </div>
