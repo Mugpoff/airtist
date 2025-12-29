@@ -1,13 +1,13 @@
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { publicProcedure } from "../trpc"
+import { protectedProcedure } from "../trpc"
 
-export const imagesByIdHandler = publicProcedure
+export const imagesByIdHandler = protectedProcedure
   .input(z.object({ id: z.string() }))
-  .query(async ({ input }) => {
+  .query(async ({ input, ctx }) => {
     const image = await db.generatedImages.findUnique({
-      where: { id: input.id },
+      where: { id: input.id, userId: ctx.session.user.id },
     })
 
     if (!image) {
@@ -17,8 +17,5 @@ export const imagesByIdHandler = publicProcedure
       })
     }
 
-    return {
-      ...image,
-      cost: image.cost?.toString() ?? null,
-    }
+    return image
   })
