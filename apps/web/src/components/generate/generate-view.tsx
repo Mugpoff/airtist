@@ -1,5 +1,7 @@
 "use client"
 
+import { useTRPC } from "@/trpc/react"
+import { toCdnUrl } from "@/utils/to-cdn-url"
 import type { AppRouter } from "@repo/trpc"
 import { STUDIO_AGE_RANGES } from "@repo/trpc/constants"
 import { Button } from "@repo/ui/base/button"
@@ -30,7 +32,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import { FaRegTrashCan } from "react-icons/fa6"
-import { useTRPC } from "@/trpc/react"
 
 type ImageOutput =
   inferRouterOutputs<AppRouter>["images"]["list"]["items"][number]
@@ -61,13 +62,6 @@ const aspectRatios = [
   "21:9",
 ] as const
 type AspectRatio = (typeof aspectRatios)[number]
-
-const toCdnUrl = (url: string) => {
-  const marker = "/images/"
-  const idx = url.indexOf(marker)
-  if (idx === -1) return url
-  return `/cdn${url.slice(idx)}`
-}
 
 export function GenerateView() {
   const trpc = useTRPC()

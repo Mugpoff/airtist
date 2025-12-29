@@ -1,7 +1,7 @@
-import { Suspense } from "react"
 import { GenerateView } from "@/components/generate/generate-view"
 import { HydrateClient, prefetch, trpc } from "@/trpc/server"
 import { getSession } from "@/utils/get-session"
+import { Suspense } from "react"
 
 export default async function DemoOpenRouterPage() {
   const session = await getSession()
