@@ -7,9 +7,7 @@ export const imagesByIdHandler = publicProcedure
   .input(z.object({ id: z.string() }))
   .query(async ({ input }) => {
     const image = await db.generatedImages.findUnique({
-      where: {
-        id: input.id,
-      },
+      where: { id: input.id },
     })
 
     if (!image) {
@@ -19,5 +17,8 @@ export const imagesByIdHandler = publicProcedure
       })
     }
 
-    return image
+    return {
+      ...image,
+      cost: image.cost?.toString() ?? null,
+    }
   })
