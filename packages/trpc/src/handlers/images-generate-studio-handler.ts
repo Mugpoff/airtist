@@ -15,7 +15,14 @@ import {
   StudioCategorySchema,
 } from "../utils/studio-constants"
 
-const EthnicitySchema = z.enum(["ASIAN", "BLACK", "ARAB", "WHITE"])
+const EthnicitySchema = z.enum([
+  "ASIAN",
+  "BLACK",
+  "ARAB",
+  "WHITE",
+  "METISSE",
+  "LATINO",
+])
 const AspectRatioSchema = z.enum([
   "1:1",
   "2:3",

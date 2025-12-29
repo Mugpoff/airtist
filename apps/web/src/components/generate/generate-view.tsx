@@ -35,7 +35,14 @@ import { useTRPC } from "@/trpc/react"
 type ImageOutput = inferRouterOutputs<AppRouter>["images"]["list"][number]
 type ImageWithUrl = ImageOutput & { imageUrl: string }
 
-const ethnicities = ["ASIAN", "BLACK", "ARAB", "WHITE"] as const
+const ethnicities = [
+  "ASIAN",
+  "BLACK",
+  "ARAB",
+  "WHITE",
+  "LATINO",
+  "METISSE",
+] as const
 type Ethnicity = (typeof ethnicities)[number]
 
 const aspectRatios = [
