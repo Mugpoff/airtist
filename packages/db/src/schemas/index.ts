@@ -24,7 +24,7 @@ export type RelationLoadStrategy = z.infer<typeof RelationLoadStrategySchema>;
 
 // File: GeneratedImageCacheScalarFieldEnum.schema.ts
 
-export const GeneratedImageCacheScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'hash', 'prompt', 'model', 'requestId', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'mimeType', 'promptTokens', 'completionTokens', 'totalTokens', 'cachedTokens', 'cost'])
+export const GeneratedImageCacheScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'hash', 'prompt', 'input', 'model', 'requestId', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'mimeType', 'promptTokens', 'completionTokens', 'totalTokens', 'cachedTokens', 'cost'])
 
 export type GeneratedImageCacheScalarFieldEnum = z.infer<typeof GeneratedImageCacheScalarFieldEnumSchema>;
 
@@ -52,6 +52,12 @@ export const SortOrderSchema = z.enum(['asc', 'desc'])
 
 export type SortOrder = z.infer<typeof SortOrderSchema>;
 
+// File: NullableJsonNullValueInput.schema.ts
+
+export const NullableJsonNullValueInputSchema = z.enum(['DbNull', 'JsonNull'])
+
+export type NullableJsonNullValueInput = z.infer<typeof NullableJsonNullValueInputSchema>;
+
 // File: QueryMode.schema.ts
 
 export const QueryModeSchema = z.enum(['default', 'insensitive'])
@@ -63,6 +69,12 @@ export type QueryMode = z.infer<typeof QueryModeSchema>;
 export const NullsOrderSchema = z.enum(['first', 'last'])
 
 export type NullsOrder = z.infer<typeof NullsOrderSchema>;
+
+// File: JsonNullValueFilter.schema.ts
+
+export const JsonNullValueFilterSchema = z.enum(['DbNull', 'JsonNull', 'AnyNull'])
+
+export type JsonNullValueFilter = z.infer<typeof JsonNullValueFilterSchema>;
 
 // File: GeneratedImages.schema.ts
 
@@ -99,6 +111,7 @@ export const GeneratedImageCacheSchema = z.object({
   createdAt: z.date(),
   hash: z.string(),
   prompt: z.string(),
+  input: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
   model: z.string(),
   requestId: z.string().nullish(),
   aspectRatio: z.string().nullish(),

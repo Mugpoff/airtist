@@ -40,6 +40,7 @@ model GeneratedImageCache {
 
   hash        String @unique
   prompt      String
+  input       Json?
   model       String
   requestId   String?
   aspectRatio String?
