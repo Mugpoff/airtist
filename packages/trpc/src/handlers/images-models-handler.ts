@@ -7,10 +7,8 @@ import {
 } from "../utils/studio-constants"
 
 export const imagesModelsHandler = publicProcedure.query(async () => {
-  const cacheKey = "images-models-v1"
-
   try {
-    const cached = await cacheClient.metadata.get(cacheKey)
+    const cached = await cacheClient.models.get()
     if (cached) return JSON.parse(cached)
   } catch {}
 
@@ -28,7 +26,7 @@ export const imagesModelsHandler = publicProcedure.query(async () => {
   }
 
   try {
-    await cacheClient.metadata.set(cacheKey, JSON.stringify(result))
+    await cacheClient.models.set(JSON.stringify(result))
   } catch {}
 
   return result
