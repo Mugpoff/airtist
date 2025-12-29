@@ -1,3 +1,4 @@
+import { settingsAtom } from "@/atoms/settings-atom"
 import { Delete02Icon, ImageUploadIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { config } from "@repo/config"
@@ -5,10 +6,9 @@ import { Button } from "@repo/ui/base/button"
 import { ScrollArea } from "@repo/ui/base/scroll-area"
 import { BlobReader, BlobWriter, ZipReader } from "@zip.js/zip.js"
 import { useAtom } from "jotai"
-import Image from "next/image"
 import { useTranslations } from "next-intl"
+import Image from "next/image"
 import { useDropzone } from "react-dropzone"
-import { settingsAtom } from "@/atoms/settings-atom"
 
 export const GenerateDropzone = () => {
   const t = useTranslations("home.dropzone")

@@ -32,10 +32,18 @@ export const config = {
     },
   },
   generationSettings: {
-    age: {
-      default: 25,
-      min: 1,
-      max: 100,
+    preset: {
+      default: "MAN_ADULT",
+      items: [
+        { label: "global.preset.manChild", value: "MAN_CHILD" },
+        { label: "global.preset.manPreteen", value: "MAN_PRETEEN" },
+        { label: "global.preset.manTeen", value: "MAN_TEEN" },
+        { label: "global.preset.manAdult", value: "MAN_ADULT" },
+        { label: "global.preset.womanChild", value: "WOMAN_CHILD" },
+        { label: "global.preset.womanPreteen", value: "WOMAN_PRETEEN" },
+        { label: "global.preset.womanTeen", value: "WOMAN_TEEN" },
+        { label: "global.preset.womanAdult", value: "WOMAN_ADULT" },
+      ],
     },
     weight: {
       default: 70,
@@ -52,11 +60,17 @@ export const config = {
         { label: "global.ethnicity.mixed", value: "mixed" },
       ],
     },
-    gender: {
-      default: "male",
+    background: {
+      default: "STUDIO_WHITE",
       items: [
-        { label: "global.gender.male", value: "male" },
-        { label: "global.gender.female", value: "female" },
+        { label: "global.background.studioWhite", value: "STUDIO_WHITE" },
+        { label: "global.background.studioGrey", value: "STUDIO_GREY" },
+        {
+          label: "global.background.studioDarkGrey",
+          value: "STUDIO_DARK_GREY",
+        },
+        { label: "global.background.studioBlack", value: "STUDIO_BLACK" },
+        { label: "global.background.studioBeige", value: "STUDIO_BEIGE" },
       ],
     },
     acceptedFiles: {

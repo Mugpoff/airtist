@@ -6,13 +6,11 @@ export const zodMessages = {
   password: {
     required: "validation.password.required",
   },
-  gender: {
-    invalid: "validation.gender.invalid",
+  preset: {
+    invalid: "validation.preset.invalid",
   },
-  age: {
-    invalid: "validation.age.invalid",
-    min: "validation.age.min",
-    max: "validation.age.max",
+  background: {
+    invalid: "validation.background.invalid",
   },
   weight: {
     invalid: "validation.weight.invalid",

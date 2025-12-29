@@ -1,3 +1,5 @@
+import { settingsAtom } from "@/atoms/settings-atom"
+import { zodMessages } from "@/utils/zod-messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Settings05Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -23,26 +25,24 @@ import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import z from "zod"
-import { settingsAtom } from "@/atoms/settings-atom"
-import { zodMessages } from "@/utils/zod-messages"
 
 const settingsSchema = z.object({
-  gender: z.enum(
-    config.generationSettings.gender.items.map((item) => item.value),
-    zodMessages.gender.invalid,
+  preset: z.enum(
+    config.generationSettings.preset.items.map((item) => item.value),
+    zodMessages.preset.invalid,
   ),
-  age: z
-    .int(zodMessages.age.invalid)
-    .min(config.generationSettings.age.min, zodMessages.age.min)
-    .max(config.generationSettings.age.max, zodMessages.age.max),
-  weight: z
-    .int(zodMessages.weight.invalid)
-    .min(config.generationSettings.weight.min, zodMessages.weight.min)
-    .max(config.generationSettings.weight.max, zodMessages.weight.max),
   ethnicity: z.enum(
     config.generationSettings.ethnicity.items.map((item) => item.value),
     zodMessages.ethnicity.invalid,
   ),
+  background: z.enum(
+    config.generationSettings.background.items.map((item) => item.value),
+    zodMessages.background.invalid,
+  ),
+  weight: z
+    .int(zodMessages.weight.invalid)
+    .min(config.generationSettings.weight.min, zodMessages.weight.min)
+    .max(config.generationSettings.weight.max, zodMessages.weight.max),
 })
 
 export const GenerateSettings = () => {
@@ -50,10 +50,10 @@ export const GenerateSettings = () => {
   const form = useForm<z.infer<typeof settingsSchema>>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
-      gender: "male",
-      age: 25,
-      weight: 70,
-      ethnicity: "white",
+      preset: config.generationSettings.preset.default,
+      weight: config.generationSettings.weight.default,
+      ethnicity: config.generationSettings.ethnicity.default,
+      background: config.generationSettings.background.default,
     },
     mode: "onTouched",
   })
@@ -63,10 +63,10 @@ export const GenerateSettings = () => {
   const onSubmit = (data: z.infer<typeof settingsSchema>) => {
     setSettings((prev) => ({
       ...prev,
-      gender: data.gender,
-      age: data.age,
+      preset: data.preset,
       weight: data.weight,
       ethnicity: data.ethnicity,
+      background: data.background,
     }))
     setOpen(false)
     form.reset(data)
@@ -78,10 +78,10 @@ export const GenerateSettings = () => {
         <DialogTrigger render={<Button />}>
           <HugeiconsIcon icon={Settings05Icon} />
           {t("home.generate.settings", {
-            gender: settings.gender,
+            preset: settings.preset,
             ethnicity: settings.ethnicity,
-            age: settings.age,
             weight: settings.weight.toString(),
+            background: settings.background,
           })}
         </DialogTrigger>
         <DialogPopup showCloseButton>
@@ -98,27 +98,11 @@ export const GenerateSettings = () => {
             </DialogHeader>
             <DialogPanel className="grid gap-4">
               <div className="grid grid-cols-2 gap-4">
-                <NumberInputField
-                  name="age"
-                  control={form.control}
-                  label={t("global.age")}
-                  min={config.generationSettings.age.min}
-                  max={config.generationSettings.age.max}
-                />
-                <NumberInputField
-                  name="weight"
-                  control={form.control}
-                  label={t("global.weight")}
-                  min={config.generationSettings.weight.min}
-                  max={config.generationSettings.weight.max}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
                 <SelectField
-                  name="gender"
+                  name="preset"
                   control={form.control}
-                  label={t("global.gender.title")}
-                  items={config.generationSettings.gender.items.map((item) => ({
+                  label={t("global.preset.title")}
+                  items={config.generationSettings.preset.items.map((item) => ({
                     label: t(item.label),
                     value: item.value,
                   }))}
@@ -128,6 +112,26 @@ export const GenerateSettings = () => {
                   control={form.control}
                   label={t("global.ethnicity.title")}
                   items={config.generationSettings.ethnicity.items.map(
+                    (item) => ({
+                      label: t(item.label),
+                      value: item.value,
+                    }),
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <NumberInputField
+                  name="weight"
+                  control={form.control}
+                  label={t("global.weight")}
+                  min={config.generationSettings.weight.min}
+                  max={config.generationSettings.weight.max}
+                />
+                <SelectField
+                  name="background"
+                  control={form.control}
+                  label={t("global.background.title")}
+                  items={config.generationSettings.background.items.map(
                     (item) => ({
                       label: t(item.label),
                       value: item.value,

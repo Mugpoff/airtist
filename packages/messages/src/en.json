@@ -4,7 +4,6 @@
     "password": "Password",
     "english": "English",
     "french": "Français",
-    "age": "Age",
     "weight": "Weight",
     "ethnicity": {
       "title": "Ethnicity",
@@ -14,10 +13,24 @@
       "latino": "Latino",
       "mixed": "Mixed"
     },
-    "gender": {
-      "title": "Gender",
-      "male": "Male",
-      "female": "Female"
+    "preset": {
+      "title": "Preset",
+      "manChild": "Man Child",
+      "manPreteen": "Man Preteen",
+      "manTeen": "Man Teen",
+      "manAdult": "Man Adult",
+      "womanChild": "Woman Child",
+      "womanPreteen": "Woman Preteen",
+      "womanTeen": "Woman Teen",
+      "womanAdult": "Woman Adult"
+    },
+    "background": {
+      "title": "Background",
+      "studioWhite": "Studio White",
+      "studioGrey": "Studio Grey",
+      "studioDarkGrey": "Studio Dark Grey",
+      "studioBlack": "Studio Black",
+      "studioBeige": "Studio Beige"
     },
     "cancel": "Cancel",
     "save": "Save",
@@ -36,16 +49,14 @@
       "min": "Weight must be greater than {min}",
       "max": "Weight must be less than {max}"
     },
-    "age": {
-      "invalid": "Please enter a valid age",
-      "min": "Age must be greater than {min}",
-      "max": "Age must be less than {max}"
+    "preset": {
+      "invalid": "Please select a valid preset"
+    },
+    "background": {
+      "invalid": "Please select a valid background"
     },
     "ethnicity": {
       "invalid": "Please select a valid ethnicity"
-    },
-    "gender": {
-      "invalid": "Please select a valid gender"
     },
     "selectOption": "Please select an option"
   },
@@ -75,7 +86,7 @@
     "generate": {
       "title": "Generation Settings",
       "description": "Make changes to the generation settings here. Click save when you're done.",
-      "settings": "{gender, select, male {Male} other {Female}}, {ethnicity, select, white {White} black {Black} asian {Asian} latino {Latino} other {Mixed}}, {age, plural, =1 {1 year} other {# years}} old, {weight} kg"
+      "settings": "{preset, select, MAN_CHILD {Man Child} MAN_PRETEEN {Man Preteen} MAN_TEEN {Man Teen} MAN_ADULT {Man Adult} WOMAN_CHILD {Woman Child} WOMAN_PRETEEN {Woman Preteen} WOMAN_TEEN {Woman Teen} other {Woman Adult}}, {ethnicity, select, white {White} black {Black} asian {Asian} latino {Latino} other {Mixed}}, {weight} kg, {background, select, STUDIO_WHITE {Studio White} STUDIO_GREY {Studio Grey} STUDIO_DARK_GREY {Studio Dark Grey} STUDIO_BLACK {Studio Black} other {Studio Beige}}"
     }
   }
 }

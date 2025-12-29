@@ -4,7 +4,6 @@
     "password": "Mot de passe",
     "english": "English",
     "french": "Français",
-    "age": "Âge",
     "weight": "Poids",
     "ethnicity": {
       "title": "Ethnicité",
@@ -14,10 +13,24 @@
       "latino": "Latino",
       "mixed": "Mixte"
     },
-    "gender": {
-      "title": "Genre",
-      "male": "Homme",
-      "female": "Femme"
+    "preset": {
+      "title": "Préréglage",
+      "manChild": "Homme Enfant",
+      "manPreteen": "Homme Préadolescent",
+      "manTeen": "Homme Adolescent",
+      "manAdult": "Homme Adulte",
+      "womanChild": "Femme Enfant",
+      "womanPreteen": "Femme Préadolescente",
+      "womanTeen": "Femme Adolescente",
+      "womanAdult": "Femme Adulte"
+    },
+    "background": {
+      "title": "Arrière-plan",
+      "studioWhite": "Studio Blanc",
+      "studioGrey": "Studio Gris",
+      "studioDarkGrey": "Studio Gris Foncé",
+      "studioBlack": "Studio Noir",
+      "studioBeige": "Studio Beige"
     },
     "cancel": "Annuler",
     "save": "Enregistrer",
@@ -36,16 +49,14 @@
       "min": "Le poids doit être supérieur à {min}",
       "max": "Le poids doit être inférieur à {max}"
     },
-    "age": {
-      "invalid": "Veuillez entrer un âge valide",
-      "min": "L'âge doit être supérieur à {min}",
-      "max": "L'âge doit être inférieur à {max}"
+    "preset": {
+      "invalid": "Veuillez sélectionner un préréglage valide"
+    },
+    "background": {
+      "invalid": "Veuillez sélectionner un arrière-plan valide"
     },
     "ethnicity": {
       "invalid": "Veuillez sélectionner une ethnie valide"
-    },
-    "gender": {
-      "invalid": "Veuillez sélectionner un genre valide"
     },
     "selectOption": "Veuillez sélectionner une option"
   },
@@ -75,7 +86,7 @@
     "generate": {
       "title": "Paramètres de génération",
       "description": "Faites des modifications aux paramètres de génération ici. Cliquez sur enregistrer lorsque vous avez terminé.",
-      "settings": "{gender, select, male {Homme} other {Femme}}, {ethnicity, select, white {Blanc} black {Noir} asian {Asiatique} latino {Latino} other {Mixte}}, {age, plural, =1 {1 an} other {# ans}}, {weight} kg"
+      "settings": "{preset, select, MAN_CHILD {Homme Enfant} MAN_PRETEEN {Homme Préadolescent} MAN_TEEN {Homme Adolescent} MAN_ADULT {Homme Adulte} WOMAN_CHILD {Femme Enfant} WOMAN_PRETEEN {Femme Préadolescente} WOMAN_TEEN {Femme Adolescente} other {Femme Adulte}}, {ethnicity, select, white {Blanc} black {Noir} asian {Asiatique} latino {Latino} other {Mixte}}, {weight} kg, {background, select, STUDIO_WHITE {Studio Blanc} STUDIO_GREY {Studio Gris} STUDIO_DARK_GREY {Studio Gris Foncé} STUDIO_BLACK {Studio Noir} STUDIO_BEIGE {Studio Beige}}"
     }
   }
 }
