@@ -32,7 +32,8 @@ import { useEffect, useMemo, useState } from "react"
 import { FaRegTrashCan } from "react-icons/fa6"
 import { useTRPC } from "@/trpc/react"
 
-type ImageOutput = inferRouterOutputs<AppRouter>["images"]["list"][number]
+type ImageOutput =
+  inferRouterOutputs<AppRouter>["images"]["list"]["items"][number]
 type ImageWithUrl = ImageOutput & { imageUrl: string }
 
 const ethnicities = [
@@ -70,9 +71,18 @@ export function GenerateView() {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
 
-  const { data: images } = useSuspenseQuery(trpc.images.list.queryOptions())
+  const { data: history } = useSuspenseQuery(
+    trpc.images.list.queryOptions({ limit: 50, offset: 0 }),
+  )
   const { data: modelsInfo } = useSuspenseQuery(
     trpc.images.models.queryOptions(),
+  )
+
+  console.log("history", history)
+  console.log("history.items.length", history.items.length)
+  console.log(
+    "history.items[0..2].imageUrl",
+    history.items.slice(0, 3).map((x) => x.imageUrl),
   )
 
   const [prompt, setPrompt] = useState(
@@ -190,8 +200,12 @@ export function GenerateView() {
   }
 
   const imagesWithUrl = useMemo(() => {
-    return images.filter((image): image is ImageWithUrl => !!image.imageUrl)
-  }, [images])
+    const list = history.items.filter(
+      (image): image is ImageWithUrl => typeof image.imageUrl === "string",
+    )
+    console.log("imagesWithUrl.length", list.length)
+    return list
+  }, [history.items])
 
   const isGenerating = generateStudioMutation.isPending
 
