@@ -12,7 +12,7 @@ export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevel
 
 // File: GeneratedImagesScalarFieldEnum.schema.ts
 
-export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'hash', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'userId'])
+export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'hash', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'promptTokens', 'completionTokens', 'totalTokens', 'cachedTokens', 'cost', 'userId'])
 
 export type GeneratedImagesScalarFieldEnum = z.infer<typeof GeneratedImagesScalarFieldEnumSchema>;
 
@@ -74,6 +74,13 @@ export const GeneratedImagesSchema = z.object({
   objectKey: z.string().nullish(),
   imageData: z.string().regex(/^[A-Za-z0-9+/]*={0,2}$/, "Must be valid base64 string").max(22369622, "Base64 string too long").nullish(),
   mimeType: z.string().default("image/png"),
+  promptTokens: z.number().int().nullish(),
+  completionTokens: z.number().int().nullish(),
+  totalTokens: z.number().int().nullish(),
+  cachedTokens: z.number().int().nullish(),
+  cost: z.instanceof(Prisma.Decimal, {
+  message: "Field 'cost' must be a Decimal. Location: ['Models', 'GeneratedImages']",
+}).nullish(),
   userId: z.string().nullish(),
 });
 

@@ -17,6 +17,12 @@ model GeneratedImages {
   imageData Bytes?
   mimeType  String @default("image/png")
 
+  promptTokens     Int?
+  completionTokens Int?
+  totalTokens      Int?
+  cachedTokens    Int?
+  cost            Decimal?
+
   userId String? @db.Uuid
   user   Users?  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
