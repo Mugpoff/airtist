@@ -27,7 +27,12 @@ export const cacheClient = {
   },
   images: {
     getByHash: (hash: string) => getClient().get(`studio:hash:${hash}`),
-    setByHash: (hash: string, value: string, ttl: number = 60 * 60 * 24 * 7) =>
+    setByHash: (hash: string, value: string, ttl = 60 * 60 * 24 * 7) =>
       getClient().setex(`studio:hash:${hash}`, ttl, value),
+  },
+  metadata: {
+    get: (key: string) => getClient().get(`meta:${key}`),
+    set: (key: string, value: string, ttl = 60 * 60 * 6) =>
+      getClient().setex(`meta:${key}`, ttl, value),
   },
 }
