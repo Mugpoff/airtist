@@ -1,3 +1,4 @@
+import { cacheClient } from "@repo/cache"
 import { publicProcedure } from "../trpc"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models"
 import {
@@ -5,8 +6,15 @@ import {
   STUDIO_CATEGORIES,
 } from "../utils/studio-constants"
 
-export const imagesModelsHandler = publicProcedure.query(() => {
-  return {
+export const imagesModelsHandler = publicProcedure.query(async () => {
+  const cacheKey = "images-models-v1"
+
+  try {
+    const cached = await cacheClient.metadata.get(cacheKey)
+    if (cached) return JSON.parse(cached)
+  } catch {}
+
+  const result = {
     defaultModel: DEFAULT_IMAGE_MODEL,
     models: ImageModelSchema.options,
     categories: Object.entries(STUDIO_CATEGORIES).map(([id, label]) => ({
@@ -18,4 +26,10 @@ export const imagesModelsHandler = publicProcedure.query(() => {
       label,
     })),
   }
+
+  try {
+    await cacheClient.metadata.set(cacheKey, JSON.stringify(result))
+  } catch {}
+
+  return result
 })
