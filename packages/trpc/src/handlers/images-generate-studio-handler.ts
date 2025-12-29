@@ -61,7 +61,8 @@ const parseString = (v: FormDataValue | null) =>
 const isFile = (v: unknown): v is File =>
   typeof File !== "undefined" && v instanceof File
 
-const sha256 = (buf: Buffer) => createHash("sha256").update(buf).digest("hex")
+const sha256Hex = (buf: Buffer) =>
+  createHash("sha256").update(buf).digest("hex")
 
 export const imagesGenerateStudioHandler = protectedProcedure
   .input(z.instanceof(FormData))
@@ -105,13 +106,19 @@ export const imagesGenerateStudioHandler = protectedProcedure
       throw new TRPCError({ code: "BAD_REQUEST", message: "Images requises" })
     }
 
-    const fileDigests: string[] = []
-    for (const file of files) {
-      const buf = Buffer.from(await file.arrayBuffer())
-      fileDigests.push(sha256(buf))
-    }
+    const prepared = await Promise.all(
+      files.map(async (file) => {
+        const mimeType = file.type || ""
+        const buf = Buffer.from(await file.arrayBuffer())
+        const digest = sha256Hex(buf)
+        return { file, mimeType, buf, digest }
+      }),
+    )
 
-    const garmentsFingerprint = fileDigests.sort().join("|")
+    const garmentsFingerprint = prepared
+      .map((x) => x.digest)
+      .sort()
+      .join("|")
 
     const hashInput: StudioHashInput & { garmentsFingerprint: string } = {
       prompt,
@@ -126,22 +133,46 @@ export const imagesGenerateStudioHandler = protectedProcedure
     }
 
     const hash = generateStudioHash(hashInput)
+    const redisKey = `studio:hash:${hash}`
 
-    let cachedResult: string | null = null
     try {
-      cachedResult = await cacheClient.images.getByHash(hash)
+      const cachedId = await cacheClient.metadata.get(redisKey)
+      if (cachedId) {
+        const cacheRow = await db.generatedImageCache.findUnique({
+          where: { id: cachedId },
+        })
+
+        if (cacheRow) {
+          const historyRow = await db.generatedImages.create({
+            data: {
+              prompt: cacheRow.prompt,
+              model: cacheRow.model,
+              requestId: cacheRow.requestId,
+              aspectRatio: cacheRow.aspectRatio,
+              width: cacheRow.width,
+              height: cacheRow.height,
+              imageUrl: cacheRow.imageUrl,
+              objectKey: cacheRow.objectKey,
+              mimeType: cacheRow.mimeType,
+              promptTokens: cacheRow.promptTokens,
+              completionTokens: cacheRow.completionTokens,
+              totalTokens: cacheRow.totalTokens,
+              cachedTokens: cacheRow.cachedTokens,
+              cost: cacheRow.cost,
+              userId: ctx.session.user.id,
+              cacheKey: cacheRow.id,
+            },
+          })
+
+          return { image: historyRow, garmentUrls: [], usage: null }
+        }
+      }
     } catch {}
 
-    if (cachedResult) {
-      return JSON.parse(cachedResult)
-    }
-
     const garmentUrls: string[] = []
-    for (const file of files) {
-      const mimeType = file.type || ""
-      const buf = Buffer.from(await file.arrayBuffer())
-      const objectKey = `uploads/${crypto.randomUUID()}-${file.name}`
-      const url = await uploadImage(objectKey, buf, mimeType)
+    for (const item of prepared) {
+      const objectKey = `uploads/${crypto.randomUUID()}-${item.file.name}`
+      const url = await uploadImage(objectKey, item.buf, item.mimeType)
       garmentUrls.push(url)
     }
 
@@ -174,19 +205,35 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const outKey = `images/${crypto.randomUUID()}.png`
     const publicUrl = await uploadImage(outKey, bytes, "image/png")
 
-    const row = await db.generatedImages.create({
-      data: {
+    const cacheRow = await db.generatedImageCache.upsert({
+      where: { hash },
+      create: {
+        hash,
         prompt: userText,
         model,
         requestId,
-        hash,
         aspectRatio,
         width: size.width,
         height: size.height,
-        mimeType: "image/png",
         imageUrl: publicUrl,
         objectKey: outKey,
-        userId: ctx.session.user.id,
+        mimeType: "image/png",
+        promptTokens: usage?.prompt_tokens,
+        completionTokens: usage?.completion_tokens,
+        totalTokens: usage?.total_tokens,
+        cachedTokens: usage?.prompt_tokens_details?.cached_tokens,
+        cost: usage?.cost != null ? String(usage.cost) : null,
+      },
+      update: {
+        prompt: userText,
+        model,
+        requestId,
+        aspectRatio,
+        width: size.width,
+        height: size.height,
+        imageUrl: publicUrl,
+        objectKey: outKey,
+        mimeType: "image/png",
         promptTokens: usage?.prompt_tokens,
         completionTokens: usage?.completion_tokens,
         totalTokens: usage?.total_tokens,
@@ -195,11 +242,25 @@ export const imagesGenerateStudioHandler = protectedProcedure
       },
     })
 
-    const result = { image: row, garmentUrls, usage }
+    const historyRow = await db.generatedImages.create({
+      data: {
+        prompt: userText,
+        model,
+        requestId,
+        aspectRatio,
+        width: size.width,
+        height: size.height,
+        mimeType: "image/png",
+        imageUrl: publicUrl,
+        objectKey: outKey,
+        userId: ctx.session.user.id,
+        cacheKey: cacheRow.id,
+      },
+    })
 
     try {
-      await cacheClient.images.setByHash(hash, JSON.stringify(result))
+      await cacheClient.metadata.set(redisKey, cacheRow.id, 60 * 60 * 24 * 7)
     } catch {}
 
-    return result
+    return { image: historyRow, garmentUrls, usage }
   })
