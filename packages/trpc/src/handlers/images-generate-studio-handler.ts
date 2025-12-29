@@ -179,18 +179,27 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const ethLabel = ethnicity.toLowerCase()
     const bgPrompt = BACKGROUND_PROMPTS[background]
 
-    const system =
+    const fixedPrompt =
       "Professional high-end fashion e-commerce photography. Minimalist studio setting. No props, no furniture, no nature, no street. Focus solely on model and clothing. Lighting must be soft, diffuse, and professional studio strobe."
-    const userText = `Subject: Full body shot of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Background: ${bgPrompt}. The model is wearing the exact clothing from the reference images. Pose: Neutral fashion pose, standing straight, facing forward or slightly turned. ${prompt}`
+    const dynamicPrompt = `Subject: Full body shot of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Background: ${bgPrompt}. The model is wearing the exact clothing from the reference images. Pose: Neutral fashion pose, standing straight, facing forward or slightly turned. ${prompt}`
 
     const { bytes, requestId, usage } = await callOpenRouterForImage({
       model,
       messages: [
-        { role: "system", content: system },
+        {
+          role: "system",
+          content: [
+            {
+              type: "text",
+              text: fixedPrompt,
+              cache_control: { type: "ephemeral" },
+            },
+          ],
+        },
         {
           role: "user",
           content: [
-            { type: "text", text: userText },
+            { type: "text", text: dynamicPrompt },
             ...garmentUrls.map((url) => ({
               type: "image_url",
               image_url: { url },
@@ -208,7 +217,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
       where: { hash },
       create: {
         hash,
-        prompt: userText,
+        prompt: dynamicPrompt,
         model,
         requestId,
         aspectRatio,
@@ -224,7 +233,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
         cost: usage?.cost != null ? String(usage.cost) : null,
       },
       update: {
-        prompt: userText,
+        prompt: dynamicPrompt,
         model,
         requestId,
         aspectRatio,
@@ -243,7 +252,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
 
     const historyRow = await db.generatedImages.create({
       data: {
-        prompt: userText,
+        prompt: dynamicPrompt,
         model,
         requestId,
         aspectRatio,
