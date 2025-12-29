@@ -183,6 +183,29 @@ export const imagesGenerateStudioHandler = protectedProcedure
       "Professional high-end fashion e-commerce photography. Minimalist studio setting. No props, no furniture, no nature, no street. Focus solely on model and clothing. Lighting must be soft, diffuse, and professional studio strobe."
     const dynamicPrompt = `Subject: Full body shot of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Background: ${bgPrompt}. The model is wearing the exact clothing from the reference images. Pose: Neutral fashion pose, standing straight, facing forward or slightly turned. ${prompt}`
 
+    const cacheInput = {
+      prompt: {
+        fixed: fixedPrompt,
+        dynamic: dynamicPrompt,
+      },
+      studio: {
+        ethnicity,
+        category,
+        background,
+        age,
+        height,
+      },
+      image: {
+        aspectRatio,
+        width: size.width,
+        height: size.height,
+      },
+      model,
+      garments: {
+        fingerprints: prepared.map((x) => x.digest).sort(),
+      },
+    }
+
     const { bytes, requestId, usage } = await callOpenRouterForImage({
       model,
       messages: [
@@ -218,6 +241,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
       create: {
         hash,
         prompt: dynamicPrompt,
+        input: cacheInput,
         model,
         requestId,
         aspectRatio,
@@ -234,6 +258,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
       },
       update: {
         prompt: dynamicPrompt,
+        input: cacheInput,
         model,
         requestId,
         aspectRatio,
