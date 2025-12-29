@@ -191,7 +191,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
         completionTokens: usage?.completion_tokens,
         totalTokens: usage?.total_tokens,
         cachedTokens: usage?.prompt_tokens_details?.cached_tokens,
-        cost: usage?.cost ?? null,
+        cost: usage?.cost != null ? String(usage.cost) : null,
       },
     })
 
