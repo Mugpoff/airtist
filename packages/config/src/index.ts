@@ -59,5 +59,11 @@ export const config = {
         { label: "global.gender.female", value: "female" },
       ],
     },
+    acceptedFiles: {
+      "image/png": [".png"],
+      "image/jpeg": [".jpg", ".jpeg"],
+      "image/webp": [".webp"],
+      "application/zip": [".zip"],
+    },
   },
 } as const

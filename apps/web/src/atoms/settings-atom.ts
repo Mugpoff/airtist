@@ -6,6 +6,7 @@ type Settings = {
   age: number
   weight: number
   ethnicity: (typeof config.generationSettings.ethnicity.items)[number]["value"]
+  files: File[]
 }
 
 export const settingsAtom = atom<Settings>({
@@ -13,4 +14,5 @@ export const settingsAtom = atom<Settings>({
   age: config.generationSettings.age.default,
   weight: config.generationSettings.weight.default,
   ethnicity: config.generationSettings.ethnicity.default,
+  files: [],
 })

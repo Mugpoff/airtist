@@ -61,12 +61,13 @@ export const GenerateSettings = () => {
   const [settings, setSettings] = useAtom(settingsAtom)
 
   const onSubmit = (data: z.infer<typeof settingsSchema>) => {
-    setSettings({
+    setSettings((prev) => ({
+      ...prev,
       gender: data.gender,
       age: data.age,
       weight: data.weight,
       ethnicity: data.ethnicity,
-    })
+    }))
     setOpen(false)
     form.reset(data)
   }
