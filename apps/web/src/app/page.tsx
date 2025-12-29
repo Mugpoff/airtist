@@ -5,8 +5,8 @@ import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const SCROLL_THRESHOLD = 50
-const SCROLL_COOLDOWN = 800
+const SCROLL_THRESHOLD = 100
+const SCROLL_COOLDOWN = 1400
 
 export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(0)
@@ -35,9 +35,15 @@ export default function HomePage() {
   const handleWheel = useCallback(
     (e: WheelEvent) => {
       const target = e.target instanceof Element ? e.target : null
+      const isInScrollArea = target?.closest(
+        '[data-slot="scroll-area-viewport"][data-has-overflow-y]',
+      )
 
-      if (target?.closest('[data-slot^="scroll-area-"]')) return
+      if (isInScrollArea) {
+        return
+      }
 
+      // Block all wheel events in other cases
       e.preventDefault()
 
       const now = Date.now()
