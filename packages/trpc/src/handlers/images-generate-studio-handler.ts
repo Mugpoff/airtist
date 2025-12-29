@@ -136,7 +136,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const redisKey = `studio:hash:${hash}`
 
     try {
-      const cachedId = await cacheClient.metadata.get(redisKey)
+      const cachedId = await cacheClient.images.cacheIdByHash.get(hash)
       if (cachedId) {
         const cacheRow = await db.generatedImageCache.findUnique({
           where: { id: cachedId },
@@ -259,7 +259,11 @@ export const imagesGenerateStudioHandler = protectedProcedure
     })
 
     try {
-      await cacheClient.metadata.set(redisKey, cacheRow.id, 60 * 60 * 24 * 7)
+      await cacheClient.images.cacheIdByHash.set(
+        hash,
+        cacheRow.id,
+        60 * 60 * 24 * 7,
+      )
     } catch {}
 
     return { image: historyRow, garmentUrls, usage }
