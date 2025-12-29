@@ -78,9 +78,7 @@ export const GeneratedImagesSchema = z.object({
   completionTokens: z.number().int().nullish(),
   totalTokens: z.number().int().nullish(),
   cachedTokens: z.number().int().nullish(),
-  cost: z.instanceof(Prisma.Decimal, {
-  message: "Field 'cost' must be a Decimal. Location: ['Models', 'GeneratedImages']",
-}).nullish(),
+  cost: z.string().nullish(),
   userId: z.string().nullish(),
 });
 

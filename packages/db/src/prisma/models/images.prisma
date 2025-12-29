@@ -21,7 +21,7 @@ model GeneratedImages {
   completionTokens Int?
   totalTokens      Int?
   cachedTokens    Int?
-  cost            Decimal?
+  cost            String?
 
   userId String? @db.Uuid
   user   Users?  @relation(fields: [userId], references: [id], onDelete: Cascade)
