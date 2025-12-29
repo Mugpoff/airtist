@@ -12,7 +12,7 @@ export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevel
 
 // File: GeneratedImagesScalarFieldEnum.schema.ts
 
-export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'hash', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'promptTokens', 'completionTokens', 'totalTokens', 'cachedTokens', 'cost', 'userId'])
+export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'hash', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'promptTokens', 'completionTokens', 'totalTokens', 'cachedTokens', 'cost', 'userId', 'cacheKey'])
 
 export type GeneratedImagesScalarFieldEnum = z.infer<typeof GeneratedImagesScalarFieldEnumSchema>;
 
@@ -21,6 +21,12 @@ export type GeneratedImagesScalarFieldEnum = z.infer<typeof GeneratedImagesScala
 export const RelationLoadStrategySchema = z.enum(['query', 'join'])
 
 export type RelationLoadStrategy = z.infer<typeof RelationLoadStrategySchema>;
+
+// File: GeneratedImageCacheScalarFieldEnum.schema.ts
+
+export const GeneratedImageCacheScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'hash', 'prompt', 'model', 'requestId', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'mimeType', 'promptTokens', 'completionTokens', 'totalTokens', 'cachedTokens', 'cost'])
+
+export type GeneratedImageCacheScalarFieldEnum = z.infer<typeof GeneratedImageCacheScalarFieldEnumSchema>;
 
 // File: UsersScalarFieldEnum.schema.ts
 
@@ -80,9 +86,35 @@ export const GeneratedImagesSchema = z.object({
   cachedTokens: z.number().int().nullish(),
   cost: z.string().nullish(),
   userId: z.string().nullish(),
+  cacheKey: z.string().nullish(),
 });
 
 export type GeneratedImagesType = z.infer<typeof GeneratedImagesSchema>;
+
+
+// File: GeneratedImageCache.schema.ts
+
+export const GeneratedImageCacheSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  hash: z.string(),
+  prompt: z.string(),
+  model: z.string(),
+  requestId: z.string().nullish(),
+  aspectRatio: z.string().nullish(),
+  width: z.number().int(),
+  height: z.number().int(),
+  imageUrl: z.string(),
+  objectKey: z.string(),
+  mimeType: z.string(),
+  promptTokens: z.number().int().nullish(),
+  completionTokens: z.number().int().nullish(),
+  totalTokens: z.number().int().nullish(),
+  cachedTokens: z.number().int().nullish(),
+  cost: z.string().nullish(),
+});
+
+export type GeneratedImageCacheType = z.infer<typeof GeneratedImageCacheSchema>;
 
 
 // File: Users.schema.ts

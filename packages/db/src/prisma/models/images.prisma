@@ -5,7 +5,7 @@ model GeneratedImages {
   prompt      String
   model       String
   requestId   String?
-  hash        String?  @unique
+  hash        String? @unique
   aspectRatio String?
 
   width  Int    @default(1024)
@@ -20,11 +20,44 @@ model GeneratedImages {
   promptTokens     Int?
   completionTokens Int?
   totalTokens      Int?
-  cachedTokens    Int?
-  cost            String?
+  cachedTokens     Int?
+  cost             String?
 
   userId String? @db.Uuid
   user   Users?  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  cacheKey String? @db.Uuid
+  cache    GeneratedImageCache? @relation(fields: [cacheKey], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([cacheKey])
   @@map("generated_images")
+}
+
+model GeneratedImageCache {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+
+  hash        String @unique
+  prompt      String
+  model       String
+  requestId   String?
+  aspectRatio String?
+
+  width  Int
+  height Int
+
+  imageUrl  String
+  objectKey String
+  mimeType  String
+
+  promptTokens     Int?
+  completionTokens Int?
+  totalTokens      Int?
+  cachedTokens     Int?
+  cost             String?
+
+  images GeneratedImages[]
+
+  @@map("generated_image_cache")
 }
