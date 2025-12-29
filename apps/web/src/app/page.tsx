@@ -1,9 +1,9 @@
 "use client"
 
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Canvas } from "@/components/canvas/canvas"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
-import { useCallback, useEffect, useRef, useState } from "react"
 
 const SCROLL_THRESHOLD = 100
 const SCROLL_COOLDOWN = 1400
