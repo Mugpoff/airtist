@@ -32,7 +32,7 @@ export const Canvas = () => {
             />
           </div>
         </div>
-        <CanvasFooter />
+        <CanvasFooter prompt={selectedImage.prompt} />
       </div>
     </div>
   )
