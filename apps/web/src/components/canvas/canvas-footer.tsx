@@ -8,9 +8,14 @@ type Props = {
 
 export const CanvasFooter = ({ prompt }: Props) => {
   return (
-    <div className="group relative shrink grow-0 basis-20 overflow-hidden rounded-b-2xl px-8 py-2 text-muted-foreground text-sm">
+    <div className="group relative shrink grow-0 basis-20 overflow-hidden rounded-b-2xl px-8 py-2">
       <VerticalFade>
-        <Marquee vertical pauseOnHover repeat={2} className="p-0 font-mono">
+        <Marquee
+          vertical
+          pauseOnHover
+          repeat={2}
+          className="p-0 font-mono text-muted-foreground text-sm"
+        >
           {prompt}
         </Marquee>
       </VerticalFade>
