@@ -46,7 +46,9 @@ export const GenerateDropzone = () => {
           }
 
           newFiles.push(
-            new File([blob], entry.filename, { type: fileType.mime }),
+            new File([blob], entry.filename.replaceAll(" ", "_"), {
+              type: fileType.mime,
+            }),
           )
         }
 
