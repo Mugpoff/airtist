@@ -17,25 +17,21 @@ export default function HomePage() {
   const isScrolling = useRef(false)
   const lastScrollTime = useRef(0)
 
-  const goToPage = useCallback(
-    (index: number) => {
-      if (index < 0 || index >= 2 || isScrolling.current) return
+  const goToPage = useCallback((index: number) => {
+    if (index < 0 || index >= 2 || isScrolling.current) return
 
-      isScrolling.current = true
-      setPageIndex(index)
+    isScrolling.current = true
 
-      containerRef.current?.scrollTo({
-        top: index * window.innerHeight,
-        behavior: "smooth",
-      })
+    containerRef.current?.scrollTo({
+      top: index * window.innerHeight,
+      behavior: "smooth",
+    })
 
-      setTimeout(() => {
-        isScrolling.current = false
-        accumulatedDelta.current = 0
-      }, SCROLL_COOLDOWN)
-    },
-    [setPageIndex],
-  )
+    setTimeout(() => {
+      isScrolling.current = false
+      accumulatedDelta.current = 0
+    }, SCROLL_COOLDOWN)
+  }, [])
 
   const handleWheel = useCallback(
     (e: WheelEvent) => {
@@ -63,12 +59,12 @@ export default function HomePage() {
 
         if (nextPage >= 0 && nextPage < 2) {
           lastScrollTime.current = now
-          goToPage(nextPage)
+          setPageIndex(nextPage)
         }
         accumulatedDelta.current = 0
       }
     },
-    [pageIndex, goToPage],
+    [pageIndex, setPageIndex],
   )
 
   const handleKeyDown = useCallback(
@@ -110,6 +106,10 @@ export default function HomePage() {
 
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [handleKeyDown])
+
+  useEffect(() => {
+    goToPage(pageIndex)
+  }, [pageIndex, goToPage])
 
   return (
     <main
