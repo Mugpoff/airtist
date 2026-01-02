@@ -1,9 +1,9 @@
-import { selectedImageIndexAtom } from "@/atoms/canvas-atom"
-import { useTRPC } from "@/trpc/react"
 import { ScrollArea } from "@repo/ui/base/scroll-area"
 import { useQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { motion } from "motion/react"
+import { selectedImageIndexAtom } from "@/atoms/canvas-atom"
+import { useTRPC } from "@/trpc/react"
 
 export const CanvasSidebar = () => {
   const trpc = useTRPC()
