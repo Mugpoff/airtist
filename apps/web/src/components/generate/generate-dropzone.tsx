@@ -4,6 +4,7 @@ import { config } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import { ScrollArea } from "@repo/ui/base/scroll-area"
 import { BlobReader, BlobWriter, ZipReader } from "@zip.js/zip.js"
+import { fileTypeFromBlob } from "file-type"
 import { useAtom } from "jotai"
 import Image from "next/image"
 import { useTranslations } from "next-intl"
@@ -31,8 +32,22 @@ export const GenerateDropzone = () => {
 
           const writer = new BlobWriter()
           const blob = await entry.getData(writer)
+          const fileType = await fileTypeFromBlob(blob)
 
-          newFiles.push(new File([blob], entry.filename))
+          if (
+            !fileType ||
+            !config.generationSettings.acceptedImages.has(fileType.mime)
+          ) {
+            console.warn(
+              `Detected unsupported file type: "${entry.filename}" in zip file "${zip.name}"`,
+            )
+
+            continue
+          }
+
+          newFiles.push(
+            new File([blob], entry.filename, { type: fileType.mime }),
+          )
         }
 
         await zipReader.close()

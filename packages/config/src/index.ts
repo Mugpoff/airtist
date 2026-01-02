@@ -79,5 +79,6 @@ export const config = {
       "image/webp": [".webp"],
       "application/zip": [".zip"],
     },
+    acceptedImages: new Set(["image/png", "image/jpeg", "image/webp"]),
   },
 } as const
