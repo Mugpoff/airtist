@@ -16,7 +16,7 @@
     "@repo/config": "*",
     "@repo/db": "*",
     "@t3-oss/env-core": "^0.13.10",
-    "better-auth": "^1.4.8",
+    "better-auth": "^1.4.10",
     "zod": "^4.2.1"
   },
   "devDependencies": {
