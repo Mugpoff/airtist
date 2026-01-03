@@ -1,15 +1,17 @@
 "use client"
 
+import { useAtom } from "jotai"
+import { useCallback, useEffect, useRef } from "react"
+import { pageIndexAtom } from "@/atoms/canvas-atom"
 import { Canvas } from "@/components/canvas/canvas"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
-import { useCallback, useEffect, useRef, useState } from "react"
 
 const SCROLL_THRESHOLD = 100
 const SCROLL_COOLDOWN = 1400
 
 export default function HomePage() {
-  const [currentPage, setCurrentPage] = useState(0)
+  const [pageIndex, setPageIndex] = useAtom(pageIndexAtom)
   const containerRef = useRef<HTMLDivElement>(null)
   const accumulatedDelta = useRef(0)
   const isScrolling = useRef(false)
@@ -19,7 +21,6 @@ export default function HomePage() {
     if (index < 0 || index >= 2 || isScrolling.current) return
 
     isScrolling.current = true
-    setCurrentPage(index)
 
     containerRef.current?.scrollTo({
       top: index * window.innerHeight,
@@ -54,29 +55,29 @@ export default function HomePage() {
 
       if (Math.abs(accumulatedDelta.current) >= SCROLL_THRESHOLD) {
         const direction = accumulatedDelta.current > 0 ? 1 : -1
-        const nextPage = currentPage + direction
+        const nextPage = pageIndex + direction
 
         if (nextPage >= 0 && nextPage < 2) {
           lastScrollTime.current = now
-          goToPage(nextPage)
+          setPageIndex(nextPage)
         }
         accumulatedDelta.current = 0
       }
     },
-    [currentPage, goToPage],
+    [pageIndex, setPageIndex],
   )
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "ArrowDown" || e.key === "PageDown") {
         e.preventDefault()
-        goToPage(currentPage + 1)
+        goToPage(pageIndex + 1)
       } else if (e.key === "ArrowUp" || e.key === "PageUp") {
         e.preventDefault()
-        goToPage(currentPage - 1)
+        goToPage(pageIndex - 1)
       }
     },
-    [currentPage, goToPage],
+    [pageIndex, goToPage],
   )
 
   useEffect(() => {
@@ -106,6 +107,10 @@ export default function HomePage() {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [handleKeyDown])
 
+  useEffect(() => {
+    goToPage(pageIndex)
+  }, [pageIndex, goToPage])
+
   return (
     <main
       ref={containerRef}
@@ -123,7 +128,7 @@ export default function HomePage() {
       >
         <Canvas />
       </section>
-      <PaginationDots selectedIndex={currentPage} setSelectedIndex={goToPage} />
+      <PaginationDots selectedIndex={pageIndex} setSelectedIndex={goToPage} />
     </main>
   )
 }
