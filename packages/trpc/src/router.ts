@@ -1,5 +1,7 @@
+import { driveGetThumbUrlHandler } from "./handlers/drive-get-thumb-url-handler"
 import { driveImportImagesHandler } from "./handlers/drive-import-images-handler"
-import { driveListImagesHandler } from "./handlers/drive-list-images-handler"
+import { driveListFoldersHandler } from "./handlers/drive-list-folders-handler"
+import { driveListItemsHandler } from "./handlers/drive-list-items-handler"
 import { imagesByIdHandler } from "./handlers/images-by-id-handler"
 import { imagesDeleteHandler } from "./handlers/images-delete-handler"
 import { imagesGenerateStudioHandler } from "./handlers/images-generate-studio-handler"
@@ -18,7 +20,9 @@ export const appRouter = createTRPCRouter({
     models: imagesModelsHandler,
   }),
   drive: createTRPCRouter({
-    listImages: driveListImagesHandler,
+    listFolders: driveListFoldersHandler,
+    listItems: driveListItemsHandler,
+    getThumbUrl: driveGetThumbUrlHandler,
     importImages: driveImportImagesHandler,
   }),
 })
