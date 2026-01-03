@@ -3,9 +3,13 @@
 import { Button } from "@repo/ui/base/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/base/card"
 import { Input } from "@repo/ui/base/input"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { useMemo, useState } from "react"
 import { useTRPC } from "@/trpc/react"
+import { DriveFolders } from "./drive-folders"
+import { DriveImages } from "./drive-images"
+
+type View = "ROOT" | "RECENT" | "SHARED"
 
 type Props = {
   onImported: (urls: string[]) => void
@@ -14,23 +18,15 @@ type Props = {
 export function DrivePicker({ onImported }: Props) {
   const trpc = useTRPC()
 
-  const { data, isLoading, error } = useQuery(
-    trpc.drive.listImages.queryOptions({ limit: 30 }),
-  )
+  const [view, setView] = useState<View>("ROOT")
+  const [parentId, setParentId] = useState<string | null>(null)
+  const [query, setQuery] = useState("")
+  const [selected, setSelected] = useState<Record<string, boolean>>({})
+  const [pageToken, setPageToken] = useState<string | null>(null)
 
   const importMutation = useMutation({
     ...trpc.drive.importImages.mutationOptions(),
   })
-
-  const [query, setQuery] = useState("")
-  const [selected, setSelected] = useState<Record<string, boolean>>({})
-
-  const filtered = useMemo(() => {
-    const items = data?.items ?? []
-    const q = query.trim().toLowerCase()
-    if (!q) return items
-    return items.filter((x) => x.name.toLowerCase().includes(q))
-  }, [data, query])
 
   const selectedIds = useMemo(() => {
     return Object.entries(selected)
@@ -38,87 +34,132 @@ export function DrivePicker({ onImported }: Props) {
       .map(([k]) => k)
   }, [selected])
 
-  if (isLoading) {
-    return (
-      <Card>
-        <CardContent className="p-4 text-sm text-muted-foreground">
-          Chargement Google Drive...
-        </CardContent>
-      </Card>
-    )
-  }
-
-  if (error || !data) {
-    return (
-      <Card>
-        <CardContent className="p-4 text-sm text-muted-foreground">
-          Google Drive indisponible.
-        </CardContent>
-      </Card>
-    )
-  }
+  const isBusy = importMutation.isPending
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between gap-4">
-        <div className="font-medium">Google Drive</div>
-        <div className="text-muted-foreground text-sm">
-          {selectedIds.length} sélectionnée(s)
+      <CardHeader className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="font-medium">Google Drive</div>
+          <div className="text-muted-foreground text-sm">
+            {selectedIds.length} sélectionnée(s)
+          </div>
         </div>
-      </CardHeader>
 
-      <CardContent className="space-y-3">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant={view === "ROOT" ? "default" : "secondary"}
+            disabled={isBusy}
+            onClick={() => {
+              setView("ROOT")
+              setParentId(null)
+              setPageToken(null)
+              setSelected({})
+            }}
+          >
+            Mon Drive
+          </Button>
+          <Button
+            type="button"
+            variant={view === "RECENT" ? "default" : "secondary"}
+            disabled={isBusy}
+            onClick={() => {
+              setView("RECENT")
+              setParentId(null)
+              setPageToken(null)
+              setSelected({})
+            }}
+          >
+            Récents
+          </Button>
+          <Button
+            type="button"
+            variant={view === "SHARED" ? "default" : "secondary"}
+            disabled={isBusy}
+            onClick={() => {
+              setView("SHARED")
+              setParentId(null)
+              setPageToken(null)
+              setSelected({})
+            }}
+          >
+            Partagés
+          </Button>
+        </div>
+
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Rechercher un fichier"
-          disabled={importMutation.isPending}
+          disabled={isBusy}
         />
 
-        <div className="max-h-80 overflow-auto rounded-md border">
-          <div className="divide-y">
-            {filtered.map((f) => (
-              <label
-                key={f.id}
-                className="flex cursor-pointer items-center gap-3 p-3"
-              >
-                <input
-                  type="checkbox"
-                  checked={Boolean(selected[f.id])}
-                  disabled={importMutation.isPending}
-                  onChange={(e) => {
-                    setSelected((prev) => ({
-                      ...prev,
-                      [f.id]: e.target.checked,
-                    }))
-                  }}
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm">{f.name}</div>
-                  <div className="truncate text-muted-foreground text-xs">
-                    {f.mimeType}
-                  </div>
-                </div>
-              </label>
-            ))}
+        {view === "ROOT" && (
+          <div className="flex items-center justify-between gap-3">
+            <div className="text-muted-foreground text-sm">
+              Dossier: {parentId ?? "root"}
+            </div>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={isBusy || parentId === null}
+              onClick={() => {
+                setParentId(null)
+                setPageToken(null)
+                setSelected({})
+              }}
+            >
+              Retour root
+            </Button>
           </div>
-        </div>
+        )}
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        {view === "ROOT" && (
+          <DriveFolders
+            parentId={parentId}
+            disabled={isBusy}
+            onOpenFolder={(id) => {
+              setParentId(id)
+              setPageToken(null)
+              setSelected({})
+            }}
+          />
+        )}
+
+        <DriveImages
+          view={view}
+          parentId={parentId}
+          pageToken={pageToken}
+          query={query}
+          selected={selected}
+          disabled={isBusy}
+          onToggle={(id) => {
+            setSelected((prev) => ({
+              ...prev,
+              [id]: !prev[id],
+            }))
+          }}
+          onNextPage={(next) => {
+            setPageToken(next)
+          }}
+        />
       </CardContent>
 
       <CardFooter className="flex items-center justify-end gap-2">
         <Button
           type="button"
           variant="secondary"
-          disabled={importMutation.isPending}
-          onClick={() => {
-            setSelected({})
-          }}
+          disabled={isBusy}
+          onClick={() => setSelected({})}
         >
           Reset
         </Button>
         <Button
           type="button"
-          disabled={selectedIds.length === 0 || importMutation.isPending}
+          disabled={selectedIds.length === 0 || isBusy}
           onClick={async () => {
             const res = await importMutation.mutateAsync({
               fileIds: selectedIds,
