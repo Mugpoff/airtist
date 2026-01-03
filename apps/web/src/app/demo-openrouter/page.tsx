@@ -9,20 +9,22 @@ export default async function DemoOpenRouterPage() {
 
   if (session?.user) {
     prefetch(trpc.images.list.queryOptions({ limit: 50, offset: 0 }))
-    prefetch(trpc.drive.listImages.queryOptions({ limit: 30 }))
+    prefetch(trpc.drive.listItems.queryOptions({ view: "RECENT", limit: 30 }))
   }
 
   prefetch(trpc.images.models.queryOptions())
 
   return (
     <HydrateClient>
-      <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-        <div className="mb-6 flex items-center justify-end">
-          <GoogleConnectButton />
+      <div className="h-dvh overflow-y-auto">
+        <div className="container mx-auto p-4 sm:p-6 lg:p-8">
+          <div className="mb-6 flex items-center justify-end">
+            <GoogleConnectButton />
+          </div>
+          <Suspense fallback={<p className="p-4 text-center">Chargement...</p>}>
+            <GenerateView isAuthed={Boolean(session?.user)} />
+          </Suspense>
         </div>
-        <Suspense fallback={<p className="p-4 text-center">Chargement...</p>}>
-          <GenerateView isAuthed={Boolean(session?.user)} />
-        </Suspense>
       </div>
     </HydrateClient>
   )

@@ -19,6 +19,7 @@ import {
 } from "@repo/ui/base/select"
 import { toastManager } from "@repo/ui/base/toast"
 import { useAtomValue } from "jotai"
+import { Suspense } from "react"
 import { isGeneratingAtom } from "@/atoms/is-generating-atom"
 import { DrivePicker } from "./drive-picker"
 import type { Ethnicity, ModelsInfoShape } from "./use-generate-form"
@@ -236,14 +237,22 @@ export function GenerateForm({ modelsInfo, isAuthed, onGenerate }: Props) {
           </div>
 
           {isAuthed ? (
-            <DrivePicker
-              onImported={(urls) => {
-                form.setImageUrls((prev) => {
-                  const set = new Set([...prev, ...urls])
-                  return Array.from(set)
-                })
-              }}
-            />
+            <Suspense
+              fallback={
+                <div className="rounded-md border p-4 text-sm text-muted-foreground">
+                  Chargement Google Drive...
+                </div>
+              }
+            >
+              <DrivePicker
+                onImported={(urls) => {
+                  form.setImageUrls((prev) => {
+                    const set = new Set([...prev, ...urls])
+                    return Array.from(set)
+                  })
+                }}
+              />
+            </Suspense>
           ) : (
             <div className="rounded-md border p-4 text-sm text-muted-foreground">
               Connecte-toi pour accéder à Google Drive.
