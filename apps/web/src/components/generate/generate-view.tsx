@@ -1,7 +1,5 @@
 "use client"
 
-import { useTRPC } from "@/trpc/react"
-import { toCdnUrl } from "@/utils/to-cdn-url"
 import type { AppRouter } from "@repo/trpc"
 import { STUDIO_AGE_RANGES } from "@repo/trpc/constants"
 import { Button } from "@repo/ui/base/button"
@@ -32,6 +30,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import { FaRegTrashCan } from "react-icons/fa6"
+import { useTRPC } from "@/trpc/react"
+import { toCdnUrl } from "@/utils/to-cdn-url"
 
 type ImageOutput =
   inferRouterOutputs<AppRouter>["images"]["list"]["items"][number]
@@ -49,20 +49,6 @@ const ethnicities = [
 ] as const
 type Ethnicity = (typeof ethnicities)[number]
 
-const aspectRatios = [
-  "1:1",
-  "2:3",
-  "3:2",
-  "3:4",
-  "4:3",
-  "4:5",
-  "5:4",
-  "9:16",
-  "16:9",
-  "21:9",
-] as const
-type AspectRatio = (typeof aspectRatios)[number]
-
 export function GenerateView() {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
@@ -73,13 +59,6 @@ export function GenerateView() {
   const { data: modelsInfo } = useSuspenseQuery(
     trpc.images.models.queryOptions(),
   ) as { data: ModelsInfo }
-
-  console.log("history", history)
-  console.log("history.items.length", history.items.length)
-  console.log(
-    "history.items[0..2].imageUrl",
-    history.items.slice(0, 3).map((x) => x.imageUrl),
-  )
 
   const [prompt, setPrompt] = useState(
     "Studio fashion model wearing the outfit",
@@ -94,7 +73,6 @@ export function GenerateView() {
   const [ethnicity, setEthnicity] = useState<Ethnicity>("WHITE")
   const [height, setHeight] = useState("175")
   const [age, setAge] = useState("25")
-  const [aspectRatio, setAspectRatio] = useState<AspectRatio>("1:1")
   const [files, setFiles] = useState<File[]>([])
 
   useEffect(() => {
@@ -180,7 +158,6 @@ export function GenerateView() {
     fd.set("ethnicity", ethnicity)
     fd.set("height", height)
     fd.set("age", age)
-    fd.set("aspectRatio", aspectRatio)
 
     for (const f of files) {
       fd.append("images", f)
@@ -196,11 +173,9 @@ export function GenerateView() {
   }
 
   const imagesWithUrl = useMemo(() => {
-    const list = history.items.filter(
+    return history.items.filter(
       (image): image is ImageWithUrl => typeof image.imageUrl === "string",
     )
-    console.log("imagesWithUrl.length", list.length)
-    return list
   }, [history.items])
 
   const isGenerating = generateStudioMutation.isPending
@@ -311,28 +286,6 @@ export function GenerateView() {
                     {ethnicities.map((e) => (
                       <SelectItem key={e} value={e}>
                         {e}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label>Format</label>
-                <Select
-                  value={aspectRatio}
-                  onValueChange={(value) => {
-                    if (value) setAspectRatio(value as AspectRatio)
-                  }}
-                  disabled={isGenerating}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {aspectRatios.map((ratio) => (
-                      <SelectItem key={ratio} value={ratio}>
-                        {ratio}
                       </SelectItem>
                     ))}
                   </SelectContent>
