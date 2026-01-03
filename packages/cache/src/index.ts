@@ -36,6 +36,17 @@ export const cacheClient = {
           .then(() => null),
     },
   },
+  drive: {
+    thumbUrlByFileId: {
+      get: (fileId: string) => getClient().get(`drive:thumb:${fileId}`),
+      set: (fileId: string, url: string, ttl = 60 * 60 * 24 * 7) =>
+        getClient().setex(`drive:thumb:${fileId}`, ttl, url),
+      delete: (fileId: string) =>
+        getClient()
+          .del(`drive:thumb:${fileId}`)
+          .then(() => null),
+    },
+  },
   models: {
     get: () => getClient().get("models:images"),
     set: (value: string, ttl = 60 * 60 * 6) =>
