@@ -1,3 +1,5 @@
+import { driveImportImagesHandler } from "./handlers/drive-import-images-handler"
+import { driveListImagesHandler } from "./handlers/drive-list-images-handler"
 import { imagesByIdHandler } from "./handlers/images-by-id-handler"
 import { imagesDeleteHandler } from "./handlers/images-delete-handler"
 import { imagesGenerateStudioHandler } from "./handlers/images-generate-studio-handler"
@@ -14,6 +16,10 @@ export const appRouter = createTRPCRouter({
     generateStudio: imagesGenerateStudioHandler,
     delete: imagesDeleteHandler,
     models: imagesModelsHandler,
+  }),
+  drive: createTRPCRouter({
+    listImages: driveListImagesHandler,
+    importImages: driveImportImagesHandler,
   }),
 })
 
