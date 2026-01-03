@@ -23,6 +23,10 @@ export const auth = betterAuth({
   account: {
     storeStateStrategy: "cookie",
     storeAccountCookie: true,
+    accountLinking: {
+      enabled: true,
+      allowDifferentEmails: true,
+    },
   },
   session: {
     cookieCache: {
