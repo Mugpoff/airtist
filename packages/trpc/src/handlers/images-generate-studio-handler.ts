@@ -1,20 +1,20 @@
-import { createHash } from "node:crypto";
-import { cacheClient } from "@repo/cache";
-import { db } from "@repo/db";
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
-import { protectedProcedure } from "../trpc";
-import { generateStudioHash, type StudioHashInput } from "../utils/hash";
-import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models";
-import { callOpenRouterForImage } from "../utils/openrouter-image";
-import { uploadImage } from "../utils/storage-client";
+import { createHash } from "node:crypto"
+import { cacheClient } from "@repo/cache"
+import { db } from "@repo/db"
+import { TRPCError } from "@trpc/server"
+import { z } from "zod"
+import { protectedProcedure } from "../trpc"
+import { generateStudioHash, type StudioHashInput } from "../utils/hash"
+import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models"
+import { callOpenRouterForImage } from "../utils/openrouter-image"
+import { uploadImage } from "../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
   STUDIO_AGE_RANGES,
   STUDIO_CATEGORIES,
   StudioBackgroundSchema,
   StudioCategorySchema,
-} from "../utils/studio-constants";
+} from "../utils/studio-constants"
 
 const EthnicitySchema = z.enum([
   "ASIAN",
@@ -23,75 +23,101 @@ const EthnicitySchema = z.enum([
   "WHITE",
   "LATINO",
   "METISSE",
-]);
+])
 
-type FormDataValue = string | File;
+type FormDataValue = string | File
 const parseNumber = (v: FormDataValue | null) =>
-  typeof v === "string" && Number.isFinite(Number(v)) ? Number(v) : null;
+  typeof v === "string" && Number.isFinite(Number(v)) ? Number(v) : null
 const parseString = (v: FormDataValue | null) =>
-  typeof v === "string" && v.trim() ? v.trim() : null;
+  typeof v === "string" && v.trim() ? v.trim() : null
 const isFile = (v: unknown): v is File =>
-  typeof File !== "undefined" && v instanceof File;
+  typeof File !== "undefined" && v instanceof File
 
 const sha256Hex = (buf: Buffer) =>
-  createHash("sha256").update(buf).digest("hex");
+  createHash("sha256").update(buf).digest("hex")
+
+const parseStringArray = (v: FormDataValue | null) => {
+  if (typeof v !== "string") return []
+  try {
+    const parsed = JSON.parse(v)
+    return Array.isArray(parsed) && parsed.every((x) => typeof x === "string")
+      ? parsed
+      : []
+  } catch {
+    return v
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean)
+  }
+}
 
 export const imagesGenerateStudioHandler = protectedProcedure
   .input(z.instanceof(FormData))
   .mutation(async ({ input, ctx }) => {
-    const prompt = parseString(input.get("prompt"));
-    const ethnicityRaw = parseString(input.get("ethnicity"));
-    const height = parseNumber(input.get("height"));
-    const age = parseNumber(input.get("age"));
-    const categoryRaw = parseString(input.get("category"));
-    const backgroundRaw = parseString(input.get("background"));
-    const modelRaw = parseString(input.get("model"));
+    const prompt = parseString(input.get("prompt"))
+    const ethnicityRaw = parseString(input.get("ethnicity"))
+    const height = parseNumber(input.get("height"))
+    const age = parseNumber(input.get("age"))
+    const categoryRaw = parseString(input.get("category"))
+    const backgroundRaw = parseString(input.get("background"))
+    const modelRaw = parseString(input.get("model"))
 
     if (!prompt) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "Prompt requis" });
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Prompt requis" })
     }
 
-    const ethnicity = EthnicitySchema.parse(ethnicityRaw);
-    const category = StudioCategorySchema.parse(categoryRaw);
+    const ethnicity = EthnicitySchema.parse(ethnicityRaw)
+    const category = StudioCategorySchema.parse(categoryRaw)
     const background = StudioBackgroundSchema.parse(
       backgroundRaw ?? "STUDIO_WHITE",
-    );
-    const model = ImageModelSchema.parse(modelRaw ?? DEFAULT_IMAGE_MODEL);
+    )
+    const model = ImageModelSchema.parse(modelRaw ?? DEFAULT_IMAGE_MODEL)
 
-    const aspectRatio = "1:1";
-    const width = 1024;
-    const canvasHeight = 1024;
+    const aspectRatio = "1:1"
+    const width = 1024
+    const canvasHeight = 1024
 
-    const range = STUDIO_AGE_RANGES[category];
+    const range = STUDIO_AGE_RANGES[category]
     if (age === null || age < range.min || age > range.max) {
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: `L'âge pour cette catégorie doit être entre ${range.min} et ${range.max} ans.`,
-      });
+      })
     }
 
     if (height === null || height < 50 || height > 230) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "Taille invalide" });
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Taille invalide" })
     }
 
-    const files = input.getAll("images").filter(isFile);
-    if (files.length === 0) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "Images requises" });
+    const files = input.getAll("images").filter(isFile)
+    const imageUrls = parseStringArray(input.get("imageUrls"))
+
+    if (files.length === 0 && imageUrls.length === 0) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Images requises",
+      })
     }
 
-    const prepared = await Promise.all(
-      files.map(async (file) => {
-        const mimeType = file.type || "";
-        const buf = Buffer.from(await file.arrayBuffer());
-        const digest = sha256Hex(buf);
-        return { file, mimeType, buf, digest };
-      }),
-    );
+    const prepared =
+      files.length > 0
+        ? await Promise.all(
+            files.map(async (file) => {
+              const mimeType = file.type || ""
+              const buf = Buffer.from(await file.arrayBuffer())
+              const digest = sha256Hex(buf)
+              return { fileName: file.name, mimeType, buf, digest }
+            }),
+          )
+        : []
 
-    const garmentsFingerprint = prepared
-      .map((x) => x.digest)
-      .sort()
-      .join("|");
+    const garmentsFingerprint =
+      prepared.length > 0
+        ? prepared
+            .map((x) => x.digest)
+            .sort()
+            .join("|")
+        : imageUrls.slice().sort().join("|")
 
     const hashInput: StudioHashInput & { garmentsFingerprint: string } = {
       prompt,
@@ -103,16 +129,16 @@ export const imagesGenerateStudioHandler = protectedProcedure
       height,
       aspectRatio,
       garmentsFingerprint,
-    };
+    }
 
-    const hash = generateStudioHash(hashInput);
+    const hash = generateStudioHash(hashInput)
 
     try {
-      const cachedId = await cacheClient.images.cacheIdByHash.get(hash);
+      const cachedId = await cacheClient.images.cacheIdByHash.get(hash)
       if (cachedId) {
         const cacheRow = await db.generatedImageCache.findUnique({
           where: { id: cachedId },
-        });
+        })
 
         if (cacheRow) {
           const historyRow = await db.generatedImages.create({
@@ -134,27 +160,32 @@ export const imagesGenerateStudioHandler = protectedProcedure
               userId: ctx.session.user.id,
               cacheKey: cacheRow.id,
             },
-          });
+          })
 
-          return { image: historyRow, garmentUrls: [], usage: null };
+          return { image: historyRow, garmentUrls: [], usage: null }
         }
       }
     } catch {}
 
-    const garmentUrls: string[] = [];
-    for (const item of prepared) {
-      const objectKey = `uploads/${crypto.randomUUID()}-${item.file.name}`;
-      const url = await uploadImage(objectKey, item.buf, item.mimeType);
-      garmentUrls.push(url);
+    const garmentUrls: string[] = []
+
+    if (prepared.length > 0) {
+      for (const item of prepared) {
+        const objectKey = `uploads/${crypto.randomUUID()}-${item.fileName}`
+        const url = await uploadImage(objectKey, item.buf, item.mimeType)
+        garmentUrls.push(url)
+      }
+    } else {
+      garmentUrls.push(...imageUrls)
     }
 
-    const catLabel = STUDIO_CATEGORIES[category].toLowerCase();
-    const ethLabel = ethnicity.toLowerCase();
-    const bgPrompt = BACKGROUND_PROMPTS[background];
+    const catLabel = STUDIO_CATEGORIES[category].toLowerCase()
+    const ethLabel = ethnicity.toLowerCase()
+    const bgPrompt = BACKGROUND_PROMPTS[background]
 
     const fixedPrompt =
-      "Professional high-end fashion e-commerce photography. Minimalist studio setting. No props, no furniture, no nature, no street. Focus solely on model and clothing. Lighting must be soft, diffuse, and professional studio strobe.";
-    const dynamicPrompt = `Subject: Full body shot of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Background: ${bgPrompt}. The model is wearing the exact clothing from the reference images. Pose: Neutral fashion pose, standing straight, facing forward or slightly turned. ${prompt}`;
+      "Professional high-end fashion e-commerce photography. Minimalist studio setting. No props, no furniture, no nature, no street. Focus solely on model and clothing. Lighting must be soft, diffuse, and professional studio strobe."
+    const dynamicPrompt = `Subject: Full body shot of a ${ethLabel} ${catLabel}, ${age} years old, ${height}cm tall. Background: ${bgPrompt}. The model is wearing the exact clothing from the reference images. Pose: Neutral fashion pose, standing straight, facing forward or slightly turned. ${prompt}`
 
     const cacheInput = {
       prompt: {
@@ -170,9 +201,11 @@ export const imagesGenerateStudioHandler = protectedProcedure
       },
       model,
       garments: {
-        fingerprints: prepared.map((x) => x.digest).sort(),
+        fingerprints:
+          prepared.length > 0 ? prepared.map((x) => x.digest).sort() : [],
+        urls: prepared.length === 0 ? imageUrls.slice().sort() : [],
       },
-    };
+    }
 
     const { bytes, requestId, usage } = await callOpenRouterForImage({
       model,
@@ -201,10 +234,10 @@ export const imagesGenerateStudioHandler = protectedProcedure
       imageConfig: {
         aspect_ratio: aspectRatio,
       },
-    });
+    })
 
-    const outKey = `images/${crypto.randomUUID()}.png`;
-    const publicUrl = await uploadImage(outKey, bytes, "image/png");
+    const outKey = `images/${crypto.randomUUID()}.png`
+    const publicUrl = await uploadImage(outKey, bytes, "image/png")
 
     const cacheRow = await db.generatedImageCache.upsert({
       where: { hash },
@@ -243,7 +276,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
         cachedTokens: usage?.prompt_tokens_details?.cached_tokens,
         cost: usage?.cost != null ? String(usage.cost) : null,
       },
-    });
+    })
 
     const historyRow = await db.generatedImages.create({
       data: {
@@ -259,15 +292,15 @@ export const imagesGenerateStudioHandler = protectedProcedure
         userId: ctx.session.user.id,
         cacheKey: cacheRow.id,
       },
-    });
+    })
 
     try {
       await cacheClient.images.cacheIdByHash.set(
         hash,
         cacheRow.id,
         60 * 60 * 24 * 7,
-      );
+      )
     } catch {}
 
-    return { image: historyRow, garmentUrls, usage };
-  });
+    return { image: historyRow, garmentUrls, usage }
+  })
