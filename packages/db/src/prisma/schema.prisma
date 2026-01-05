@@ -2,21 +2,21 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider               = "prisma-client"
-    engineType             = "client"
-    output                 = "../generated/prisma"
-    previewFeatures        = ["relationJoins", "strictUndefinedChecks"]
-    moduleFormat           = "esm"
-    generatedFileExtension = "ts"
-    importFileExtension    = "ts"
+  provider               = "prisma-client"
+  engineType             = "client"
+  output                 = "../generated/prisma"
+  previewFeatures        = ["relationJoins", "strictUndefinedChecks"]
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
 }
 
 generator zod {
-    provider = "prisma-zod-generator"
-    output   = "../schemas"
-    config   = "./prisma/zod-generator.config.json"
+  provider = "prisma-zod-generator"
+  output   = "../schemas"
+  config   = "./prisma/zod-generator.config.json"
 }
 
 datasource db {
-    provider = "postgresql"
+  provider = "postgresql"
 }
