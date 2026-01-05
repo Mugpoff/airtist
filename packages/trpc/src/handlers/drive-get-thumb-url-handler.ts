@@ -6,7 +6,7 @@ import { protectedProcedure } from "../trpc"
 import {
   createDriveClientForConnection,
   getDefaultDriveConnection,
-} from "../utils/google-drive-client"
+} from "../utils/drive-client"
 import { uploadImage } from "../utils/storage-client"
 
 const sha256Hex = (buf: Buffer) =>
