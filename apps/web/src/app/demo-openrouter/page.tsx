@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { Suspense } from "react"
 import { GenerateView } from "@/components/generate/generate-view"
 import { GoogleConnectButton } from "@/components/generate/google-connect-button"
@@ -7,11 +8,11 @@ import { getSession } from "@/utils/get-session"
 export default async function DemoOpenRouterPage() {
   const session = await getSession()
 
-  if (session?.user) {
-    prefetch(trpc.images.list.queryOptions({ limit: 50, offset: 0 }))
-    prefetch(trpc.drive.listItems.queryOptions({ view: "RECENT", limit: 30 }))
+  if (!session?.user) {
+    redirect("/")
   }
 
+  prefetch(trpc.images.list.queryOptions({ limit: 50, offset: 0 }))
   prefetch(trpc.images.models.queryOptions())
 
   return (
@@ -22,7 +23,7 @@ export default async function DemoOpenRouterPage() {
             <GoogleConnectButton />
           </div>
           <Suspense fallback={<p className="p-4 text-center">Chargement...</p>}>
-            <GenerateView isAuthed={Boolean(session?.user)} />
+            <GenerateView isAuthed />
           </Suspense>
         </div>
       </div>

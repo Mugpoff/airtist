@@ -1,17 +1,20 @@
 "use client"
 
-import { authClient } from "@repo/auth/client"
 import { Button } from "@repo/ui/base/button"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { useTRPC } from "@/trpc/react"
 
 export function GoogleConnectButton() {
+  const trpc = useTRPC()
+  const { data } = useSuspenseQuery(
+    trpc.drive.connectUrl.queryOptions({ callbackPath: "/demo-openrouter" }),
+  )
+
   return (
     <Button
       type="button"
-      onClick={async () => {
-        await authClient.linkSocial({
-          provider: "google",
-          scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-        })
+      onClick={() => {
+        window.location.assign(data.url)
       }}
     >
       Connecter Google Drive

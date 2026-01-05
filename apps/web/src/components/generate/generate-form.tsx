@@ -18,10 +18,13 @@ import {
   SelectValue,
 } from "@repo/ui/base/select"
 import { toastManager } from "@repo/ui/base/toast"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { useAtomValue } from "jotai"
 import { Suspense } from "react"
 import { isGeneratingAtom } from "@/atoms/is-generating-atom"
+import { useTRPC } from "@/trpc/react"
 import { DrivePicker } from "./drive-picker"
+import { GoogleConnectButton } from "./google-connect-button"
 import type { Ethnicity, ModelsInfoShape } from "./use-generate-form"
 import { useGenerateForm } from "./use-generate-form"
 
@@ -38,6 +41,30 @@ type Props = {
   modelsInfo: ModelsInfoShape
   isAuthed: boolean
   onGenerate: (fd: FormData) => void
+}
+
+function DriveSection({
+  disabled,
+  onImported,
+}: {
+  disabled: boolean
+  onImported: (urls: string[]) => void
+}) {
+  const trpc = useTRPC()
+  const { data } = useSuspenseQuery(trpc.drive.status.queryOptions())
+
+  if (!data.connected) {
+    return (
+      <div className="rounded-md border p-4">
+        <div className="mb-3 text-sm text-muted-foreground">
+          Google Drive non connecté.
+        </div>
+        <GoogleConnectButton />
+      </div>
+    )
+  }
+
+  return <DrivePicker onImported={onImported} />
 }
 
 export function GenerateForm({ modelsInfo, isAuthed, onGenerate }: Props) {
@@ -244,7 +271,8 @@ export function GenerateForm({ modelsInfo, isAuthed, onGenerate }: Props) {
                 </div>
               }
             >
-              <DrivePicker
+              <DriveSection
+                disabled={isGenerating}
                 onImported={(urls) => {
                   form.setImageUrls((prev) => {
                     const set = new Set([...prev, ...urls])
