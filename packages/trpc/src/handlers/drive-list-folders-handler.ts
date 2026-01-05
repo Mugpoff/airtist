@@ -1,6 +1,9 @@
 import { z } from "zod"
 import { protectedProcedure } from "../trpc"
-import { createDriveClientForUser } from "../utils/google-drive-client"
+import {
+  createDriveClientForConnection,
+  getDefaultDriveConnection,
+} from "../utils/google-drive-client"
 
 export const driveListFoldersHandler = protectedProcedure
   .input(
@@ -11,7 +14,8 @@ export const driveListFoldersHandler = protectedProcedure
     }),
   )
   .query(async ({ input, ctx }) => {
-    const { drive } = await createDriveClientForUser(ctx.session.user.id)
+    const conn = await getDefaultDriveConnection(ctx.session.user.id)
+    const { drive } = await createDriveClientForConnection(conn.id)
 
     const parent = input.parentId ?? "root"
 

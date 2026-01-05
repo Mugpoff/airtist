@@ -1,6 +1,9 @@
 import { z } from "zod"
 import { protectedProcedure } from "../trpc"
-import { createDriveClientForUser } from "../utils/google-drive-client"
+import {
+  createDriveClientForConnection,
+  getDefaultDriveConnection,
+} from "../utils/google-drive-client"
 
 export const driveListItemsHandler = protectedProcedure
   .input(
@@ -12,7 +15,8 @@ export const driveListItemsHandler = protectedProcedure
     }),
   )
   .query(async ({ input, ctx }) => {
-    const { drive } = await createDriveClientForUser(ctx.session.user.id)
+    const conn = await getDefaultDriveConnection(ctx.session.user.id)
+    const { drive } = await createDriveClientForConnection(conn.id)
 
     const q =
       input.view === "RECENT"
@@ -26,7 +30,7 @@ export const driveListItemsHandler = protectedProcedure
       pageToken: input.pageToken,
       q,
       fields:
-        "nextPageToken,files(id,name,mimeType,modifiedTime,size,iconLink)",
+        "nextPageToken,files(id,name,mimeType,modifiedTime,size,iconLink,thumbnailLink)",
       orderBy: input.view === "ROOT" ? "name" : "modifiedTime desc",
       spaces: "drive",
     })

@@ -2,7 +2,10 @@ import { createHash } from "node:crypto"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { protectedProcedure } from "../trpc"
-import { createDriveClientForUser } from "../utils/google-drive-client"
+import {
+  createDriveClientForConnection,
+  getDefaultDriveConnection,
+} from "../utils/google-drive-client"
 import { uploadImage } from "../utils/storage-client"
 
 const sha256Hex = (buf: Buffer) =>
@@ -17,7 +20,8 @@ export const driveImportImagesHandler = protectedProcedure
     }),
   )
   .mutation(async ({ input, ctx }) => {
-    const { drive } = await createDriveClientForUser(ctx.session.user.id)
+    const conn = await getDefaultDriveConnection(ctx.session.user.id)
+    const { drive } = await createDriveClientForConnection(conn.id)
 
     const metas = await Promise.all(
       input.fileIds.map(async (fileId) => {

@@ -3,7 +3,10 @@ import { cacheClient } from "@repo/cache"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { protectedProcedure } from "../trpc"
-import { createDriveClientForUser } from "../utils/google-drive-client"
+import {
+  createDriveClientForConnection,
+  getDefaultDriveConnection,
+} from "../utils/google-drive-client"
 import { uploadImage } from "../utils/storage-client"
 
 const sha256Hex = (buf: Buffer) =>
@@ -25,13 +28,14 @@ export const driveGetThumbUrlHandler = protectedProcedure
       return { url: cached }
     }
 
-    const { drive, account } = await createDriveClientForUser(
-      ctx.session.user.id,
+    const conn = await getDefaultDriveConnection(ctx.session.user.id)
+    const { drive, conn: stored } = await createDriveClientForConnection(
+      conn.id,
     )
 
     const meta = await drive.files.get({
       fileId: input.fileId,
-      fields: "id,name,mimeType,thumbnailLink",
+      fields: "id,mimeType,thumbnailLink",
     })
 
     const id = meta.data.id
@@ -51,7 +55,7 @@ export const driveGetThumbUrlHandler = protectedProcedure
 
     const res = await fetch(thumbnailLink, {
       headers: {
-        Authorization: `Bearer ${account.accessToken ?? ""}`,
+        Authorization: `Bearer ${stored.accessToken}`,
       },
     })
 
@@ -67,7 +71,16 @@ export const driveGetThumbUrlHandler = protectedProcedure
     const digest = sha256Hex(buf)
 
     const objectKey = `images/thumbs/drive/${id}-${digest}.jpg`
-    const url = await uploadImage(objectKey, buf, "image/jpeg")
+
+    let url: string
+    try {
+      url = await uploadImage(objectKey, buf, "image/jpeg")
+    } catch {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Storage indisponible",
+      })
+    }
 
     await cacheClient.drive.thumbUrlByFileId
       .set(cacheKey, url, 60 * 60 * 24 * 7)
