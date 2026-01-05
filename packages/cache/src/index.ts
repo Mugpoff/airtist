@@ -46,6 +46,15 @@ export const cacheClient = {
           .del(`drive:thumb:${fileId}`)
           .then(() => null),
     },
+    oauthState: {
+      set: (state: string, userId: string, ttl = 60 * 10) =>
+        getClient().setex(`drive:oauth:state:${state}`, ttl, userId),
+      get: (state: string) => getClient().get(`drive:oauth:state:${state}`),
+      delete: (state: string) =>
+        getClient()
+          .del(`drive:oauth:state:${state}`)
+          .then(() => null),
+    },
   },
   models: {
     get: () => getClient().get("models:images"),
