@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { protectedProcedure } from "../trpc"
+import { protectedProcedure } from "../../trpc"
 import {
   createDriveClientForConnection,
   getDefaultDriveConnection,
-} from "../utils/drive-client"
-import { uploadImage } from "../utils/storage-client"
+} from "../../utils/drive-client"
+import { uploadImage } from "../../utils/storage-client"
 
 const sha256Hex = (buf: Buffer) =>
   createHash("sha256").update(buf).digest("hex")

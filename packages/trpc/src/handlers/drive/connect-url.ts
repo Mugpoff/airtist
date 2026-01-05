@@ -1,6 +1,6 @@
 import { cacheClient } from "@repo/cache"
 import { z } from "zod"
-import { protectedProcedure } from "../trpc"
+import { protectedProcedure } from "../../trpc"
 
 export const driveConnectUrlHandler = protectedProcedure
   .input(
@@ -36,8 +36,10 @@ export const driveConnectUrlHandler = protectedProcedure
     const cb = new URL(input.callbackPath, baseUrl).toString()
     url.searchParams.set("redirect_to", cb)
 
-    console.log("[drive] oauth redirect_uri", redirectUri)
-    console.log("[drive] oauth url", url.toString())
+    if (process.env.NODE_ENV !== "production") {
+      console.log("[drive] oauth redirect_uri", redirectUri)
+      console.log("[drive] oauth url", url.toString())
+    }
 
     return { url: url.toString() }
   })

@@ -1,9 +1,9 @@
 import { z } from "zod"
-import { protectedProcedure } from "../trpc"
+import { protectedProcedure } from "../../trpc"
 import {
   createDriveClientForConnection,
   getDefaultDriveConnection,
-} from "../utils/drive-client"
+} from "../../utils/drive-client"
 
 export const driveListFoldersHandler = protectedProcedure
   .input(

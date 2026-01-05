@@ -1,9 +1,9 @@
 import { z } from "zod"
-import { protectedProcedure } from "../trpc"
+import { protectedProcedure } from "../../trpc"
 import {
   createDriveClientForConnection,
   getDefaultDriveConnection,
-} from "../utils/drive-client"
+} from "../../utils/drive-client"
 
 export const driveListItemsHandler = protectedProcedure
   .input(
@@ -30,7 +30,7 @@ export const driveListItemsHandler = protectedProcedure
       pageToken: input.pageToken,
       q,
       fields:
-        "nextPageToken,files(id,name,mimeType,modifiedTime,size,iconLink,thumbnailLink)",
+        "nextPageToken,files(id,name,mimeType,modifiedTime,size,iconLink)",
       orderBy: input.view === "ROOT" ? "name" : "modifiedTime desc",
       spaces: "drive",
     })

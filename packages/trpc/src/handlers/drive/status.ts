@@ -1,4 +1,4 @@
-import { protectedProcedure } from "../trpc"
+import { protectedProcedure } from "../../trpc"
 
 export const driveStatusHandler = protectedProcedure.query(async ({ ctx }) => {
   const row = await ctx.db.driveConnections.findFirst({
