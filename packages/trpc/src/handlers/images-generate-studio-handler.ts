@@ -4,10 +4,10 @@ import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { protectedProcedure } from "../trpc"
+import { uploadImage } from "../utils/storage-client"
 import { generateStudioHash, type StudioHashInput } from "../utils/hash"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models"
 import { callOpenRouterForImage } from "../utils/openrouter-image"
-import { uploadImage } from "../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
   STUDIO_AGE_RANGES,
