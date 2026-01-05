@@ -2,38 +2,48 @@ import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { google } from "googleapis"
 
-const getGoogleAccount = async (userId: string) => {
-  const account = await db.accounts.findFirst({
-    where: {
-      userId,
-      providerId: "google",
-    },
+export const getDefaultDriveConnection = async (userId: string) => {
+  const conn = await db.driveConnections.findFirst({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
   })
 
-  if (!account?.accessToken) {
+  if (!conn?.accessToken) {
     throw new TRPCError({
       code: "BAD_REQUEST",
-      message: "Google non connecté",
+      message: "Google Drive non connecté",
     })
   }
 
-  return account
+  return conn
 }
 
-export const createDriveClientForUser = async (userId: string) => {
-  const account = await getGoogleAccount(userId)
+export const createDriveClientForConnection = async (connectionId: string) => {
+  const conn = await db.driveConnections.findUnique({
+    where: { id: connectionId },
+  })
+
+  if (!conn?.accessToken) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Connexion Google Drive introuvable",
+    })
+  }
 
   const auth = new google.auth.OAuth2({
     clientId: process.env.GOOGLE_CLIENT_ID as string,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    redirectUri: `${process.env.BETTER_AUTH_URL}/api/auth/callback/google`,
+    redirectUri: new URL(
+      "/api/drive/callback",
+      process.env.BETTER_AUTH_URL as string,
+    ).toString(),
   })
 
   auth.setCredentials({
-    access_token: account.accessToken ?? undefined,
-    refresh_token: account.refreshToken ?? undefined,
+    access_token: conn.accessToken,
+    refresh_token: conn.refreshToken ?? undefined,
   })
 
   const drive = google.drive({ version: "v3", auth })
-  return { drive, account }
+  return { drive, conn }
 }
