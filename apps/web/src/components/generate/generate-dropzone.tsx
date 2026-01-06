@@ -1,25 +1,23 @@
-import { settingsAtom } from "@/atoms/settings-atom"
-import { useTRPC } from "@/trpc/react"
 import { ImageUploadIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { config } from "@repo/config"
 import { ShinyText } from "@repo/ui/stylistic/shiny-text"
-import { useMutation } from "@tanstack/react-query"
 import { BlobReader, BlobWriter, ZipReader } from "@zip.js/zip.js"
 import { fileTypeFromBlob } from "file-type"
 import { useAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
+import { settingsAtom } from "@/atoms/settings-atom"
 import { GenerateDropzoneMasonry } from "./generate-dropzone-masonry"
 
-export const GenerateDropzone = () => {
+type Props = {
+  isGenerating: boolean
+}
+
+export const GenerateDropzone = ({ isGenerating }: Props) => {
   const t = useTranslations("home.dropzone")
   const [settings, setSettings] = useAtom(settingsAtom)
-  const trpc = useTRPC()
-  const { isPending } = useMutation(
-    trpc.images.generateStudio.mutationOptions(),
-  )
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: async (acceptedFiles) => {
       const images = acceptedFiles.filter((f) => f.type.startsWith("image/"))
@@ -85,9 +83,9 @@ export const GenerateDropzone = () => {
       className="after:-inset-[5px] after:-z-1 relative flex max-h-1/2 min-w-0 flex-1 flex-col rounded-2xl border bg-muted/50 bg-clip-padding shadow-black/5 shadow-sm transition after:pointer-events-none after:absolute after:rounded-[calc(var(--radius-2xl)+4px)] after:border after:border-border/50 after:bg-clip-padding not-data-has-files:hover:cursor-pointer not-data-has-files:hover:bg-muted data-generating:pointer-events-none not-data-has-files:data-drag-active:bg-muted dark:after:bg-background/72"
       data-has-files={settings.files.length > 0 || undefined}
       data-drag-active={isDragActive || undefined}
-      data-generating={isPending || undefined}
+      data-generating={isGenerating || undefined}
     >
-      {isPending && (
+      {isGenerating && (
         <div className="flex h-full flex-col items-center justify-center gap-1">
           <ShinyText className="text-foreground" text={t("generating")} />
           <p className="text-muted-foreground text-sm">
@@ -95,7 +93,7 @@ export const GenerateDropzone = () => {
           </p>
         </div>
       )}
-      {settings.files.length === 0 && !isPending && (
+      {settings.files.length === 0 && !isGenerating && (
         <div className="flex h-full flex-col items-center justify-center gap-3">
           <input {...getInputProps()} />
           <div className="flex size-12 items-center justify-center rounded-lg bg-muted">
@@ -108,7 +106,7 @@ export const GenerateDropzone = () => {
           </div>
         </div>
       )}
-      {settings.files.length > 0 && !isPending && (
+      {settings.files.length > 0 && !isGenerating && (
         <GenerateDropzoneMasonry
           files={settings.files}
           deleteFile={deleteFile}
