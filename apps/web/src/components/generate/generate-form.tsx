@@ -44,7 +44,7 @@ type Props = {
 }
 
 function DriveSection({
-  disabled,
+  disabled: _,
   onImported,
 }: {
   disabled: boolean
@@ -56,7 +56,7 @@ function DriveSection({
   if (!data.connected) {
     return (
       <div className="rounded-md border p-4">
-        <div className="mb-3 text-sm text-muted-foreground">
+        <div className="mb-3 text-muted-foreground text-sm">
           Google Drive non connecté.
         </div>
         <GoogleConnectButton />
@@ -266,7 +266,7 @@ export function GenerateForm({ modelsInfo, isAuthed, onGenerate }: Props) {
           {isAuthed ? (
             <Suspense
               fallback={
-                <div className="rounded-md border p-4 text-sm text-muted-foreground">
+                <div className="rounded-md border p-4 text-muted-foreground text-sm">
                   Chargement Google Drive...
                 </div>
               }
@@ -282,7 +282,7 @@ export function GenerateForm({ modelsInfo, isAuthed, onGenerate }: Props) {
               />
             </Suspense>
           ) : (
-            <div className="rounded-md border p-4 text-sm text-muted-foreground">
+            <div className="rounded-md border p-4 text-muted-foreground text-sm">
               Connecte-toi pour accéder à Google Drive.
             </div>
           )}
