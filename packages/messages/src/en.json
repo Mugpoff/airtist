@@ -91,5 +91,9 @@
       "settings": "{preset, select, MAN_CHILD {Man Child} MAN_PRETEEN {Man Preteen} MAN_TEEN {Man Teen} MAN_ADULT {Man Adult} WOMAN_CHILD {Woman Child} WOMAN_PRETEEN {Woman Preteen} WOMAN_TEEN {Woman Teen} other {Woman Adult}}, {ethnicity, select, white {White} black {Black} asian {Asian} latino {Latino} other {Mixed}}, {weight} kg, {background, select, STUDIO_WHITE {Studio White} STUDIO_GREY {Studio Grey} STUDIO_DARK_GREY {Studio Dark Grey} STUDIO_BLACK {Studio Black} other {Studio Beige}}",
       "error": "An error occurred during generation. Please try again or contact our team."
     }
+  },
+  "notFound": {
+    "title": "404",
+    "description": "Oops. The page you are looking for does not exist."
   }
 }
