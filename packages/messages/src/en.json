@@ -76,7 +76,9 @@
     "dropzone": {
       "title": "Upload a file",
       "description": "Drag and drop or click to upload",
-      "accepts": "Accepts PNG, JPEG, WebP or ZIP."
+      "accepts": "Accepts PNG, JPEG, WebP or ZIP.",
+      "generating": "Generating...",
+      "generatingDescription": "This may take a while."
     },
     "tooltips": {
       "theme": "Toggle theme",

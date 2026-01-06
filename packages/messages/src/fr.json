@@ -76,7 +76,9 @@
     "dropzone": {
       "title": "Téléverser un fichier",
       "description": "Glissez-déposez ou cliquez pour téléverser",
-      "accepts": "Accepte PNG, JPEG, WebP ou ZIP."
+      "accepts": "Accepte PNG, JPEG, WebP ou ZIP.",
+      "generating": "Génération en cours...",
+      "generatingDescription": "Cela peut prendre un moment."
     },
     "tooltips": {
       "theme": "Changer le thème",
