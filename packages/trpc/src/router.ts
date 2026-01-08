@@ -4,6 +4,7 @@ import { imagesGenerateStudioHandler } from "./handlers/images-generate-studio-h
 import { imagesListHandler } from "./handlers/images-list-handler"
 import { imagesModelsHandler } from "./handlers/images-models-handler"
 import { pingHandler } from "./handlers/ping-handler"
+import { driveRouter } from "./routers/drive"
 import { createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
     delete: imagesDeleteHandler,
     models: imagesModelsHandler,
   }),
+  drive: driveRouter,
 })
 
 export type AppRouter = typeof appRouter

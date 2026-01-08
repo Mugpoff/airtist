@@ -1,20 +1,23 @@
-import { Delete02Icon, ImageUploadIcon } from "@hugeicons/core-free-icons"
+import { ImageUploadIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { config } from "@repo/config"
-import { Button } from "@repo/ui/base/button"
-import { ScrollArea } from "@repo/ui/base/scroll-area"
+import { ShinyText } from "@repo/ui/stylistic/shiny-text"
 import { BlobReader, BlobWriter, ZipReader } from "@zip.js/zip.js"
 import { fileTypeFromBlob } from "file-type"
 import { useAtom } from "jotai"
-import Image from "next/image"
 import { useTranslations } from "next-intl"
+import { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { settingsAtom } from "@/atoms/settings-atom"
+import { GenerateDropzoneMasonry } from "./generate-dropzone-masonry"
 
-export const GenerateDropzone = () => {
+type Props = {
+  isGenerating: boolean
+}
+
+export const GenerateDropzone = ({ isGenerating }: Props) => {
   const t = useTranslations("home.dropzone")
   const [settings, setSettings] = useAtom(settingsAtom)
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: async (acceptedFiles) => {
       const images = acceptedFiles.filter((f) => f.type.startsWith("image/"))
@@ -64,14 +67,33 @@ export const GenerateDropzone = () => {
     disabled: settings.files.length > 0,
   })
 
+  const deleteFile = useCallback(
+    (index: number) => {
+      setSettings((prev) => ({
+        ...prev,
+        files: prev.files.filter((_, i) => i !== index),
+      }))
+    },
+    [setSettings],
+  )
+
   return (
     <div
       {...getRootProps()}
-      className="after:-inset-[5px] after:-z-1 relative flex max-h-1/2 min-w-0 flex-1 flex-col rounded-2xl border bg-muted/50 bg-clip-padding shadow-black/5 shadow-sm transition after:pointer-events-none after:absolute after:rounded-[calc(var(--radius-2xl)+4px)] after:border after:border-border/50 after:bg-clip-padding not-data-has-files:hover:cursor-pointer not-data-has-files:hover:bg-muted not-data-has-files:data-drag-active:bg-muted dark:after:bg-background/72"
+      className="after:-inset-[5px] after:-z-1 relative flex max-h-1/2 min-w-0 flex-1 flex-col rounded-2xl border bg-muted/50 bg-clip-padding shadow-black/5 shadow-sm transition after:pointer-events-none after:absolute after:rounded-[calc(var(--radius-2xl)+4px)] after:border after:border-border/50 after:bg-clip-padding not-data-has-files:hover:cursor-pointer not-data-has-files:hover:bg-muted data-generating:pointer-events-none not-data-has-files:data-drag-active:bg-muted dark:after:bg-background/72"
       data-has-files={settings.files.length > 0 || undefined}
       data-drag-active={isDragActive || undefined}
+      data-generating={isGenerating || undefined}
     >
-      {settings.files.length === 0 && (
+      {isGenerating && (
+        <div className="flex h-full flex-col items-center justify-center gap-1">
+          <ShinyText className="text-foreground" text={t("generating")} />
+          <p className="text-muted-foreground text-sm">
+            {t("generatingDescription")}
+          </p>
+        </div>
+      )}
+      {settings.files.length === 0 && !isGenerating && (
         <div className="flex h-full flex-col items-center justify-center gap-3">
           <input {...getInputProps()} />
           <div className="flex size-12 items-center justify-center rounded-lg bg-muted">
@@ -84,45 +106,11 @@ export const GenerateDropzone = () => {
           </div>
         </div>
       )}
-      {settings.files.length > 0 && (
-        <div
-          className="h-full p-4 pr-0 data-[files-count=4]:pr-4"
-          data-files-count={settings.files.length}
-        >
-          <ScrollArea scrollFade scrollbarGutter>
-            <div className="w-full columns-4 gap-4">
-              {settings.files.map((file, index) => (
-                <div
-                  className="group relative mb-4 break-inside-avoid"
-                  key={file.name}
-                >
-                  <Image
-                    src={URL.createObjectURL(file)}
-                    className="h-auto w-full rounded-lg transition-transform duration-300 group-hover:scale-97"
-                    alt={file.name}
-                    width={0}
-                    height={0}
-                    sizes="25vw"
-                  />
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setSettings((prev) => ({
-                        ...prev,
-                        files: prev.files.filter((_, i) => i !== index),
-                      }))
-                    }}
-                    className="absolute right-2 bottom-2 size-8 translate-y-2 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
-                  >
-                    <HugeiconsIcon icon={Delete02Icon} className="size-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
-        </div>
+      {settings.files.length > 0 && !isGenerating && (
+        <GenerateDropzoneMasonry
+          files={settings.files}
+          deleteFile={deleteFile}
+        />
       )}
     </div>
   )

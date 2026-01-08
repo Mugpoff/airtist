@@ -8,8 +8,9 @@ model Users {
   emailVerified Boolean @default(false)
   image         String?
 
-  accounts Accounts[]
-  images   GeneratedImages[]
+  accounts         Accounts[]
+  images           GeneratedImages[]
+  driveConnections DriveConnections[]
 
   @@unique([email])
   @@map("users")
@@ -31,7 +32,7 @@ model Accounts {
   providerId            String
 
   userId String @db.Uuid
-  users  Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("accounts")

@@ -7,6 +7,7 @@ import { nextCookies } from "better-auth/next-js"
 
 export const auth = betterAuth({
   appName: config.general.name,
+  baseURL: process.env.BETTER_AUTH_URL as string,
   database: prismaAdapter(db, {
     provider: "postgresql",
     transaction: true,
@@ -22,6 +23,10 @@ export const auth = betterAuth({
   account: {
     storeStateStrategy: "cookie",
     storeAccountCookie: true,
+    accountLinking: {
+      enabled: true,
+      allowDifferentEmails: true,
+    },
   },
   session: {
     cookieCache: {
@@ -29,6 +34,15 @@ export const auth = betterAuth({
       maxAge: config.auth.cookieMaxAge,
       strategy: "jwe",
       refreshCache: true,
+    },
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      accessType: "offline",
+      prompt: "select_account consent",
+      scopes: ["https://www.googleapis.com/auth/drive.readonly"],
     },
   },
   advanced: { database: { generateId: "uuid" } },

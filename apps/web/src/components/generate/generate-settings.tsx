@@ -69,6 +69,7 @@ export const GenerateSettings = () => {
       background: data.background,
     }))
     setOpen(false)
+
     form.reset(data)
   }
 

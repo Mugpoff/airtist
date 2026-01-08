@@ -2,7 +2,8 @@ import { config } from "@repo/config"
 import { AnchoredToastProvider, ToastProvider } from "@repo/ui/base/toast"
 import { cn } from "@repo/ui/utils"
 import type { Metadata } from "next"
-import { Cal_Sans, Inter } from "next/font/google"
+import { Inter } from "next/font/google"
+import localFont from "next/font/local"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
@@ -41,11 +42,9 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 })
-const calSans = Cal_Sans({
-  subsets: ["latin"],
+const calSans = localFont({
+  src: "../../public/fonts/CalSans-Regular.ttf",
   variable: "--font-cal-sans",
-  weight: "400",
-  display: "swap",
 })
 
 export default async function RootLayout(props: { children: ReactNode }) {

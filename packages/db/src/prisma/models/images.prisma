@@ -8,8 +8,8 @@ model GeneratedImages {
   hash        String? @unique
   aspectRatio String?
 
-  width  Int    @default(1024)
-  height Int    @default(1024)
+  width  Int @default(1024)
+  height Int @default(1024)
 
   imageUrl  String?
   objectKey String?
@@ -26,7 +26,7 @@ model GeneratedImages {
   userId String? @db.Uuid
   user   Users?  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  cacheKey String? @db.Uuid
+  cacheKey String?              @db.Uuid
   cache    GeneratedImageCache? @relation(fields: [cacheKey], references: [id])
 
   @@index([userId, createdAt])
@@ -38,7 +38,7 @@ model GeneratedImageCache {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now())
 
-  hash        String @unique
+  hash        String  @unique
   prompt      String
   input       Json?
   model       String

@@ -1,0 +1,19 @@
+model DriveConnections {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @db.Uuid
+  user   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  googleAccountId String
+  email           String?
+
+  accessToken  String
+  refreshToken String?
+  scope        String?
+  expiresAt    DateTime?
+
+  @@index([userId])
+  @@map("drive_connections")
+}

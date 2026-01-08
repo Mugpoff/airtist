@@ -10,17 +10,23 @@ export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted', 'ReadC
 
 export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevelSchema>;
 
-// File: GeneratedImagesScalarFieldEnum.schema.ts
+// File: DriveConnectionsScalarFieldEnum.schema.ts
 
-export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'hash', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'promptTokens', 'completionTokens', 'totalTokens', 'cachedTokens', 'cost', 'userId', 'cacheKey'])
+export const DriveConnectionsScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'userId', 'googleAccountId', 'email', 'accessToken', 'refreshToken', 'scope', 'expiresAt'])
 
-export type GeneratedImagesScalarFieldEnum = z.infer<typeof GeneratedImagesScalarFieldEnumSchema>;
+export type DriveConnectionsScalarFieldEnum = z.infer<typeof DriveConnectionsScalarFieldEnumSchema>;
 
 // File: RelationLoadStrategy.schema.ts
 
 export const RelationLoadStrategySchema = z.enum(['query', 'join'])
 
 export type RelationLoadStrategy = z.infer<typeof RelationLoadStrategySchema>;
+
+// File: GeneratedImagesScalarFieldEnum.schema.ts
+
+export const GeneratedImagesScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'prompt', 'model', 'requestId', 'hash', 'aspectRatio', 'width', 'height', 'imageUrl', 'objectKey', 'imageData', 'mimeType', 'promptTokens', 'completionTokens', 'totalTokens', 'cachedTokens', 'cost', 'userId', 'cacheKey'])
+
+export type GeneratedImagesScalarFieldEnum = z.infer<typeof GeneratedImagesScalarFieldEnumSchema>;
 
 // File: GeneratedImageCacheScalarFieldEnum.schema.ts
 
@@ -75,6 +81,24 @@ export type NullsOrder = z.infer<typeof NullsOrderSchema>;
 export const JsonNullValueFilterSchema = z.enum(['DbNull', 'JsonNull', 'AnyNull'])
 
 export type JsonNullValueFilter = z.infer<typeof JsonNullValueFilterSchema>;
+
+// File: DriveConnections.schema.ts
+
+export const DriveConnectionsSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  userId: z.string(),
+  googleAccountId: z.string(),
+  email: z.string().nullish(),
+  accessToken: z.string(),
+  refreshToken: z.string().nullish(),
+  scope: z.string().nullish(),
+  expiresAt: z.date().nullish(),
+});
+
+export type DriveConnectionsType = z.infer<typeof DriveConnectionsSchema>;
+
 
 // File: GeneratedImages.schema.ts
 
