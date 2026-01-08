@@ -12,6 +12,7 @@ import {
   splitLink,
   unstable_httpSubscriptionLink,
 } from "@trpc/client"
+import { createTRPCReact } from "@trpc/react-query"
 import { createTRPCContext } from "@trpc/tanstack-react-query"
 import { useState } from "react"
 import SuperJSON from "superjson"
@@ -24,10 +25,14 @@ const getQueryClient = () => {
     return createQueryClient()
   }
 
-  // biome-ignore lint/suspicious/noAssignInExpressions: it's a valid use case
-  return (clientQueryClientSingleton ??= createQueryClient())
+  if (!clientQueryClientSingleton) {
+    clientQueryClientSingleton = createQueryClient()
+  }
+
+  return clientQueryClientSingleton
 }
 
+export const trpc = createTRPCReact<AppRouter>()
 export const { useTRPC, TRPCProvider } = createTRPCContext<AppRouter>()
 
 export function TRPCReactProvider(props: { children: React.ReactNode }) {
@@ -78,9 +83,11 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        {props.children}
-      </TRPCProvider>
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+          {props.children}
+        </TRPCProvider>
+      </trpc.Provider>
     </QueryClientProvider>
   )
 }
