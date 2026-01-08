@@ -1,0 +1,2 @@
+[phases.build]
+cmds = ["bun run -F @repo/db prisma migrate deploy", "bun run -F @repo/db prisma generate", "bun run build"]
