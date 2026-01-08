@@ -14,6 +14,7 @@ const getClient = () => {
 }
 
 export const cacheClient = {
+  getClient,
   users: {
     auth: {
       set: (id: string, value: string, ttl = 60) =>
