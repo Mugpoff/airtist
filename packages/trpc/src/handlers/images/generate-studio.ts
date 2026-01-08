@@ -3,19 +3,19 @@ import { cacheClient } from "@repo/cache"
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { protectedProcedure } from "../trpc"
-import { generateStudioHash, type StudioHashInput } from "../utils/hash"
-import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../utils/image-models"
-import { callOpenRouterForImage } from "../utils/openrouter-image"
-import { pushStatus } from "../utils/redis-stream"
-import { uploadImage } from "../utils/storage-client"
+import { protectedProcedure } from "../../trpc"
+import { generateStudioHash, type StudioHashInput } from "../../utils/hash"
+import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../../utils/image-models"
+import { callOpenRouterForImage } from "../../utils/openrouter-image"
+import { pushStatus } from "../../utils/redis-stream"
+import { uploadImage } from "../../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
   STUDIO_AGE_RANGES,
   STUDIO_CATEGORIES,
   StudioBackgroundSchema,
   StudioCategorySchema,
-} from "../utils/studio-constants"
+} from "../../utils/studio-constants"
 
 const EthnicitySchema = z.enum([
   "ASIAN",
