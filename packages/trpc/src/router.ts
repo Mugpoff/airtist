@@ -1,27 +1,17 @@
 import { on } from "node:events"
 import { cacheClient } from "@repo/cache"
 import { z } from "zod"
-import { imagesByIdHandler } from "./handlers/images-by-id-handler"
-import { imagesDeleteHandler } from "./handlers/images-delete-handler"
-import { imagesGenerateStudioHandler } from "./handlers/images-generate-studio-handler"
-import { imagesListHandler } from "./handlers/images-list-handler"
-import { imagesModelsHandler } from "./handlers/images-models-handler"
 import { pingHandler } from "./handlers/ping-handler"
 import { driveRouter } from "./routers/drive"
+import { imagesRouter } from "./routers/images"
 import { createTRPCRouter, protectedProcedure } from "./trpc"
 import { getJobHistory } from "./utils/redis-stream"
 
-const getRedis = () => cacheClient.getClient()
+const getRedis = () => (cacheClient as any).getClient()
 
 export const appRouter = createTRPCRouter({
   ping: pingHandler,
-  images: createTRPCRouter({
-    list: imagesListHandler,
-    byId: imagesByIdHandler,
-    generateStudio: imagesGenerateStudioHandler,
-    delete: imagesDeleteHandler,
-    models: imagesModelsHandler,
-  }),
+  images: imagesRouter,
   drive: driveRouter,
   onGenerateProgress: protectedProcedure
     .input(z.object({ jobId: z.string() }))
