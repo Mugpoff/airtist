@@ -1,58 +1,74 @@
 "use client"
 
-import type { AppRouter } from "@repo/trpc"
 import { toastManager } from "@repo/ui/base/toast"
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query"
-import type { TRPCClientError } from "@trpc/client"
-import type { inferRouterOutputs } from "@trpc/server"
 import { useSetAtom } from "jotai"
+import { useQueryState } from "nuqs"
 import { isGeneratingAtom } from "@/atoms/is-generating-atom"
-import { useTRPC } from "@/trpc/react"
+import { trpc, useTRPC } from "@/trpc/react"
 import { GenerateForm } from "./generate-form"
 import { GenerateGallery } from "./generate-gallery"
 
-type ModelsInfo = inferRouterOutputs<AppRouter>["images"]["models"]
-
-type Props = {
-  isAuthed: boolean
-}
-
-export function GenerateView({ isAuthed }: Props) {
-  const trpc = useTRPC()
+export function GenerateView({ isAuthed }: { isAuthed: boolean }) {
+  const t = useTRPC()
   const queryClient = useQueryClient()
   const setIsGenerating = useSetAtom(isGeneratingAtom)
 
-  const { data: history } = useSuspenseQuery(
-    trpc.images.list.queryOptions({ limit: 50, offset: 0 }),
-  )
-  const { data: modelsInfo } = useSuspenseQuery(
-    trpc.images.models.queryOptions(),
-  ) as { data: ModelsInfo }
+  const [activeJobId, setActiveJobId] = useQueryState("jobId")
 
-  const generateStudioMutation = useMutation({
-    ...trpc.images.generateStudio.mutationOptions(),
-    onMutate: () => {
-      setIsGenerating(true)
+  const { data: history } = useSuspenseQuery(
+    t.images.list.queryOptions({ limit: 50, offset: 0 }),
+  )
+  const { data: modelsInfo } = useSuspenseQuery(t.images.models.queryOptions())
+
+  trpc.onGenerateProgress.useSubscription(
+    { jobId: activeJobId ?? "" },
+    {
+      enabled: !!activeJobId,
+      onData: (data: any) => {
+        if (data.step === "completed") {
+          toastManager.add({ title: "Génération réussie !", type: "success" })
+          queryClient.invalidateQueries({ queryKey: t.images.list.queryKey() })
+          setIsGenerating(false)
+          setActiveJobId(null)
+        }
+        if (data.step === "failed") {
+          toastManager.add({
+            title: "Erreur",
+            description: data.error,
+            type: "error",
+          })
+          setIsGenerating(false)
+          setActiveJobId(null)
+        }
+      },
     },
-    onSuccess: () => {
-      toastManager.add({
-        title: "Image générée avec succès !",
-        type: "success",
-      })
-      queryClient.invalidateQueries({ queryKey: trpc.images.list.queryKey() })
+  )
+
+  const generateMutation = useMutation({
+    ...t.images.generateStudio.mutationOptions(),
+    onSuccess: (data: any) => {
+      if (data.jobId) {
+        setActiveJobId(data.jobId)
+      } else {
+        toastManager.add({
+          title: "Image chargée depuis le cache",
+          type: "success",
+        })
+        queryClient.invalidateQueries({ queryKey: t.images.list.queryKey() })
+        setIsGenerating(false)
+      }
     },
-    onError: (error: TRPCClientError<AppRouter>) => {
+    onError: (error: any) => {
       toastManager.add({
-        title: "Erreur lors de la génération",
+        title: "Erreur",
         description: error.message,
         type: "error",
       })
-    },
-    onSettled: () => {
       setIsGenerating(false)
     },
   })
@@ -61,9 +77,12 @@ export function GenerateView({ isAuthed }: Props) {
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <div className="space-y-8">
         <GenerateForm
-          modelsInfo={modelsInfo}
+          modelsInfo={modelsInfo as any}
           isAuthed={isAuthed}
-          onGenerate={(fd) => generateStudioMutation.mutate(fd)}
+          onGenerate={(fd) => {
+            setIsGenerating(true)
+            generateMutation.mutate(fd)
+          }}
         />
         <GenerateGallery items={history.items} />
       </div>
