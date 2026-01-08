@@ -7,6 +7,7 @@ import localFont from "next/font/local"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import type { ReactNode } from "react"
 import { AuthStoreProvider } from "@/stores/auth-store"
 import { TRPCReactProvider } from "@/trpc/react"
@@ -66,7 +67,9 @@ export default async function RootLayout(props: { children: ReactNode }) {
             <ToastProvider>
               <AnchoredToastProvider>
                 <AuthStoreProvider session={session}>
-                  <TRPCReactProvider>{props.children}</TRPCReactProvider>
+                  <NuqsAdapter>
+                    <TRPCReactProvider>{props.children}</TRPCReactProvider>
+                  </NuqsAdapter>
                 </AuthStoreProvider>
               </AnchoredToastProvider>
             </ToastProvider>
