@@ -21,5 +21,6 @@
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/tsbuildinfo.json"]
     }
-  }
+  },
+  "globalPassThroughEnv": ["MINIO_PUBLIC_ENDPOINT", "MINIO_BUCKET"]
 }
