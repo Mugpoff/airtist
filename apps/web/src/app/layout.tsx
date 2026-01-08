@@ -1,17 +1,18 @@
+import { MobileForbidden } from "@/components/ui/mobile-forbidden"
+import { AuthStoreProvider } from "@/stores/auth-store"
+import { TRPCReactProvider } from "@/trpc/react"
+import { getSession } from "@/utils/get-session"
 import { config } from "@repo/config"
 import { AnchoredToastProvider, ToastProvider } from "@repo/ui/base/toast"
 import { cn } from "@repo/ui/utils"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import localFont from "next/font/local"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
+import { Inter } from "next/font/google"
+import localFont from "next/font/local"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import type { ReactNode } from "react"
-import { AuthStoreProvider } from "@/stores/auth-store"
-import { TRPCReactProvider } from "@/trpc/react"
-import { getSession } from "@/utils/get-session"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -68,7 +69,10 @@ export default async function RootLayout(props: { children: ReactNode }) {
               <AnchoredToastProvider>
                 <AuthStoreProvider session={session}>
                   <NuqsAdapter>
-                    <TRPCReactProvider>{props.children}</TRPCReactProvider>
+                    <TRPCReactProvider>
+                      <MobileForbidden />
+                      {props.children}
+                    </TRPCReactProvider>
                   </NuqsAdapter>
                 </AuthStoreProvider>
               </AnchoredToastProvider>

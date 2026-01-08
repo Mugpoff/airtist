@@ -1,11 +1,11 @@
 "use client"
 
-import { useAtom } from "jotai"
-import { useCallback, useEffect, useRef } from "react"
 import { pageIndexAtom } from "@/atoms/canvas-atom"
 import { Canvas } from "@/components/canvas/canvas"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
+import { useAtom } from "jotai"
+import { useCallback, useEffect, useRef } from "react"
 
 const SCROLL_THRESHOLD = 100
 const SCROLL_COOLDOWN = 1400
@@ -114,7 +114,7 @@ export default function HomePage() {
   return (
     <main
       ref={containerRef}
-      className="scrollbar-none h-screen w-full overflow-y-auto"
+      className="scrollbar-none hidden h-screen w-full overflow-y-auto md:block"
     >
       <section
         key="generate"
