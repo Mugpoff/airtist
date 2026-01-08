@@ -1,6 +1,5 @@
 import type { NextConfig } from "next"
 import createNextIntlPlugin from "next-intl/plugin"
-import { env } from "./src/env"
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
@@ -9,7 +8,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/cdn/images/:path*",
-        destination: `${env.MINIO_PUBLIC_ENDPOINT}/${env.MINIO_BUCKET}/images/:path*`,
+        destination: `${process.env.MINIO_PUBLIC_ENDPOINT}/${process.env.MINIO_BUCKET}/images/:path*`,
       },
     ]
   },
