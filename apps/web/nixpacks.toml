@@ -1,0 +1,5 @@
+[phases.build]
+cmds = ["bun run --cwd packages/db migrate deploy", "bun run build"]
+
+[start]
+cmd = "bun run --cwd apps/web start"

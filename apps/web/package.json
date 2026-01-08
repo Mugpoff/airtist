@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun with-env next dev --port 3000",
-    "build": "bun with-env next build",
-    "start": "bun with-env next start",
+    "build": "next build",
+    "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
