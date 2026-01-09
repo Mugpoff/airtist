@@ -9,7 +9,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { cn } from "../../lib/utils"
-import { LoaderCircleIcon } from "../icons/lodader-circle"
+import { LoaderCircleIcon } from "../icons/loader-circle"
 import { buttonVariants } from "./button"
 
 const toastManager = Toast.createToastManager()

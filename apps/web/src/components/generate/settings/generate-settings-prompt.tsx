@@ -18,32 +18,38 @@ type Props = {
 
 export const GenerateSettingsPrompt = ({ handle }: Props) => {
   const t = useTranslations("global.prompt")
-  const [settings, setSettings] = useAtom(settingsAtom)
 
   return (
     <PopoverTrigger
       render={<Button variant="outline" />}
       handle={handle}
-      payload={() => (
-        <>
-          <div>
-            <PopoverTitle>{t("title")}</PopoverTitle>
-            <PopoverDescription>{t("description")}</PopoverDescription>
-          </div>
-          <div>
-            <Textarea
-              value={settings.prompt}
-              onChange={(e) =>
-                setSettings((prev) => ({ ...prev, prompt: e.target.value }))
-              }
-              placeholder={t("placeholder")}
-            />
-          </div>
-        </>
-      )}
+      payload={Payload}
     >
       <HugeiconsIcon icon={TextAlignLeftIcon} />
       {t("title")}
     </PopoverTrigger>
+  )
+}
+
+const Payload = () => {
+  const t = useTranslations("global.prompt")
+  const [settings, setSettings] = useAtom(settingsAtom)
+
+  return (
+    <>
+      <div>
+        <PopoverTitle>{t("title")}</PopoverTitle>
+        <PopoverDescription>{t("description")}</PopoverDescription>
+      </div>
+      <div>
+        <Textarea
+          value={settings.prompt}
+          onChange={(e) =>
+            setSettings((prev) => ({ ...prev, prompt: e.target.value }))
+          }
+          placeholder={t("placeholder")}
+        />
+      </div>
+    </>
   )
 }

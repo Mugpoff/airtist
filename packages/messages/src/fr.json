@@ -102,6 +102,12 @@
       "description": "Faites des modifications aux paramètres de génération ici. Cliquez sur enregistrer lorsque vous avez terminé.",
       "settings": "{preset, select, MAN_CHILD {Homme Enfant} MAN_PRETEEN {Homme Préadolescent} MAN_TEEN {Homme Adolescent} MAN_ADULT {Homme Adulte} WOMAN_CHILD {Femme Enfant} WOMAN_PRETEEN {Femme Préadolescente} WOMAN_TEEN {Femme Adolescente} other {Femme Adulte}}, {ethnicity, select, WHITE {Blanc} BLACK {Noir} ASIAN {Asiatique} LATINO {Latino} other {Mixte}}, {weight} kg, {background, select, STUDIO_WHITE {Studio Blanc} STUDIO_GREY {Studio Gris} STUDIO_DARK_GREY {Studio Gris Foncé} STUDIO_BLACK {Studio Noir} other {Studio Beige}}",
       "error": "Une erreur est survenue lors de la génération. Veuillez réessayer ou contacter nos équipes."
+    },
+    "canvas": {
+      "empty": {
+        "title": "Rien ici pour l'instant...",
+        "button": "Remonter ?"
+      }
     }
   },
   "notFound": {

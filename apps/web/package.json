@@ -10,7 +10,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.965.0",
+    "@aws-sdk/client-s3": "^3.966.0",
     "@hookform/resolvers": "^5.2.2",
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react": "^1.1.4",
@@ -31,7 +31,7 @@
     "country-flag-icons": "^1.6.4",
     "file-type": "^21.3.0",
     "jotai": "^2.16.1",
-    "motion": "^12.24.12",
+    "motion": "^12.25.0",
     "next": "16.1.1",
     "next-intl": "^4.7.0",
     "next-themes": "^0.4.6",

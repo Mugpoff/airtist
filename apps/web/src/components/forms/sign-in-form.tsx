@@ -39,6 +39,7 @@ export const SignInForm = () => {
       {
         onSuccess: (ctx) => {
           signIn(ctx.data.user)
+          router.refresh()
           router.push("/")
         },
         onError: (ctx) => {
