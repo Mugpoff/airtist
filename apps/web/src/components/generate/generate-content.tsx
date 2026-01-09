@@ -21,7 +21,7 @@ import { SignOutButton } from "@/components/ui/sign-out-button"
 import { ThemeSwitch } from "@/components/ui/theme-switch"
 import { useTRPC } from "@/trpc/react"
 import { GenerateDropzone } from "./generate-dropzone"
-import { GenerateSettings } from "./generate-settings"
+import { GenerateSettings } from "./settings/generate-settings"
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>()
 
@@ -38,13 +38,13 @@ export const GenerateContent = () => {
   const handleClick = () => {
     const formData = new FormData()
 
-    formData.set("prompt", "Studio fashion model wearing the outfit")
-    formData.set("model", "google/gemini-3-pro-image-preview")
-    formData.set("category", "MAN_ADULT")
+    formData.set("prompt", settings.prompt)
+    formData.set("category", settings.preset)
     formData.set("background", settings.background)
     formData.set("ethnicity", settings.ethnicity.toUpperCase())
+    formData.set("age", settings.age.toString())
+    formData.set("model", "google/gemini-3-pro-image-preview")
     formData.set("height", "170")
-    formData.set("age", "25")
     formData.set("aspectRatio", "1:1")
 
     for (const file of settings.files) {
@@ -86,9 +86,10 @@ export const GenerateContent = () => {
         />
       </div>
       <div className="flex size-full max-w-6xl flex-col justify-center gap-8 place-self-center p-16">
+        <GenerateSettings />
         <GenerateDropzone isGenerating={isPending} />
         <div className="grid grid-cols-3 items-center">
-          <GenerateSettings />
+          <div />
           <div className="flex justify-center">
             <ShimmerButton
               className="px-12"

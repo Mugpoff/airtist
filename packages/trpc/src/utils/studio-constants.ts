@@ -1,15 +1,9 @@
+import { config } from "@repo/config"
 import { z } from "zod"
 
-export const StudioCategorySchema = z.enum([
-  "MAN_CHILD",
-  "MAN_PRETEEN",
-  "MAN_TEEN",
-  "MAN_ADULT",
-  "WOMAN_CHILD",
-  "WOMAN_PRETEEN",
-  "WOMAN_TEEN",
-  "WOMAN_ADULT",
-])
+export const StudioCategorySchema = z.enum(
+  config.generationSettings.preset.values,
+)
 
 export type StudioCategory = z.infer<typeof StudioCategorySchema>
 
@@ -38,13 +32,9 @@ export const STUDIO_AGE_RANGES: Record<
   WOMAN_ADULT: { min: 19, max: 100 },
 }
 
-export const StudioBackgroundSchema = z.enum([
-  "STUDIO_WHITE",
-  "STUDIO_GREY",
-  "STUDIO_DARK_GREY",
-  "STUDIO_BLACK",
-  "STUDIO_BEIGE",
-])
+export const StudioBackgroundSchema = z.enum(
+  config.generationSettings.background.values,
+)
 
 export type StudioBackground = z.infer<typeof StudioBackgroundSchema>
 

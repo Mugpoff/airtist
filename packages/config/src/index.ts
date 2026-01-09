@@ -1,6 +1,6 @@
 export const config = {
   general: {
-    name: "AI Picture",
+    name: "Airtist",
     description: "Generate stunning AI-powered images with ease",
     url: "https://aipicture.app",
   },
@@ -11,7 +11,7 @@ export const config = {
       "artificial intelligence",
       "pictures",
     ] as string[],
-    author: "AI Picture Team",
+    author: "Airtist Team",
   },
   env: {
     isSeed: !!process.env.SEED,
@@ -34,16 +34,21 @@ export const config = {
   generationSettings: {
     preset: {
       default: "MAN_ADULT",
-      items: [
-        { label: "global.preset.manChild", value: "MAN_CHILD" },
-        { label: "global.preset.manPreteen", value: "MAN_PRETEEN" },
-        { label: "global.preset.manTeen", value: "MAN_TEEN" },
-        { label: "global.preset.manAdult", value: "MAN_ADULT" },
-        { label: "global.preset.womanChild", value: "WOMAN_CHILD" },
-        { label: "global.preset.womanPreteen", value: "WOMAN_PRETEEN" },
-        { label: "global.preset.womanTeen", value: "WOMAN_TEEN" },
-        { label: "global.preset.womanAdult", value: "WOMAN_ADULT" },
+      values: [
+        "MAN_CHILD",
+        "MAN_PRETEEN",
+        "MAN_TEEN",
+        "MAN_ADULT",
+        "WOMAN_CHILD",
+        "WOMAN_PRETEEN",
+        "WOMAN_TEEN",
+        "WOMAN_ADULT",
       ],
+    },
+    age: {
+      default: 25,
+      min: 1,
+      max: 100,
     },
     weight: {
       default: 70,
@@ -51,26 +56,17 @@ export const config = {
       max: 200,
     },
     ethnicity: {
-      default: "white",
-      items: [
-        { label: "global.ethnicity.white", value: "white" },
-        { label: "global.ethnicity.black", value: "black" },
-        { label: "global.ethnicity.asian", value: "asian" },
-        { label: "global.ethnicity.latino", value: "latino" },
-        { label: "global.ethnicity.mixed", value: "mixed" },
-      ],
+      default: "WHITE",
+      values: ["WHITE", "BLACK", "ASIAN", "LATINO", "MIXED"],
     },
     background: {
       default: "STUDIO_WHITE",
-      items: [
-        { label: "global.background.studioWhite", value: "STUDIO_WHITE" },
-        { label: "global.background.studioGrey", value: "STUDIO_GREY" },
-        {
-          label: "global.background.studioDarkGrey",
-          value: "STUDIO_DARK_GREY",
-        },
-        { label: "global.background.studioBlack", value: "STUDIO_BLACK" },
-        { label: "global.background.studioBeige", value: "STUDIO_BEIGE" },
+      values: [
+        "STUDIO_WHITE",
+        "STUDIO_GREY",
+        "STUDIO_DARK_GREY",
+        "STUDIO_BLACK",
+        "STUDIO_BEIGE",
       ],
     },
     acceptedFiles: {

@@ -12,7 +12,7 @@ None required.
 import { config } from "@repo/config";
 
 // Access app name
-console.log(config.general.name); // "AI Picture"
+console.log(config.general.name); // "Airtist"
 
 // Access auth settings
 console.log(config.auth.cookieMaxAge); // 604800 (7 days in seconds)
@@ -20,7 +20,7 @@ console.log(config.auth.cookieMaxAge); // 604800 (7 days in seconds)
 
 ## Configuration
 
-| Key                 | Value          | Description                      |
-| ------------------- | -------------- | -------------------------------- |
-| `general.name`      | `"AI Picture"` | Application name                 |
-| `auth.cookieMaxAge` | `604800`       | Session cookie duration (7 days) |
+| Key                 | Value       | Description                      |
+| ------------------- | ----------- | -------------------------------- |
+| `general.name`      | `"Airtist"` | Application name                 |
+| `auth.cookieMaxAge` | `604800`    | Session cookie duration (7 days) |

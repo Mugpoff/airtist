@@ -114,7 +114,7 @@ export default function HomePage() {
   return (
     <main
       ref={containerRef}
-      className="scrollbar-none h-screen w-full overflow-y-auto"
+      className="scrollbar-none hidden h-screen w-full overflow-y-auto md:block"
     >
       <section
         key="generate"

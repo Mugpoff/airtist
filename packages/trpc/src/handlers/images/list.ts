@@ -1,6 +1,6 @@
 import { db } from "@repo/db"
 import { z } from "zod"
-import { protectedProcedure } from "../trpc"
+import { protectedProcedure } from "../../trpc"
 
 const PaginationSchema = z.object({
   limit: z.coerce.number().min(1).max(100).default(20),

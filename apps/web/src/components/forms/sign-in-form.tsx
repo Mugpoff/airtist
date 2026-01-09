@@ -29,7 +29,7 @@ export const SignInForm = () => {
   const router = useRouter()
   const form = useForm({
     resolver: zodResolver(signInSchema),
-    defaultValues: { email: "john@example.com", password: "Password123!" },
+    defaultValues: { email: "", password: "" },
     mode: "onTouched",
   })
 

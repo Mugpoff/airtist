@@ -4,33 +4,45 @@
     "password": "Password",
     "english": "English",
     "french": "Français",
-    "weight": "Weight",
+    "weight": {
+      "title": "Weight",
+      "description": "Set the body weight of the generated model in kilograms. This affects the body shape and proportions."
+    },
     "ethnicity": {
       "title": "Ethnicity",
-      "white": "White",
-      "black": "Black",
-      "asian": "Asian",
-      "latino": "Latino",
-      "mixed": "Mixed"
+      "description": "Select the ethnicity of the generated model. This affects skin tone, facial features, and overall appearance.",
+      "WHITE": "White",
+      "BLACK": "Black",
+      "ASIAN": "Asian",
+      "LATINO": "Latino",
+      "MIXED": "Mixed"
     },
     "preset": {
       "title": "Preset",
-      "manChild": "Man Child",
-      "manPreteen": "Man Preteen",
-      "manTeen": "Man Teen",
-      "manAdult": "Man Adult",
-      "womanChild": "Woman Child",
-      "womanPreteen": "Woman Preteen",
-      "womanTeen": "Woman Teen",
-      "womanAdult": "Woman Adult"
+      "description": "Choose the gender and age category for the generated model. This determines the body type and appearance of the person in the final image.",
+      "MAN_CHILD": "Man Child",
+      "MAN_PRETEEN": "Man Preteen",
+      "MAN_TEEN": "Man Teen",
+      "MAN_ADULT": "Man Adult",
+      "WOMAN_CHILD": "Woman Child",
+      "WOMAN_PRETEEN": "Woman Preteen",
+      "WOMAN_TEEN": "Woman Teen",
+      "WOMAN_ADULT": "Woman Adult"
     },
     "background": {
       "title": "Background",
-      "studioWhite": "Studio White",
-      "studioGrey": "Studio Grey",
-      "studioDarkGrey": "Studio Dark Grey",
-      "studioBlack": "Studio Black",
-      "studioBeige": "Studio Beige"
+      "description": "Choose the studio backdrop color for the generated image. Different backgrounds work better for different clothing colors.",
+      "STUDIO_WHITE": "Studio White",
+      "STUDIO_GREY": "Studio Grey",
+      "STUDIO_DARK_GREY": "Studio Dark Grey",
+      "STUDIO_BLACK": "Studio Black",
+      "STUDIO_BEIGE": "Studio Beige"
+    },
+    "age": "Age",
+    "prompt": {
+      "title": "Prompt",
+      "description": "Describe additional details for the generated image. This helps guide the AI to create more specific results.",
+      "placeholder": "e.g. Studio fashion model wearing the outfit, natural lighting..."
     },
     "cancel": "Cancel",
     "save": "Save",
@@ -66,7 +78,7 @@
       "UNKNOWN": "An unexpected error occurred. Please try again."
     },
     "signIn": {
-      "title": "Welcome to AI Picture",
+      "title": "Welcome to Airtist",
       "submitButton": "Login",
       "submitting": "Signing in...",
       "privacy": "By clicking continue, you agree to our <termsOfService>Terms of Service</termsOfService> and <privacyPolicy>Privacy Policy</privacyPolicy>."

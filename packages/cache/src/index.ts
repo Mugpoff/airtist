@@ -3,7 +3,7 @@ import { env } from "./env"
 
 let client: DF | null = null
 
-const getClient = () => {
+export const rawCacheClient = () => {
   if (!client) {
     client = new DF(env.DRAGONFLY_URL, {
       maxRetriesPerRequest: 1,
@@ -17,51 +17,52 @@ export const cacheClient = {
   users: {
     auth: {
       set: (id: string, value: string, ttl = 60) =>
-        getClient().setex(`users:auth:${id}`, ttl, value),
-      get: (id: string) => getClient().get(`users:auth:${id}`),
+        rawCacheClient().setex(`users:auth:${id}`, ttl, value),
+      get: (id: string) => rawCacheClient().get(`users:auth:${id}`),
       delete: (id: string) =>
-        getClient()
+        rawCacheClient()
           .del(`users:auth:${id}`)
           .then(() => null),
     },
   },
   images: {
     cacheIdByHash: {
-      get: (hash: string) => getClient().get(`images:studio:hash:${hash}`),
+      get: (hash: string) => rawCacheClient().get(`images:studio:hash:${hash}`),
       set: (hash: string, cacheId: string, ttl = 60 * 60 * 24 * 7) =>
-        getClient().setex(`images:studio:hash:${hash}`, ttl, cacheId),
+        rawCacheClient().setex(`images:studio:hash:${hash}`, ttl, cacheId),
       delete: (hash: string) =>
-        getClient()
+        rawCacheClient()
           .del(`images:studio:hash:${hash}`)
           .then(() => null),
     },
   },
   drive: {
     thumbUrlByFileId: {
-      get: (fileId: string) => getClient().get(`drive:thumb:${fileId}`),
+      get: (fileId: string) => rawCacheClient().get(`drive:thumb:${fileId}`),
       set: (fileId: string, url: string, ttl = 60 * 60 * 24 * 7) =>
-        getClient().setex(`drive:thumb:${fileId}`, ttl, url),
+        rawCacheClient().setex(`drive:thumb:${fileId}`, ttl, url),
       delete: (fileId: string) =>
-        getClient()
+        rawCacheClient()
           .del(`drive:thumb:${fileId}`)
           .then(() => null),
     },
     oauthState: {
       set: (state: string, userId: string, ttl = 60 * 10) =>
-        getClient().setex(`drive:oauth:state:${state}`, ttl, userId),
-      get: (state: string) => getClient().get(`drive:oauth:state:${state}`),
+        rawCacheClient().setex(`drive:oauth:state:${state}`, ttl, userId),
+      get: (state: string) =>
+        rawCacheClient().get(`drive:oauth:state:${state}`),
       delete: (state: string) =>
-        getClient()
+        rawCacheClient()
           .del(`drive:oauth:state:${state}`)
           .then(() => null),
     },
   },
   models: {
-    get: () => getClient().get("models:images"),
+    get: () => rawCacheClient().get("models:images"),
     set: (value: string, ttl = 60 * 60 * 6) =>
-      getClient().setex("models:images", ttl, value),
+      rawCacheClient().setex("models:images", ttl, value),
     delete: () =>
-      getClient()
+      rawCacheClient()
         .del("models:images")
         .then(() => null),
   },

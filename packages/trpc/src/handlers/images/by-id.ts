@@ -1,7 +1,7 @@
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { protectedProcedure } from "../trpc"
+import { protectedProcedure } from "../../trpc"
 
 export const imagesByIdHandler = protectedProcedure
   .input(z.object({ id: z.string() }))

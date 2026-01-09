@@ -7,7 +7,9 @@ import localFont from "next/font/local"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import type { ReactNode } from "react"
+import { MobileForbidden } from "@/components/ui/mobile-forbidden"
 import { AuthStoreProvider } from "@/stores/auth-store"
 import { TRPCReactProvider } from "@/trpc/react"
 import { getSession } from "@/utils/get-session"
@@ -66,7 +68,12 @@ export default async function RootLayout(props: { children: ReactNode }) {
             <ToastProvider>
               <AnchoredToastProvider>
                 <AuthStoreProvider session={session}>
-                  <TRPCReactProvider>{props.children}</TRPCReactProvider>
+                  <NuqsAdapter>
+                    <TRPCReactProvider>
+                      <MobileForbidden />
+                      {props.children}
+                    </TRPCReactProvider>
+                  </NuqsAdapter>
                 </AuthStoreProvider>
               </AnchoredToastProvider>
             </ToastProvider>

@@ -1,8 +1,8 @@
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
-import { protectedProcedure } from "../trpc"
-import { deletePng } from "../utils/storage-client"
+import { protectedProcedure } from "../../trpc"
+import { deletePng } from "../../utils/storage-client"
 
 export const imagesDeleteHandler = protectedProcedure
   .input(z.object({ id: z.string() }))
