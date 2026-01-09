@@ -10,6 +10,7 @@ import { selectedImageIndexAtom } from "@/atoms/canvas-atom"
 import { useTRPC } from "@/trpc/react"
 import { toCdnUrl } from "@/utils/to-cdn-url"
 import { CanvasFooter } from "./canvas-footer"
+import { CanvasLoading } from "./canvas-loading"
 import { CanvasSidebar } from "./canvas-sidebar"
 
 export const Canvas = () => {
@@ -20,17 +21,20 @@ export const Canvas = () => {
 
   const handleDownload = async () => {
     if (!selectedImage?.imageUrl) return
+
     const response = await fetch(toCdnUrl(selectedImage.imageUrl))
     const blob = await response.blob()
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
+
     a.href = url
     a.download = `${selectedImage.id}.png`
     a.click()
+
     URL.revokeObjectURL(url)
   }
 
-  if (isLoading || !selectedImage || !selectedImage.imageUrl) return
+  if (isLoading) return <CanvasLoading />
 
   return (
     <div className="flex size-full max-w-6xl justify-center place-self-center p-16">
