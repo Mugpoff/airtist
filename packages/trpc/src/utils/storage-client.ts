@@ -13,7 +13,6 @@ const s3 = new S3Client({
     secretAccessKey: env.MINIO_SECRET_KEY,
   },
   forcePathStyle: true,
-  tls: false,
 })
 
 const ALLOWED_IMAGE_MIME_TYPES = new Set([
