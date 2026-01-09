@@ -20,6 +20,7 @@ export const CanvasSidebar = () => {
       render={<aside className="w-80 [&>div]:space-y-2" />}
       className="space-y-4"
       scrollFade
+      scrollbarGutter
     >
       {data.items.map((image, index) => (
         <button

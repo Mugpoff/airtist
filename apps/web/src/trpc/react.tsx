@@ -7,12 +7,11 @@ import {
   createTRPCClient,
   httpBatchStreamLink,
   httpLink,
+  httpSubscriptionLink,
   isNonJsonSerializable,
   loggerLink,
   splitLink,
-  unstable_httpSubscriptionLink,
 } from "@trpc/client"
-import { createTRPCReact } from "@trpc/react-query"
 import { createTRPCContext } from "@trpc/tanstack-react-query"
 import { useState } from "react"
 import SuperJSON from "superjson"
@@ -32,7 +31,6 @@ const getQueryClient = () => {
   return clientQueryClientSingleton
 }
 
-export const trpc = createTRPCReact<AppRouter>()
 export const { useTRPC, TRPCProvider } = createTRPCContext<AppRouter>()
 
 export function TRPCReactProvider(props: { children: React.ReactNode }) {
@@ -48,7 +46,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
         }),
         splitLink({
           condition: (op) => op.type === "subscription",
-          true: unstable_httpSubscriptionLink({
+          true: httpSubscriptionLink({
             url: `${getBaseUrl()}/api/trpc`,
             transformer: SuperJSON,
           }),
@@ -83,11 +81,9 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-          {props.children}
-        </TRPCProvider>
-      </trpc.Provider>
+      <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
+        {props.children}
+      </TRPCProvider>
     </QueryClientProvider>
   )
 }
