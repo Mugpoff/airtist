@@ -1,5 +1,11 @@
 "use client"
 
+import { pageIndexAtom } from "@/atoms/canvas-atom"
+import { settingsAtom } from "@/atoms/settings-atom"
+import { LanguageSelector } from "@/components/ui/language-selector"
+import { SignOutButton } from "@/components/ui/sign-out-button"
+import { ThemeSwitch } from "@/components/ui/theme-switch"
+import { useTRPC } from "@/trpc/react"
 import { LightRays } from "@repo/ui/backgrounds/light-rays"
 import { toastManager } from "@repo/ui/base/toast"
 import {
@@ -11,15 +17,11 @@ import {
 } from "@repo/ui/base/tooltip"
 import { ShimmerButton } from "@repo/ui/buttons/shimmer-button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useSubscription } from "@trpc/tanstack-react-query"
 import { useAtomValue, useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import type React from "react"
-import { pageIndexAtom } from "@/atoms/canvas-atom"
-import { settingsAtom } from "@/atoms/settings-atom"
-import { LanguageSelector } from "@/components/ui/language-selector"
-import { SignOutButton } from "@/components/ui/sign-out-button"
-import { ThemeSwitch } from "@/components/ui/theme-switch"
-import { useTRPC } from "@/trpc/react"
+import { useState } from "react"
 import { GenerateDropzone } from "./generate-dropzone"
 import { GenerateSettings } from "./settings/generate-settings"
 
@@ -29,11 +31,37 @@ export const GenerateContent = () => {
   const t = useTranslations("home")
   const trpc = useTRPC()
   const queryClient = useQueryClient()
-  const { mutate, isPending } = useMutation(
-    trpc.images.generateStudio.mutationOptions(),
-  )
+  const { mutate } = useMutation(trpc.images.generateStudio.mutationOptions())
   const settings = useAtomValue(settingsAtom)
   const setPageIndex = useSetAtom(pageIndexAtom)
+  const [activeJobId, setActiveJobId] = useState<string | null>(null)
+  const { status } = useSubscription(
+    trpc.onGenerateProgress.subscriptionOptions(
+      { jobId: activeJobId ?? "" },
+      {
+        enabled: !!activeJobId,
+        onData: async (data) => {
+          console.log(data)
+
+          if (data.step === "completed") {
+            await queryClient.invalidateQueries({
+              queryKey: trpc.images.list.queryKey(),
+            })
+
+            setPageIndex(1)
+          }
+
+          if (data.step === "failed") {
+            toastManager.add({
+              title: "Erreur",
+              description: data.error,
+              type: "error",
+            })
+          }
+        },
+      },
+    ),
+  )
 
   const handleClick = () => {
     const formData = new FormData()
@@ -52,12 +80,8 @@ export const GenerateContent = () => {
     }
 
     mutate(formData, {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: trpc.images.list.queryKey(),
-        })
-
-        setPageIndex(1)
+      onSuccess: (data) => {
+        setActiveJobId(data.jobId)
       },
       onError: (error) => {
         toastManager.add({
@@ -87,14 +111,14 @@ export const GenerateContent = () => {
       </div>
       <div className="flex size-full max-w-6xl flex-col justify-center gap-8 place-self-center p-16">
         <GenerateSettings />
-        <GenerateDropzone isGenerating={isPending} />
+        <GenerateDropzone isGenerating={status === "pending"} />
         <div className="grid grid-cols-3 items-center">
           <div />
           <div className="flex justify-center">
             <ShimmerButton
               className="px-12"
               onClick={handleClick}
-              disabled={settings.files.length === 0 || isPending}
+              disabled={settings.files.length === 0 || status === "pending"}
             >
               Generate
             </ShimmerButton>
