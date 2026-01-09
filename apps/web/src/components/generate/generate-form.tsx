@@ -39,7 +39,6 @@ const ethnicities = [
 
 type Props = {
   modelsInfo: ModelsInfoShape
-  isAuthed: boolean
   onGenerate: (fd: FormData) => void
 }
 
@@ -67,7 +66,7 @@ function DriveSection({
   return <DrivePicker onImported={onImported} />
 }
 
-export function GenerateForm({ modelsInfo, isAuthed, onGenerate }: Props) {
+export function GenerateForm({ modelsInfo, onGenerate }: Props) {
   const isGenerating = useAtomValue(isGeneratingAtom)
   const form = useGenerateForm(modelsInfo)
 
@@ -263,29 +262,23 @@ export function GenerateForm({ modelsInfo, isAuthed, onGenerate }: Props) {
             </Button>
           </div>
 
-          {isAuthed ? (
-            <Suspense
-              fallback={
-                <div className="rounded-md border p-4 text-muted-foreground text-sm">
-                  Chargement Google Drive...
-                </div>
-              }
-            >
-              <DriveSection
-                disabled={isGenerating}
-                onImported={(urls) => {
-                  form.setImageUrls((prev) => {
-                    const set = new Set([...prev, ...urls])
-                    return Array.from(set)
-                  })
-                }}
-              />
-            </Suspense>
-          ) : (
-            <div className="rounded-md border p-4 text-muted-foreground text-sm">
-              Connecte-toi pour accéder à Google Drive.
-            </div>
-          )}
+          <Suspense
+            fallback={
+              <div className="rounded-md border p-4 text-muted-foreground text-sm">
+                Chargement Google Drive...
+              </div>
+            }
+          >
+            <DriveSection
+              disabled={isGenerating}
+              onImported={(urls) => {
+                form.setImageUrls((prev) => {
+                  const set = new Set([...prev, ...urls])
+                  return Array.from(set)
+                })
+              }}
+            />
+          </Suspense>
         </div>
       </CardContent>
 

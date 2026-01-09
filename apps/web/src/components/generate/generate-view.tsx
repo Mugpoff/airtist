@@ -13,7 +13,7 @@ import { trpc, useTRPC } from "@/trpc/react"
 import { GenerateForm } from "./generate-form"
 import { GenerateGallery } from "./generate-gallery"
 
-export function GenerateView({ isAuthed }: { isAuthed: boolean }) {
+export function GenerateView() {
   const t = useTRPC()
   const queryClient = useQueryClient()
   const setIsGenerating = useSetAtom(isGeneratingAtom)
@@ -79,7 +79,6 @@ export function GenerateView({ isAuthed }: { isAuthed: boolean }) {
         <GenerateForm
           // biome-ignore lint/suspicious/noExplicitAny: need to check models procedure
           modelsInfo={modelsInfo as any}
-          isAuthed={isAuthed}
           onGenerate={(fd) => {
             setIsGenerating(true)
             generateMutation.mutate(fd)
