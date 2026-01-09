@@ -35,20 +35,20 @@ export const GenerateContent = () => {
   const settings = useAtomValue(settingsAtom)
   const setPageIndex = useSetAtom(pageIndexAtom)
   const [activeJobId, setActiveJobId] = useState<string | null>(null)
-  const { status } = useSubscription(
+  const { status, reset } = useSubscription(
     trpc.onGenerateProgress.subscriptionOptions(
       { jobId: activeJobId ?? "" },
       {
         enabled: !!activeJobId,
         onData: async (data) => {
-          console.log(data)
-
           if (data.step === "completed") {
             await queryClient.invalidateQueries({
               queryKey: trpc.images.list.queryKey(),
             })
 
+            reset()
             setPageIndex(1)
+            setActiveJobId(null)
           }
 
           if (data.step === "failed") {
@@ -69,7 +69,7 @@ export const GenerateContent = () => {
     formData.set("prompt", settings.prompt)
     formData.set("category", settings.preset)
     formData.set("background", settings.background)
-    formData.set("ethnicity", settings.ethnicity.toUpperCase())
+    formData.set("ethnicity", settings.ethnicity)
     formData.set("age", settings.age.toString())
     formData.set("model", "google/gemini-3-pro-image-preview")
     formData.set("height", "170")
