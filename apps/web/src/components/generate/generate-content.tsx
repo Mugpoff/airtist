@@ -21,7 +21,7 @@ import { SignOutButton } from "@/components/ui/sign-out-button"
 import { ThemeSwitch } from "@/components/ui/theme-switch"
 import { useTRPC } from "@/trpc/react"
 import { GenerateDropzone } from "./generate-dropzone"
-import { GenerateSettings } from "./generate-settings"
+import { GenerateSettings } from "./settings/generate-settings"
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>()
 
@@ -86,9 +86,10 @@ export const GenerateContent = () => {
         />
       </div>
       <div className="flex size-full max-w-6xl flex-col justify-center gap-8 place-self-center p-16">
+        <GenerateSettings />
         <GenerateDropzone isGenerating={isPending} />
         <div className="grid grid-cols-3 items-center">
-          <GenerateSettings />
+          <div />
           <div className="flex justify-center">
             <ShimmerButton
               className="px-12"

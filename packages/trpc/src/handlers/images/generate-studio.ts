@@ -11,7 +11,6 @@ import { pushStatus } from "../../utils/redis-stream"
 import { uploadImage } from "../../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
-  STUDIO_AGE_RANGES,
   STUDIO_CATEGORIES,
   StudioBackgroundSchema,
   StudioCategorySchema,

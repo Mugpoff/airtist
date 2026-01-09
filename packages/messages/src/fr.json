@@ -4,33 +4,45 @@
     "password": "Mot de passe",
     "english": "English",
     "french": "Français",
-    "weight": "Poids",
+    "weight": {
+      "title": "Poids",
+      "description": "Définissez le poids corporel du modèle généré en kilogrammes. Cela affecte la forme et les proportions du corps."
+    },
     "ethnicity": {
       "title": "Ethnicité",
-      "white": "Blanc",
-      "black": "Noir",
-      "asian": "Asiatique",
-      "latino": "Latino",
-      "mixed": "Mixte"
+      "description": "Sélectionnez l'ethnicité du modèle généré. Cela affecte le teint, les traits du visage et l'apparence générale.",
+      "WHITE": "Blanc",
+      "BLACK": "Noir",
+      "ASIAN": "Asiatique",
+      "LATINO": "Latino",
+      "MIXED": "Mixte"
     },
     "preset": {
       "title": "Préréglage",
-      "manChild": "Homme Enfant",
-      "manPreteen": "Homme Préadolescent",
-      "manTeen": "Homme Adolescent",
-      "manAdult": "Homme Adulte",
-      "womanChild": "Femme Enfant",
-      "womanPreteen": "Femme Préadolescente",
-      "womanTeen": "Femme Adolescente",
-      "womanAdult": "Femme Adulte"
+      "description": "Choisissez le genre et la catégorie d'âge du modèle généré. Cela détermine le type de corps et l'apparence de la personne dans l'image finale.",
+      "MAN_CHILD": "Homme Enfant",
+      "MAN_PRETEEN": "Homme Préadolescent",
+      "MAN_TEEN": "Homme Adolescent",
+      "MAN_ADULT": "Homme Adulte",
+      "WOMAN_CHILD": "Femme Enfant",
+      "WOMAN_PRETEEN": "Femme Préadolescente",
+      "WOMAN_TEEN": "Femme Adolescente",
+      "WOMAN_ADULT": "Femme Adulte"
     },
     "background": {
       "title": "Arrière-plan",
-      "studioWhite": "Studio Blanc",
-      "studioGrey": "Studio Gris",
-      "studioDarkGrey": "Studio Gris Foncé",
-      "studioBlack": "Studio Noir",
-      "studioBeige": "Studio Beige"
+      "description": "Choisissez la couleur de fond du studio pour l'image générée. Différents arrière-plans fonctionnent mieux avec différentes couleurs de vêtements.",
+      "STUDIO_WHITE": "Studio Blanc",
+      "STUDIO_GREY": "Studio Gris",
+      "STUDIO_DARK_GREY": "Studio Gris Foncé",
+      "STUDIO_BLACK": "Studio Noir",
+      "STUDIO_BEIGE": "Studio Beige"
+    },
+    "age": "Âge",
+    "prompt": {
+      "title": "Prompt",
+      "description": "Décrivez des détails supplémentaires pour l'image générée. Cela aide l'IA à créer des résultats plus spécifiques.",
+      "placeholder": "ex. Mannequin de mode en studio portant la tenue, éclairage naturel..."
     },
     "cancel": "Annuler",
     "save": "Enregistrer",
@@ -88,7 +100,7 @@
     "generate": {
       "title": "Paramètres de génération",
       "description": "Faites des modifications aux paramètres de génération ici. Cliquez sur enregistrer lorsque vous avez terminé.",
-      "settings": "{preset, select, MAN_CHILD {Homme Enfant} MAN_PRETEEN {Homme Préadolescent} MAN_TEEN {Homme Adolescent} MAN_ADULT {Homme Adulte} WOMAN_CHILD {Femme Enfant} WOMAN_PRETEEN {Femme Préadolescente} WOMAN_TEEN {Femme Adolescente} other {Femme Adulte}}, {ethnicity, select, white {Blanc} black {Noir} asian {Asiatique} latino {Latino} other {Mixte}}, {weight} kg, {background, select, STUDIO_WHITE {Studio Blanc} STUDIO_GREY {Studio Gris} STUDIO_DARK_GREY {Studio Gris Foncé} STUDIO_BLACK {Studio Noir} other {Studio Beige}}",
+      "settings": "{preset, select, MAN_CHILD {Homme Enfant} MAN_PRETEEN {Homme Préadolescent} MAN_TEEN {Homme Adolescent} MAN_ADULT {Homme Adulte} WOMAN_CHILD {Femme Enfant} WOMAN_PRETEEN {Femme Préadolescente} WOMAN_TEEN {Femme Adolescente} other {Femme Adulte}}, {ethnicity, select, WHITE {Blanc} BLACK {Noir} ASIAN {Asiatique} LATINO {Latino} other {Mixte}}, {weight} kg, {background, select, STUDIO_WHITE {Studio Blanc} STUDIO_GREY {Studio Gris} STUDIO_DARK_GREY {Studio Gris Foncé} STUDIO_BLACK {Studio Noir} other {Studio Beige}}",
       "error": "Une erreur est survenue lors de la génération. Veuillez réessayer ou contacter nos équipes."
     }
   },
