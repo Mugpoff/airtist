@@ -9,6 +9,7 @@ import Image from "next/image"
 import { selectedImageIndexAtom } from "@/atoms/canvas-atom"
 import { useTRPC } from "@/trpc/react"
 import { toCdnUrl } from "@/utils/to-cdn-url"
+import { CanvasEmpty } from "./canvas-empty"
 import { CanvasFooter } from "./canvas-footer"
 import { CanvasLoading } from "./canvas-loading"
 import { CanvasSidebar } from "./canvas-sidebar"
@@ -35,6 +36,7 @@ export const Canvas = () => {
   }
 
   if (isLoading) return <CanvasLoading />
+  if (!selectedImage || !selectedImage.imageUrl) return <CanvasEmpty />
 
   return (
     <div className="flex size-full max-w-6xl justify-center place-self-center p-16">
