@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/base/select"
-import { useAtom } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { useTranslations } from "next-intl"
 import { settingsAtom } from "@/atoms/settings-atom"
 
@@ -25,47 +25,53 @@ type Props = {
 
 export const GenerateSettingsEthnicity = ({ handle }: Props) => {
   const t = useTranslations("global.ethnicity")
-  const [settings, setSettings] = useAtom(settingsAtom)
-  const items = config.generationSettings.ethnicity.values.map((value) => ({
-    label: t(`${value}`),
-    value,
-  }))
+  const settings = useAtomValue(settingsAtom)
 
   return (
     <PopoverTrigger
       render={<Button variant="outline" />}
       handle={handle}
-      payload={() => (
-        <>
-          <div>
-            <PopoverTitle>{t("title")}</PopoverTitle>
-            <PopoverDescription>{t("description")}</PopoverDescription>
-          </div>
-          <div>
-            <Select
-              value={settings.ethnicity}
-              onValueChange={(value) => {
-                if (value)
-                  setSettings((prev) => ({ ...prev, ethnicity: value }))
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue>{t(`${settings.ethnicity}`)}</SelectValue>
-              </SelectTrigger>
-              <SelectPopup>
-                {items.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
-          </div>
-        </>
-      )}
+      payload={Payload}
     >
       <HugeiconsIcon icon={PaintBoardIcon} />
       {t(settings.ethnicity)}
     </PopoverTrigger>
+  )
+}
+
+const Payload = () => {
+  const t = useTranslations("global.ethnicity")
+  const [settings, setSettings] = useAtom(settingsAtom)
+  const items = config.generationSettings.ethnicity.values.map((value) => ({
+    label: t(value),
+    value,
+  }))
+
+  return (
+    <>
+      <div>
+        <PopoverTitle>{t("title")}</PopoverTitle>
+        <PopoverDescription>{t("description")}</PopoverDescription>
+      </div>
+      <div>
+        <Select
+          value={settings.ethnicity}
+          onValueChange={(value) => {
+            if (value) setSettings((prev) => ({ ...prev, ethnicity: value }))
+          }}
+        >
+          <SelectTrigger>
+            <SelectValue>{t(settings.ethnicity)}</SelectValue>
+          </SelectTrigger>
+          <SelectPopup>
+            {items.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectPopup>
+        </Select>
+      </div>
+    </>
   )
 }
