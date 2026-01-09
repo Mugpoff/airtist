@@ -1,6 +1,6 @@
 export const config = {
   general: {
-    name: "AI Picture",
+    name: "Airtist",
     description: "Generate stunning AI-powered images with ease",
     url: "https://aipicture.app",
   },
@@ -11,7 +11,7 @@ export const config = {
       "artificial intelligence",
       "pictures",
     ] as string[],
-    author: "AI Picture Team",
+    author: "Airtist Team",
   },
   env: {
     isSeed: !!process.env.SEED,

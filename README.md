@@ -1,4 +1,4 @@
-# AI Picture
+# Airtist
 
 AI-powered image generation and management platform.
 

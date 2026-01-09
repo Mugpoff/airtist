@@ -78,7 +78,7 @@
       "UNKNOWN": "Une erreur inattendue s'est produite. Veuillez réessayer."
     },
     "signIn": {
-      "title": "Bienvenue sur AI Picture",
+      "title": "Bienvenue sur Airtist",
       "submitButton": "Connexion",
       "submitting": "Connexion en cours...",
       "privacy": "En cliquant sur continuer, vous acceptez nos <termsOfService>Conditions d'utilisation</termsOfService> et notre <privacyPolicy>Politique de confidentialité</privacyPolicy>."

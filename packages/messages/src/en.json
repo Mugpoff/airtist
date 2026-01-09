@@ -78,7 +78,7 @@
       "UNKNOWN": "An unexpected error occurred. Please try again."
     },
     "signIn": {
-      "title": "Welcome to AI Picture",
+      "title": "Welcome to Airtist",
       "submitButton": "Login",
       "submitting": "Signing in...",
       "privacy": "By clicking continue, you agree to our <termsOfService>Terms of Service</termsOfService> and <privacyPolicy>Privacy Policy</privacyPolicy>."

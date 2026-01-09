@@ -1,4 +1,4 @@
-# AI Picture Web
+# web
 
 Next.js 16 web application with React 19.
 
