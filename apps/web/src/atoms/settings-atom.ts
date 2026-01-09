@@ -17,6 +17,6 @@ export const settingsAtom = atom<Settings>({
   weight: config.generationSettings.weight.default,
   ethnicity: config.generationSettings.ethnicity.default,
   background: config.generationSettings.background.default,
-  prompt: "",
+  prompt: "Studio fashion model wearing the outfit",
   files: [],
 })

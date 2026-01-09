@@ -43,7 +43,7 @@ export const GenerateSettingsPrompt = ({ handle }: Props) => {
       )}
     >
       <HugeiconsIcon icon={TextAlignLeftIcon} />
-      {settings.prompt || t("title")}
+      {t("title")}
     </PopoverTrigger>
   )
 }

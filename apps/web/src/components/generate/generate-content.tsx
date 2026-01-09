@@ -38,13 +38,13 @@ export const GenerateContent = () => {
   const handleClick = () => {
     const formData = new FormData()
 
-    formData.set("prompt", "Studio fashion model wearing the outfit")
-    formData.set("model", "google/gemini-3-pro-image-preview")
-    formData.set("category", "MAN_ADULT")
+    formData.set("prompt", settings.prompt)
+    formData.set("category", settings.preset)
     formData.set("background", settings.background)
     formData.set("ethnicity", settings.ethnicity.toUpperCase())
+    formData.set("age", settings.age.toString())
+    formData.set("model", "google/gemini-3-pro-image-preview")
     formData.set("height", "170")
-    formData.set("age", "25")
     formData.set("aspectRatio", "1:1")
 
     for (const file of settings.files) {
