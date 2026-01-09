@@ -57,6 +57,9 @@ export const GenerateContent = () => {
               description: data.error,
               type: "error",
             })
+
+            reset()
+            setActiveJobId(null)
           }
         },
       },
