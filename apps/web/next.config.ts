@@ -4,6 +4,12 @@ import { env } from "./src/env"
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
+
+  // TypeScript is already ran during CI, so we can ignore build errors.
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   async rewrites() {
     // Allow rendering images stored in local MinIO during development.
     return [

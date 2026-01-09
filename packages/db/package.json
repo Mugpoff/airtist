@@ -19,7 +19,7 @@
     "@repo/config": "*",
     "@t3-oss/env-core": "^0.13.10",
     "prisma-zod-generator": "^2.1.2",
-    "zod": "^4.2.1"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
