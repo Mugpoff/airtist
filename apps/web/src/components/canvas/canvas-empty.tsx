@@ -1,10 +1,10 @@
+import { pageIndexAtom } from "@/atoms/canvas-atom"
 import { ArrowUp02Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Button } from "@repo/ui/base/button"
 import { Void } from "@repo/ui/illustrations/void"
 import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
-import { pageIndexAtom } from "@/atoms/canvas-atom"
 
 export const CanvasEmpty = () => {
   const t = useTranslations("home.canvas.empty")
@@ -16,7 +16,11 @@ export const CanvasEmpty = () => {
       <div className="flex flex-col items-center gap-2">
         <p>{t("title")}</p>
         <div className="flex items-center gap-2">
-          <Button onClick={() => setPageIndex(0)} variant="ghost" className="">
+          <Button
+            onClick={() => setPageIndex(0)}
+            variant="ghost"
+            className="hover:[&_svg]:-translate-y-0.5"
+          >
             {t("button")}
             <HugeiconsIcon
               icon={ArrowUp02Icon}
