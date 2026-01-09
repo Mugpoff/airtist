@@ -1,5 +1,5 @@
 import { cn } from "../../lib/utils"
-import { LoaderCircleIcon } from "../icons/lodader-circle"
+import { LoaderCircleIcon } from "../icons/loader-circle"
 
 function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (
