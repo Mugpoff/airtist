@@ -1,13 +1,11 @@
 import { on } from "node:events"
-import { cacheClient } from "@repo/cache"
+import { rawCacheClient } from "@repo/cache"
 import { z } from "zod"
 import { pingHandler } from "./handlers/ping-handler"
 import { driveRouter } from "./routers/drive"
 import { imagesRouter } from "./routers/images"
 import { createTRPCRouter, protectedProcedure } from "./trpc"
 import { getJobHistory } from "./utils/redis-stream"
-
-const getRedis = () => (cacheClient as any).getClient()
 
 export const appRouter = createTRPCRouter({
   ping: pingHandler,
@@ -23,7 +21,7 @@ export const appRouter = createTRPCRouter({
         yield event
       }
 
-      const sub = getRedis().duplicate()
+      const sub = rawCacheClient().duplicate()
       await sub.subscribe(`job:${jobId}:events`)
 
       try {

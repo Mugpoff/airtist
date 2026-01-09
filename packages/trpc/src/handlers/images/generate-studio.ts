@@ -201,8 +201,11 @@ export const imagesGenerateStudioHandler = protectedProcedure
         })
 
         await pushStatus(jobId, { step: "completed", imageUrl: publicUrl })
-      } catch (error: any) {
-        await pushStatus(jobId, { step: "failed", error: error.message })
+      } catch (error) {
+        await pushStatus(jobId, {
+          step: "failed",
+          error: (error as Error).message,
+        })
       }
     })()
 

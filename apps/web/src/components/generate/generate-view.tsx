@@ -29,7 +29,7 @@ export function GenerateView({ isAuthed }: { isAuthed: boolean }) {
     { jobId: activeJobId ?? "" },
     {
       enabled: !!activeJobId,
-      onData: (data: any) => {
+      onData: (data) => {
         if (data.step === "completed") {
           toastManager.add({ title: "Génération réussie !", type: "success" })
           queryClient.invalidateQueries({ queryKey: t.images.list.queryKey() })
@@ -51,7 +51,7 @@ export function GenerateView({ isAuthed }: { isAuthed: boolean }) {
 
   const generateMutation = useMutation({
     ...t.images.generateStudio.mutationOptions(),
-    onSuccess: (data: any) => {
+    onSuccess: (data) => {
       if (data.jobId) {
         setActiveJobId(data.jobId)
       } else {
@@ -63,7 +63,7 @@ export function GenerateView({ isAuthed }: { isAuthed: boolean }) {
         setIsGenerating(false)
       }
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toastManager.add({
         title: "Erreur",
         description: error.message,
@@ -77,6 +77,7 @@ export function GenerateView({ isAuthed }: { isAuthed: boolean }) {
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <div className="space-y-8">
         <GenerateForm
+          // biome-ignore lint/suspicious/noExplicitAny: need to check models procedure
           modelsInfo={modelsInfo as any}
           isAuthed={isAuthed}
           onGenerate={(fd) => {
