@@ -1,10 +1,10 @@
-import { pageIndexAtom } from "@/atoms/canvas-atom"
 import { ArrowUp02Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Button } from "@repo/ui/base/button"
 import { Void } from "@repo/ui/illustrations/void"
 import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
+import { pageIndexAtom } from "@/atoms/canvas-atom"
 
 export const CanvasEmpty = () => {
   const t = useTranslations("home.canvas.empty")
