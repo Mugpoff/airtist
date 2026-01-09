@@ -1,5 +1,11 @@
 "use client"
 
+import { pageIndexAtom } from "@/atoms/canvas-atom"
+import { settingsAtom } from "@/atoms/settings-atom"
+import { LanguageSelector } from "@/components/ui/language-selector"
+import { SignOutButton } from "@/components/ui/sign-out-button"
+import { ThemeSwitch } from "@/components/ui/theme-switch"
+import { useTRPC } from "@/trpc/react"
 import { LightRays } from "@repo/ui/backgrounds/light-rays"
 import { toastManager } from "@repo/ui/base/toast"
 import {
@@ -16,12 +22,6 @@ import { useAtomValue, useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import type React from "react"
 import { useState } from "react"
-import { pageIndexAtom } from "@/atoms/canvas-atom"
-import { settingsAtom } from "@/atoms/settings-atom"
-import { LanguageSelector } from "@/components/ui/language-selector"
-import { SignOutButton } from "@/components/ui/sign-out-button"
-import { ThemeSwitch } from "@/components/ui/theme-switch"
-import { useTRPC } from "@/trpc/react"
 import { GenerateDropzone } from "./generate-dropzone"
 import { GenerateSettings } from "./settings/generate-settings"
 
@@ -57,6 +57,9 @@ export const GenerateContent = () => {
               description: data.error,
               type: "error",
             })
+
+            reset()
+            setActiveJobId(null)
           }
         },
       },
