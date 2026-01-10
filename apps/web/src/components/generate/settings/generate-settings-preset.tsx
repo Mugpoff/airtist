@@ -1,3 +1,4 @@
+import { settingsAtom } from "@/atoms/settings-atom"
 import {
   Baby01Icon,
   ChildIcon,
@@ -30,7 +31,6 @@ import {
 } from "@repo/ui/base/select"
 import { useAtom, useAtomValue } from "jotai"
 import { useTranslations } from "next-intl"
-import { settingsAtom } from "@/atoms/settings-atom"
 
 type Props = {
   handle: ReturnType<typeof PopoverCreateHandle<React.ComponentType>>
@@ -71,7 +71,7 @@ const Payload = () => {
   const showAge =
     settings.preset === "MAN_ADULT" || settings.preset === "WOMAN_ADULT"
 
-  return () => (
+  return (
     <>
       <div>
         <PopoverTitle>{t("preset.title")}</PopoverTitle>
