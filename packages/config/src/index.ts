@@ -57,7 +57,7 @@ export const config = {
     },
     ethnicity: {
       default: "WHITE",
-      values: ["WHITE", "BLACK", "ASIAN", "LATINO", "MIXED"],
+      values: ["WHITE", "BLACK", "ASIAN", "LATINO", "ARAB", "MIXED"],
     },
     background: {
       default: "STUDIO_WHITE",

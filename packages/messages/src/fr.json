@@ -15,6 +15,7 @@
       "BLACK": "Noir",
       "ASIAN": "Asiatique",
       "LATINO": "Latino",
+      "ARAB": "Arabe",
       "MIXED": "Mixte"
     },
     "preset": {
