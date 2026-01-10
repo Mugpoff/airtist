@@ -53,3 +53,7 @@ export const BACKGROUND_PROMPTS: Record<StudioBackground, string> = {
   STUDIO_BLACK: "pitch black studio background, dramatic lighting",
   STUDIO_BEIGE: "soft warm beige studio wall background",
 }
+
+export const EthnicitySchema = z.enum(
+  config.generationSettings.ethnicity.values,
+)

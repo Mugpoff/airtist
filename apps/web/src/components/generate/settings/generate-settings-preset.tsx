@@ -71,7 +71,7 @@ const Payload = () => {
   const showAge =
     settings.preset === "MAN_ADULT" || settings.preset === "WOMAN_ADULT"
 
-  return () => (
+  return (
     <>
       <div>
         <PopoverTitle>{t("preset.title")}</PopoverTitle>

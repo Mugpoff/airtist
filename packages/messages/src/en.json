@@ -15,6 +15,7 @@
       "BLACK": "Black",
       "ASIAN": "Asian",
       "LATINO": "Latino",
+      "ARAB": "Arab",
       "MIXED": "Mixed"
     },
     "preset": {
@@ -90,7 +91,7 @@
       "description": "Drag and drop or click to upload",
       "accepts": "Accepts PNG, JPEG, WebP or ZIP.",
       "generating": "Generating...",
-      "generatingDescription": "This may take a while."
+      "generatingDescription": "Your generation will be ready in a few seconds!"
     },
     "tooltips": {
       "theme": "Toggle theme",

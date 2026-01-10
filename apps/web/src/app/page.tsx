@@ -1,115 +1,50 @@
 "use client"
 
 import { useAtom } from "jotai"
+import { useInView } from "motion/react"
 import { useCallback, useEffect, useRef } from "react"
-import { pageIndexAtom } from "@/atoms/canvas-atom"
+import { pageIndexAtom, pageIndexShadowAtom } from "@/atoms/canvas-atom"
 import { Canvas } from "@/components/canvas/canvas"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
 
-const SCROLL_THRESHOLD = 100
-const SCROLL_COOLDOWN = 1400
-
 export default function HomePage() {
   const [pageIndex, setPageIndex] = useAtom(pageIndexAtom)
+  const [pageIndexShadow, setPageIndexShadow] = useAtom(pageIndexShadowAtom)
   const containerRef = useRef<HTMLDivElement>(null)
-  const accumulatedDelta = useRef(0)
-  const isScrolling = useRef(false)
-  const lastScrollTime = useRef(0)
+  const settingsRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLDivElement>(null)
+  const settingsInView = useInView(settingsRef, { amount: 0.7 })
+  const canvasInView = useInView(canvasRef, { amount: 0.7 })
 
-  const goToPage = useCallback((index: number) => {
-    if (index < 0 || index >= 2 || isScrolling.current) return
+  const goToPage = useCallback(
+    (index: number) => {
+      if (index < 0 || index >= 2) return
 
-    isScrolling.current = true
+      containerRef.current?.scrollTo({
+        top: index * window.innerHeight,
+        behavior: "smooth",
+      })
 
-    containerRef.current?.scrollTo({
-      top: index * window.innerHeight,
-      behavior: "smooth",
-    })
-
-    setTimeout(() => {
-      isScrolling.current = false
-      accumulatedDelta.current = 0
-    }, SCROLL_COOLDOWN)
-  }, [])
-
-  const handleWheel = useCallback(
-    (e: WheelEvent) => {
-      const target = e.target instanceof Element ? e.target : null
-      const isInScrollArea = target?.closest(
-        '[data-slot="scroll-area-viewport"][data-has-overflow-y]',
-      )
-
-      if (isInScrollArea) {
-        return
-      }
-
-      // Block all wheel events in other cases
-      e.preventDefault()
-
-      const now = Date.now()
-      if (now - lastScrollTime.current < SCROLL_COOLDOWN || isScrolling.current)
-        return
-
-      accumulatedDelta.current += e.deltaY
-
-      if (Math.abs(accumulatedDelta.current) >= SCROLL_THRESHOLD) {
-        const direction = accumulatedDelta.current > 0 ? 1 : -1
-        const nextPage = pageIndex + direction
-
-        if (nextPage >= 0 && nextPage < 2) {
-          lastScrollTime.current = now
-          setPageIndex(nextPage)
-        }
-        accumulatedDelta.current = 0
-      }
+      setPageIndex(index)
+      setPageIndexShadow(index)
     },
-    [pageIndex, setPageIndex],
+    [setPageIndex, setPageIndexShadow],
   )
-
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "PageDown") {
-        e.preventDefault()
-        goToPage(pageIndex + 1)
-      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-        e.preventDefault()
-        goToPage(pageIndex - 1)
-      }
-    },
-    [pageIndex, goToPage],
-  )
-
-  useEffect(() => {
-    let resetTimeout: ReturnType<typeof setTimeout>
-
-    const handleWheelWithReset = (e: WheelEvent) => {
-      handleWheel(e)
-      clearTimeout(resetTimeout)
-      resetTimeout = setTimeout(() => {
-        accumulatedDelta.current = 0
-      }, 150)
-    }
-
-    window.addEventListener("wheel", handleWheelWithReset, {
-      passive: false,
-    })
-
-    return () => {
-      window.removeEventListener("wheel", handleWheelWithReset)
-      clearTimeout(resetTimeout)
-    }
-  }, [handleWheel])
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown)
-
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [handleKeyDown])
 
   useEffect(() => {
     goToPage(pageIndex)
   }, [pageIndex, goToPage])
+
+  useEffect(() => {
+    if (settingsInView) {
+      setPageIndexShadow(0)
+    }
+
+    if (canvasInView) {
+      setPageIndexShadow(1)
+    }
+  }, [settingsInView, canvasInView, setPageIndexShadow])
 
   return (
     <main
@@ -118,17 +53,22 @@ export default function HomePage() {
     >
       <section
         key="generate"
+        ref={settingsRef}
         className="flex h-screen w-full items-center justify-center"
       >
         <GenerateContent />
       </section>
       <section
         key="canvas"
+        ref={canvasRef}
         className="flex h-screen w-full items-center justify-center"
       >
         <Canvas />
       </section>
-      <PaginationDots selectedIndex={pageIndex} setSelectedIndex={goToPage} />
+      <PaginationDots
+        selectedIndex={pageIndexShadow}
+        setSelectedIndex={goToPage}
+      />
     </main>
   )
 }

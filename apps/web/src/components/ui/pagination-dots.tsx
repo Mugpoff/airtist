@@ -14,7 +14,7 @@ export const PaginationDots = ({ selectedIndex, setSelectedIndex }: Props) => {
           type="button"
           onClick={() => setSelectedIndex(index)}
           className={cn(
-            "h-2.5 w-2.5 rounded-full bg-muted-foreground/30 transition-all duration-300 ease-out hover:scale-110 hover:cursor-pointer hover:bg-muted-foreground/50 data-selected:h-6 data-selected:bg-primary",
+            "size-2.5 rounded-full bg-muted-foreground/30 transition-all duration-300 ease-out hover:scale-110 hover:cursor-pointer hover:bg-muted-foreground/50 data-selected:h-6 data-selected:bg-primary",
           )}
           data-selected={selectedIndex === index || undefined}
           aria-label={`Go to page ${index + 1}`}

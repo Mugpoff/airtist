@@ -11,19 +11,11 @@ import { pushStatus } from "../../utils/redis-stream"
 import { uploadImage } from "../../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
+  EthnicitySchema,
   STUDIO_CATEGORIES,
   StudioBackgroundSchema,
   StudioCategorySchema,
 } from "../../utils/studio-constants"
-
-const EthnicitySchema = z.enum([
-  "ASIAN",
-  "BLACK",
-  "ARAB",
-  "WHITE",
-  "LATINO",
-  "METISSE",
-])
 
 type FormDataValue = string | File
 const parseNumber = (v: FormDataValue | null) =>

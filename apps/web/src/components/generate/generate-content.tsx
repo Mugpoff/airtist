@@ -98,7 +98,7 @@ export const GenerateContent = () => {
   }
 
   return (
-    <div className="relative size-full">
+    <div className="relative flex size-full justify-center">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden not-dark:opacity-0">
         <LightRays
           raysOrigin="top-center"
@@ -112,7 +112,7 @@ export const GenerateContent = () => {
           followMouse
         />
       </div>
-      <div className="flex size-full max-w-6xl flex-col justify-center gap-8 place-self-center p-16">
+      <div className="flex size-full max-w-6xl flex-col justify-center gap-8 p-16">
         <GenerateSettings />
         <GenerateDropzone isGenerating={status === "pending"} />
         <div className="grid grid-cols-3 items-center">

@@ -5,7 +5,7 @@ AI-powered image generation and management platform.
 ## Architecture
 
 ```
-ai-picture/
+airtist/
 ├── apps/
 │   └── web/                 # Next.js 16 web application
 ├── packages/
@@ -52,8 +52,8 @@ ai-picture/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-org/ai-picture.git
-cd ai-picture
+git clone https://github.com/your-org/airtist.git
+cd airtist
 ```
 
 ### 2. Install dependencies
@@ -84,13 +84,13 @@ You'll need to configure the MinIO instance and create the default bucket with t
 
 ```bash
 # Configure the local alias
-source .env && docker exec -it ai-picture-minio-1 mc alias set local $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+source .env && docker exec -it airtist-minio-1 mc alias set local $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
 # Create the bucket
-source .env && docker exec -it ai-picture-minio-1 mc mb -p local/$MINIO_BUCKET
+source .env && docker exec -it airtist-minio-1 mc mb -p local/$MINIO_BUCKET
 
 # Allow public access
-source .env && docker exec -it ai-picture-minio-1 mc anonymous set download local/$MINIO_BUCKET
+source .env && docker exec -it airtist-minio-1 mc anonymous set download local/$MINIO_BUCKET
 ```
 
 ### 6. Execute database migrations
