@@ -1,12 +1,12 @@
 "use client"
 
+import { useAtom } from "jotai"
+import { useInView } from "motion/react"
+import { useCallback, useEffect, useRef } from "react"
 import { pageIndexAtom, pageIndexShadowAtom } from "@/atoms/canvas-atom"
 import { Canvas } from "@/components/canvas/canvas"
 import { GenerateContent } from "@/components/generate/generate-content"
 import { PaginationDots } from "@/components/ui/pagination-dots"
-import { useAtom } from "jotai"
-import { useInView } from "motion/react"
-import { useCallback, useEffect, useRef } from "react"
 
 export default function HomePage() {
   const [pageIndex, setPageIndex] = useAtom(pageIndexAtom)
