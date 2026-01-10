@@ -90,7 +90,7 @@
       "description": "Glissez-déposez ou cliquez pour téléverser",
       "accepts": "Accepte PNG, JPEG, WebP ou ZIP.",
       "generating": "Génération en cours...",
-      "generatingDescription": "Cela peut prendre un moment."
+      "generatingDescription": "Votre génération sera prête dans quelques secondes !"
     },
     "tooltips": {
       "theme": "Changer le thème",
