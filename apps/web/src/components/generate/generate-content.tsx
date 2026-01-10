@@ -112,7 +112,7 @@ export const GenerateContent = () => {
           followMouse
         />
       </div>
-      <div className="flex size-full max-w-6xl flex-col justify-center gap-8 place-self-center p-16">
+      <div className="flex size-full max-w-6xl flex-col justify-center gap-8 p-16">
         <GenerateSettings />
         <GenerateDropzone isGenerating={status === "pending"} />
         <div className="grid grid-cols-3 items-center">
