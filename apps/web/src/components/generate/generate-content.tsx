@@ -98,7 +98,7 @@ export const GenerateContent = () => {
   }
 
   return (
-    <div className="relative size-full">
+    <div className="relative flex size-full justify-center">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden not-dark:opacity-0">
         <LightRays
           raysOrigin="top-center"
