@@ -36,6 +36,7 @@ function PopoverPopup({
         data-slot="popover-positioner"
         side={side}
         sideOffset={sideOffset}
+        disableAnchorTracking
       >
         <PopoverPrimitive.Popup
           className={cn(
