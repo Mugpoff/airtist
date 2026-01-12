@@ -6,12 +6,10 @@ import {
   createDriveClientForConnection,
   getDefaultDriveConnection,
 } from "../../utils/drive-client"
-import { uploadImage } from "../../utils/storage-client"
+import { sanitizeFileName, uploadImage } from "../../utils/storage-client"
 
 const sha256Hex = (buf: Buffer) =>
   createHash("sha256").update(buf).digest("hex")
-
-const normalizeName = (name: string) => name.replaceAll(" ", "_")
 
 export const driveImportImagesHandler = protectedProcedure
   .input(
@@ -61,7 +59,7 @@ export const driveImportImagesHandler = protectedProcedure
 
         const buf = Buffer.from(res.data as ArrayBuffer)
         const digest = sha256Hex(buf)
-        const objectKey = `uploads/drive/${crypto.randomUUID()}-${normalizeName(m.name)}`
+        const objectKey = `uploads/drive/${crypto.randomUUID()}-${sanitizeFileName(m.name)}`
         const url = await uploadImage(objectKey, buf, m.mimeType)
 
         return {
