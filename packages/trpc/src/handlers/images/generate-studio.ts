@@ -8,7 +8,7 @@ import { generateStudioHash, type StudioHashInput } from "../../utils/hash"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../../utils/image-models"
 import { callOpenRouterForImage } from "../../utils/openrouter-image"
 import { pushStatus } from "../../utils/redis-stream"
-import { uploadImage } from "../../utils/storage-client"
+import { sanitizeFileName, uploadImage } from "../../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
   EthnicitySchema,
@@ -142,7 +142,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
           prepared.length > 0
             ? await Promise.all(
                 prepared.map(async (item) => {
-                  const objectKey = `uploads/${crypto.randomUUID()}-${item.fileName}`
+                  const objectKey = `uploads/${crypto.randomUUID()}-${sanitizeFileName(item.fileName)}`
                   return await uploadImage(objectKey, item.buf, item.mimeType)
                 }),
               )
