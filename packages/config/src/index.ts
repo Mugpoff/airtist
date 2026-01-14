@@ -2,7 +2,7 @@ export const config = {
   general: {
     name: "Airtist",
     description: "Generate stunning AI-powered images with ease",
-    url: "https://aipicture.app",
+    url: "https://studio.regardbeauty.xyz",
   },
   metadata: {
     keywords: [
