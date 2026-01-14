@@ -2,6 +2,7 @@ import { on } from "node:events"
 import { rawCacheClient } from "@repo/cache"
 import { z } from "zod"
 import { pingHandler } from "./handlers/ping-handler"
+import { adminRouter } from "./routers/admin"
 import { driveRouter } from "./routers/drive"
 import { imagesRouter } from "./routers/images"
 import { createTRPCRouter, protectedProcedure } from "./trpc"
@@ -9,6 +10,7 @@ import { getJobHistory } from "./utils/redis-stream"
 
 export const appRouter = createTRPCRouter({
   ping: pingHandler,
+  admin: adminRouter,
   images: imagesRouter,
   drive: driveRouter,
   onGenerateProgress: protectedProcedure

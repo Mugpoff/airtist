@@ -114,5 +114,69 @@
   "notFound": {
     "title": "404",
     "description": "Oops. The page you are looking for does not exist."
+  },
+  "admin": {
+    "sidebar": {
+      "backToApp": "Back to App",
+      "administration": "Administration",
+      "dashboard": "Dashboard",
+      "users": "Users"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Overview of your application statistics",
+      "stats": {
+        "totalUsers": "Total Users",
+        "activeUsers": "Active Users (7d)",
+        "bannedUsers": "Banned Users",
+        "totalImages": "Total Images",
+        "newUsersWeek": "New Users (7d)",
+        "imagesWeek": "Images (7d)"
+      }
+    },
+    "users": {
+      "title": "User Management",
+      "description": "View and manage all users in your application",
+      "search": "Search users...",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "images": "Images",
+        "joined": "Joined",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Active",
+        "banned": "Banned"
+      },
+      "roles": {
+        "admin": "Admin",
+        "user": "User"
+      },
+      "actions": {
+        "ban": "Ban User",
+        "unban": "Unban User"
+      },
+      "banDialog": {
+        "title": "Ban User",
+        "description": "Are you sure you want to ban this user? They will not be able to sign in.",
+        "reason": "Ban Reason",
+        "reasonPlaceholder": "Enter the reason for banning...",
+        "duration": "Ban Duration (days)",
+        "durationPlaceholder": "Leave empty for permanent ban",
+        "confirm": "Ban User",
+        "cancel": "Cancel"
+      },
+      "unbanDialog": {
+        "title": "Unban User",
+        "description": "Are you sure you want to unban this user? They will be able to sign in again.",
+        "confirm": "Unban User",
+        "cancel": "Cancel"
+      },
+      "empty": "No users found",
+      "loading": "Loading users..."
+    }
   }
 }

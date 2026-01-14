@@ -124,3 +124,26 @@ export const protectedProcedure = t.procedure
       },
     })
   })
+
+/**
+ * Admin procedure
+ *
+ * This procedure is only accessible to users with the admin role.
+ * It extends protectedProcedure and adds an additional role check.
+ */
+export const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role !== "admin") {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Admin access required",
+    })
+  }
+  return next({
+    ctx: {
+      session: {
+        ...ctx.session,
+        user: ctx.session.user as typeof ctx.session.user & { role: "admin" },
+      },
+    },
+  })
+})

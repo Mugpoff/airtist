@@ -36,7 +36,7 @@ export type GeneratedImageCacheScalarFieldEnum = z.infer<typeof GeneratedImageCa
 
 // File: UsersScalarFieldEnum.schema.ts
 
-export const UsersScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'name', 'email', 'emailVerified', 'image'])
+export const UsersScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'name', 'email', 'emailVerified', 'image', 'role', 'banned', 'banReason', 'banExpires'])
 
 export type UsersScalarFieldEnum = z.infer<typeof UsersScalarFieldEnumSchema>;
 
@@ -164,6 +164,10 @@ export const UsersSchema = z.object({
   email: z.string(),
   emailVerified: z.boolean(),
   image: z.string().nullish(),
+  role: z.string().default("user"),
+  banned: z.boolean(),
+  banReason: z.string().nullish(),
+  banExpires: z.date().nullish(),
 });
 
 export type UsersType = z.infer<typeof UsersSchema>;

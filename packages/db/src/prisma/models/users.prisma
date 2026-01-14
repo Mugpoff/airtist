@@ -8,6 +8,12 @@ model Users {
   emailVerified Boolean @default(false)
   image         String?
 
+  // Admin plugin fields
+  role       String    @default("user")
+  banned     Boolean   @default(false)
+  banReason  String?
+  banExpires DateTime?
+
   accounts         Accounts[]
   images           GeneratedImages[]
   driveConnections DriveConnections[]

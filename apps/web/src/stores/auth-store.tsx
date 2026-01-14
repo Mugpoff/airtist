@@ -8,6 +8,9 @@ type State = {
   user: Session["user"] | null
   session: Session["session"] | null
 
+  // Computed helpers
+  isAdmin: boolean
+
   signIn: (user: Session["user"]) => void
   signOut: () => void
 }
@@ -19,11 +22,14 @@ const createAuthStore = (session: Session | null) =>
     user: session?.user ?? null,
     session: session?.session ?? null,
 
+    // Computed based on user role
+    isAdmin: session?.user?.role === "admin",
+
     signIn: (user: Session["user"]) => {
-      set({ user })
+      set({ user, isAdmin: user?.role === "admin" })
     },
     signOut: () => {
-      set({ user: null, session: null })
+      set({ user: null, session: null, isAdmin: false })
     },
   }))
 

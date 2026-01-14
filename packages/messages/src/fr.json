@@ -114,5 +114,69 @@
   "notFound": {
     "title": "404",
     "description": "Oops. La page que vous cherchez n'existe pas."
+  },
+  "admin": {
+    "sidebar": {
+      "backToApp": "Retour à l'app",
+      "administration": "Administration",
+      "dashboard": "Tableau de bord",
+      "users": "Utilisateurs"
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "description": "Vue d'ensemble des statistiques de votre application",
+      "stats": {
+        "totalUsers": "Total utilisateurs",
+        "activeUsers": "Utilisateurs actifs (7j)",
+        "bannedUsers": "Utilisateurs bannis",
+        "totalImages": "Total images",
+        "newUsersWeek": "Nouveaux utilisateurs (7j)",
+        "imagesWeek": "Images (7j)"
+      }
+    },
+    "users": {
+      "title": "Gestion des utilisateurs",
+      "description": "Voir et gérer tous les utilisateurs de votre application",
+      "search": "Rechercher des utilisateurs...",
+      "table": {
+        "name": "Nom",
+        "email": "E-mail",
+        "role": "Rôle",
+        "status": "Statut",
+        "images": "Images",
+        "joined": "Inscription",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Actif",
+        "banned": "Banni"
+      },
+      "roles": {
+        "admin": "Admin",
+        "user": "Utilisateur"
+      },
+      "actions": {
+        "ban": "Bannir",
+        "unban": "Débannir"
+      },
+      "banDialog": {
+        "title": "Bannir l'utilisateur",
+        "description": "Êtes-vous sûr de vouloir bannir cet utilisateur ? Il ne pourra plus se connecter.",
+        "reason": "Raison du bannissement",
+        "reasonPlaceholder": "Entrez la raison du bannissement...",
+        "duration": "Durée du bannissement (jours)",
+        "durationPlaceholder": "Laissez vide pour un bannissement permanent",
+        "confirm": "Bannir",
+        "cancel": "Annuler"
+      },
+      "unbanDialog": {
+        "title": "Débannir l'utilisateur",
+        "description": "Êtes-vous sûr de vouloir débannir cet utilisateur ? Il pourra de nouveau se connecter.",
+        "confirm": "Débannir",
+        "cancel": "Annuler"
+      },
+      "empty": "Aucun utilisateur trouvé",
+      "loading": "Chargement des utilisateurs..."
+    }
   }
 }
