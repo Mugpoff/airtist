@@ -4,6 +4,7 @@ import { db } from "@repo/db"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { nextCookies } from "better-auth/next-js"
+import { admin } from "better-auth/plugins"
 
 export const auth = betterAuth({
   appName: config.general.name,
@@ -47,7 +48,7 @@ export const auth = betterAuth({
   },
   advanced: { database: { generateId: "uuid" } },
   experimental: { joins: true },
-  plugins: [nextCookies()],
+  plugins: [nextCookies(), admin()],
 })
 
 export type Session = (typeof auth)["$Infer"]["Session"]

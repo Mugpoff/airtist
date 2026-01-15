@@ -5,15 +5,38 @@ model Users {
 
   name          String
   email         String
-  emailVerified Boolean @default(false)
+  emailVerified Boolean   @default(false)
   image         String?
+  role          String    @default("user")
+  banned        Boolean   @default(false)
+  banReason     String?
+  banExpires    DateTime?
 
+  sessions         Sessions[]
   accounts         Accounts[]
   images           GeneratedImages[]
   driveConnections DriveConnections[]
 
   @@unique([email])
   @@map("users")
+}
+
+model Sessions {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+
+  token     String  @unique
+  ipAddress String?
+  userAgent String?
+
+  userId String @db.Uuid
+  user   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@map("sessions")
 }
 
 model Accounts {
