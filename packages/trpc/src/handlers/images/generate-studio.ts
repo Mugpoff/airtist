@@ -2,6 +2,7 @@ import { createHash } from "node:crypto"
 import { cacheClient } from "@repo/cache"
 import { config } from "@repo/config"
 import { db } from "@repo/db"
+import { sanitizeFileName } from "@repo/utils/sanitize-file-name"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { protectedProcedure } from "../../trpc"
@@ -9,7 +10,7 @@ import { generateStudioHash, type StudioHashInput } from "../../utils/hash"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../../utils/image-models"
 import { callOpenRouterForImage } from "../../utils/openrouter-image"
 import { pushStatus } from "../../utils/redis-stream"
-import { sanitizeFileName, uploadImage } from "../../utils/storage-client"
+import { uploadImage } from "../../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
   EthnicitySchema,
