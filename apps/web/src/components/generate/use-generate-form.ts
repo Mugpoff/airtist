@@ -37,7 +37,8 @@ export const useGenerateForm = (modelsInfo: ModelsInfoShape) => {
 
   useEffect(() => {
     const range =
-      config.generationSettings.preset.ageRanges[category as GenerationPreset]
+      config.generationSettings.preset.metadata[category as GenerationPreset]
+        .age
     if (!range) return
     setAge(range.min.toString())
     if (category.includes("BABY")) setHeight("80")

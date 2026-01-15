@@ -82,7 +82,7 @@ const Payload = () => {
     setSettings((prev: Settings) => ({
       ...prev,
       preset: value,
-      age: config.generationSettings.preset.ageRanges[value].min,
+      age: config.generationSettings.preset.metadata[value].age.min,
     }))
   }
 
@@ -112,10 +112,10 @@ const Payload = () => {
           <NumberField
             value={settings.age}
             min={
-              config.generationSettings.preset.ageRanges[settings.preset].min
+              config.generationSettings.preset.metadata[settings.preset].age.min
             }
             max={
-              config.generationSettings.preset.ageRanges[settings.preset].max
+              config.generationSettings.preset.metadata[settings.preset].age.max
             }
             onValueChange={(value) => {
               if (value !== null)

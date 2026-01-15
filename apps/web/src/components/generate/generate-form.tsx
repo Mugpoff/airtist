@@ -91,9 +91,9 @@ export function GenerateForm({ modelsInfo, onGenerate }: Props) {
 
     const ageNum = parseInt(form.age, 10)
     const range =
-      config.generationSettings.preset.ageRanges[
+      config.generationSettings.preset.metadata[
         form.category as GenerationPreset
-      ]
+      ].age
     if (range && (ageNum < range.min || ageNum > range.max)) {
       toastManager.add({
         title: "Âge non autorisé",

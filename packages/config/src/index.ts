@@ -46,18 +46,47 @@ export const config = {
         "WOMAN_TEEN",
         "WOMAN_ADULT",
       ],
-      ageRanges: {
-        BABY: { min: 1, max: 3 },
-        MAN_BABY: { min: 1, max: 3 },
-        MAN_CHILD: { min: 5, max: 12 },
-        MAN_PRETEEN: { min: 13, max: 15 },
-        MAN_TEEN: { min: 16, max: 18 },
-        MAN_ADULT: { min: 22, max: 99 },
-        WOMAN_BABY: { min: 1, max: 3 },
-        WOMAN_CHILD: { min: 5, max: 12 },
-        WOMAN_PRETEEN: { min: 13, max: 15 },
-        WOMAN_TEEN: { min: 16, max: 18 },
-        WOMAN_ADULT: { min: 22, max: 99 },
+      metadata: {
+        MAN_BABY: {
+          age: { min: 1, max: 3 },
+          prompt: "baby boy",
+        },
+        MAN_CHILD: {
+          age: { min: 5, max: 12 },
+          prompt: "young boy",
+        },
+        MAN_PRETEEN: {
+          age: { min: 13, max: 15 },
+          prompt: "preteen boy",
+        },
+        MAN_TEEN: {
+          age: { min: 16, max: 18 },
+          prompt: "teen boy",
+        },
+        MAN_ADULT: {
+          age: { min: 22, max: 99 },
+          prompt: "adult man",
+        },
+        WOMAN_BABY: {
+          age: { min: 1, max: 3 },
+          prompt: "baby girl",
+        },
+        WOMAN_CHILD: {
+          age: { min: 5, max: 12 },
+          prompt: "young girl",
+        },
+        WOMAN_PRETEEN: {
+          age: { min: 13, max: 15 },
+          prompt: "preteen girl",
+        },
+        WOMAN_TEEN: {
+          age: { min: 16, max: 18 },
+          prompt: "teen girl",
+        },
+        WOMAN_ADULT: {
+          age: { min: 22, max: 99 },
+          prompt: "adult woman",
+        },
       },
     },
     age: {

@@ -69,7 +69,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const age = ageNum
     const height = heightNum
 
-    const ageRange = config.generationSettings.preset.ageRanges[category]
+    const ageRange = config.generationSettings.preset.metadata[category].age
     if (ageRange && (age < ageRange.min || age > ageRange.max)) {
       throw new TRPCError({
         code: "BAD_REQUEST",
@@ -179,31 +179,13 @@ export const imagesGenerateStudioHandler = protectedProcedure
               )
             : imageUrls
 
-        const categoryPrompt =
-          category === "MAN_BABY"
-            ? "baby boy"
-            : category === "WOMAN_BABY"
-              ? "baby girl"
-              : category === "MAN_CHILD"
-                ? "young boy"
-                : category === "WOMAN_CHILD"
-                  ? "young girl"
-                  : category === "MAN_PRETEEN"
-                    ? "preteen boy"
-                    : category === "WOMAN_PRETEEN"
-                      ? "preteen girl"
-                      : category === "MAN_TEEN"
-                        ? "teen boy"
-                        : category === "WOMAN_TEEN"
-                          ? "teen girl"
-                          : category === "MAN_ADULT"
-                            ? "adult man"
-                            : "adult woman"
+        const presetPrompt =
+          config.generationSettings.preset.metadata[category].prompt
         const ethLabel = ethnicity.toLowerCase()
         const bgPrompt = BACKGROUND_PROMPTS[background]
         const fixedPrompt =
           "Professional high-end fashion photography. Soft lighting."
-        const dynamicPrompt = `Full body shot of a ${ethLabel} ${categoryPrompt}, ${age}yo, ${height}cm. ${bgPrompt}. ${prompt}`
+        const dynamicPrompt = `Full body shot of a ${ethLabel} ${presetPrompt}, ${age}yo, ${height}cm. ${bgPrompt}. ${prompt}`
 
         await pushStatus(jobId, { step: "generating" })
 
