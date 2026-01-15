@@ -10,17 +10,9 @@ export type StudioCategory = z.infer<typeof StudioCategorySchema>
 const presetMetadata = PRESET_METADATA as Record<
   StudioCategory,
   {
-    label: string
     ageRange: { min: number; max: number }
   }
 >
-
-export const STUDIO_CATEGORIES = Object.fromEntries(
-  Object.entries(presetMetadata).map(([preset, metadata]) => [
-    preset,
-    metadata.label,
-  ]),
-) as Record<StudioCategory, string>
 
 export const STUDIO_AGE_RANGES = Object.fromEntries(
   Object.entries(presetMetadata).map(([preset, metadata]) => [
@@ -28,7 +20,6 @@ export const STUDIO_AGE_RANGES = Object.fromEntries(
     metadata.ageRange,
   ]),
 ) as Record<StudioCategory, { min: number; max: number }>
-
 export const StudioBackgroundSchema = z.enum(
   config.generationSettings.background.values,
 )
