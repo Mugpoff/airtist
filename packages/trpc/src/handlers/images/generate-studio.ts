@@ -2,6 +2,7 @@ import { createHash } from "node:crypto"
 import { cacheClient } from "@repo/cache"
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
+import { getTranslations } from "next-intl/server"
 import { z } from "zod"
 import { protectedProcedure } from "../../trpc"
 import { generateStudioHash, type StudioHashInput } from "../../utils/hash"
@@ -56,9 +57,9 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const model = ImageModelSchema.parse(
       input.get("model") ?? DEFAULT_IMAGE_MODEL,
     )
-
     const ageNum = parseNumber(input.get("age"))
     const heightNum = parseNumber(input.get("height"))
+    const t = await getTranslations("global")
 
     if (!prompt || ageNum === null || heightNum === null) {
       throw new TRPCError({
@@ -180,7 +181,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
               )
             : imageUrls
 
-        const catLabel = STUDIO_CATEGORIES[category].toLowerCase()
+        const catLabel = t(`preset.${category}`)
         const ethLabel = ethnicity.toLowerCase()
         const bgPrompt = BACKGROUND_PROMPTS[background]
         const fixedPrompt =
