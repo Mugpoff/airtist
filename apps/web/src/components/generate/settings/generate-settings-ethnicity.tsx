@@ -1,6 +1,6 @@
 import { PaintBoardIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { config } from "@repo/config"
+import { type config, ETHNICITY_VALUES } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import {
   type PopoverCreateHandle,
@@ -17,6 +17,7 @@ import {
 } from "@repo/ui/base/select"
 import { useAtom, useAtomValue } from "jotai"
 import { useTranslations } from "next-intl"
+import type { Settings } from "@/atoms/settings-atom"
 import { settingsAtom } from "@/atoms/settings-atom"
 
 type Props = {
@@ -42,7 +43,7 @@ export const GenerateSettingsEthnicity = ({ handle }: Props) => {
 const Payload = () => {
   const t = useTranslations("global.ethnicity")
   const [settings, setSettings] = useAtom(settingsAtom)
-  const items = config.generationSettings.ethnicity.values.map((value) => ({
+  const items = ETHNICITY_VALUES.map((value) => ({
     label: t(value),
     value,
   }))
@@ -57,7 +58,12 @@ const Payload = () => {
         <Select
           value={settings.ethnicity}
           onValueChange={(value) => {
-            if (value) setSettings((prev) => ({ ...prev, ethnicity: value }))
+            if (value)
+              setSettings((prev: Settings) => ({
+                ...prev,
+                ethnicity:
+                  value as (typeof config.generationSettings.ethnicity.values)[number],
+              }))
           }}
         >
           <SelectTrigger>

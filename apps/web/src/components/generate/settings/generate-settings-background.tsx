@@ -1,6 +1,6 @@
 import { BackgroundIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { config } from "@repo/config"
+import { BACKGROUND_VALUES, type config } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import {
   type PopoverCreateHandle,
@@ -17,6 +17,7 @@ import {
 } from "@repo/ui/base/select"
 import { useAtom, useAtomValue } from "jotai"
 import { useTranslations } from "next-intl"
+import type { Settings } from "@/atoms/settings-atom"
 import { settingsAtom } from "@/atoms/settings-atom"
 
 type Props = {
@@ -42,7 +43,7 @@ export const GenerateSettingsBackground = ({ handle }: Props) => {
 const Payload = () => {
   const t = useTranslations("global.background")
   const [settings, setSettings] = useAtom(settingsAtom)
-  const items = config.generationSettings.background.values.map((value) => ({
+  const items = BACKGROUND_VALUES.map((value) => ({
     label: t(value),
     value,
   }))
@@ -57,7 +58,12 @@ const Payload = () => {
         <Select
           value={settings.background}
           onValueChange={(value) => {
-            if (value) setSettings((prev) => ({ ...prev, background: value }))
+            if (value)
+              setSettings((prev: Settings) => ({
+                ...prev,
+                background:
+                  value as (typeof config.generationSettings.background.values)[number],
+              }))
           }}
         >
           <SelectTrigger>
