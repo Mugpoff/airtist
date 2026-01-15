@@ -1,4 +1,5 @@
 import { cacheClient } from "@repo/cache"
+import { config } from "@repo/config"
 import { publicProcedure } from "../../trpc"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../../utils/image-models"
 import {
@@ -14,6 +15,7 @@ export const imagesModelsHandler = publicProcedure.query(async () => {
 
   const result = {
     defaultModel: DEFAULT_IMAGE_MODEL,
+    promptDefault: config.generationSettings.prompt.default,
     models: ImageModelSchema.options,
     categories: Object.entries(STUDIO_CATEGORIES).map(([id, label]) => ({
       id,

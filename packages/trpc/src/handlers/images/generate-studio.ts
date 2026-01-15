@@ -12,6 +12,7 @@ import { sanitizeFileName, uploadImage } from "../../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
   EthnicitySchema,
+  STUDIO_AGE_RANGES,
   STUDIO_CATEGORIES,
   StudioBackgroundSchema,
   StudioCategorySchema,
@@ -68,6 +69,37 @@ export const imagesGenerateStudioHandler = protectedProcedure
 
     const age = ageNum
     const height = heightNum
+
+    const ageRange = STUDIO_AGE_RANGES[category]
+    if (ageRange && (age < ageRange.min || age > ageRange.max)) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: `Âge ${age} incompatible avec ${STUDIO_CATEGORIES[category]} (${ageRange.min}-${ageRange.max}).`,
+      })
+    }
+
+    const isMinorCategory =
+      category.includes("CHILD") ||
+      category.includes("PRETEEN") ||
+      category.includes("TEEN")
+    const isAdultCategory = category.includes("ADULT")
+    const adultKeywords =
+      /\b(adult|woman|women|man|men|mature|lingerie|sexy|voluptuous|voluptueuse|voluptueux|bra|bikini|underwear)\b/i
+    const childKeywords = /\b(baby|infant|toddler|child|kid|newborn)\b/i
+
+    if (isMinorCategory && adultKeywords.test(prompt)) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Prompt incompatible avec un preset enfant/adolescent.",
+      })
+    }
+
+    if (isAdultCategory && childKeywords.test(prompt)) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Prompt incompatible avec un preset adulte.",
+      })
+    }
 
     const files = input.getAll("images").filter(isFile)
     const imageUrls = parseStringArray(input.get("imageUrls"))
