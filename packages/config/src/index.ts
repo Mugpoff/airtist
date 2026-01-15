@@ -33,26 +33,17 @@ export const BACKGROUND_VALUES = [
 export type GenerationPreset = (typeof GENERATION_PRESETS)[number]
 
 export const PRESET_METADATA = {
-  MAN_BABY: { label: "Garçon (Bébé)", ageRange: { min: 1, max: 3 } },
-  MAN_CHILD: { label: "Garçon (Enfant)", ageRange: { min: 5, max: 12 } },
-  MAN_PRETEEN: {
-    label: "Garçon (Pré-adolescent)",
-    ageRange: { min: 13, max: 15 },
-  },
-  MAN_TEEN: { label: "Homme (Adolescent)", ageRange: { min: 16, max: 18 } },
-  MAN_ADULT: { label: "Homme (Adulte)", ageRange: { min: 22, max: 99 } },
-  WOMAN_BABY: { label: "Fille (Bébé)", ageRange: { min: 1, max: 3 } },
-  WOMAN_CHILD: { label: "Fille (Enfant)", ageRange: { min: 5, max: 12 } },
-  WOMAN_PRETEEN: {
-    label: "Fille (Pré-adolescente)",
-    ageRange: { min: 13, max: 15 },
-  },
-  WOMAN_TEEN: {
-    label: "Femme (Adolescente)",
-    ageRange: { min: 16, max: 18 },
-  },
-  WOMAN_ADULT: { label: "Femme (Adulte)", ageRange: { min: 22, max: 99 } },
-} satisfies Record<GenerationPreset, { label: string; ageRange: AgeRange }>
+  MAN_BABY: { ageRange: { min: 1, max: 3 } },
+  MAN_CHILD: { ageRange: { min: 5, max: 12 } },
+  MAN_PRETEEN: { ageRange: { min: 13, max: 15 } },
+  MAN_TEEN: { ageRange: { min: 16, max: 18 } },
+  MAN_ADULT: { ageRange: { min: 22, max: 99 } },
+  WOMAN_BABY: { ageRange: { min: 1, max: 3 } },
+  WOMAN_CHILD: { ageRange: { min: 5, max: 12 } },
+  WOMAN_PRETEEN: { ageRange: { min: 13, max: 15 } },
+  WOMAN_TEEN: { ageRange: { min: 16, max: 18 } },
+  WOMAN_ADULT: { ageRange: { min: 22, max: 99 } },
+} satisfies Record<GenerationPreset, { ageRange: AgeRange }>
 
 type ConfigShape = {
   general: {
