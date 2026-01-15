@@ -20,6 +20,7 @@ import {
 import { toastManager } from "@repo/ui/base/toast"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { useAtomValue } from "jotai"
+import { useTranslations } from "next-intl"
 import { Suspense } from "react"
 import { isGeneratingAtom } from "@/atoms/is-generating-atom"
 import { useTRPC } from "@/trpc/react"
@@ -67,6 +68,7 @@ function DriveSection({
 }
 
 export function GenerateForm({ modelsInfo, onGenerate }: Props) {
+  const t = useTranslations("global")
   const isGenerating = useAtomValue(isGeneratingAtom)
   const form = useGenerateForm(modelsInfo)
 
@@ -157,7 +159,7 @@ export function GenerateForm({ modelsInfo, onGenerate }: Props) {
               <SelectContent>
                 {modelsInfo.categories.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
-                    {c.label}
+                    {t(`preset.${c.id}` as "preset.MAN_ADULT")}
                   </SelectItem>
                 ))}
               </SelectContent>

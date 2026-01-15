@@ -16,7 +16,7 @@ export type ModelsInfoShape = {
   defaultModel: string
   promptDefault: string
   models: string[]
-  categories: Array<{ id: string; label: string }>
+  categories: Array<{ id: string }>
   backgrounds: Array<{ id: string; label: string }>
 }
 
