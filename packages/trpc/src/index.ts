@@ -1,5 +1,4 @@
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
-import "next-intl"
 import type { AppRouter } from "./router"
 
 /**
