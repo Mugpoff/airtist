@@ -36,9 +36,15 @@ export type GeneratedImageCacheScalarFieldEnum = z.infer<typeof GeneratedImageCa
 
 // File: UsersScalarFieldEnum.schema.ts
 
-export const UsersScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'name', 'email', 'emailVerified', 'image'])
+export const UsersScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'name', 'email', 'emailVerified', 'image', 'role', 'banned', 'banReason', 'banExpires'])
 
 export type UsersScalarFieldEnum = z.infer<typeof UsersScalarFieldEnumSchema>;
+
+// File: SessionsScalarFieldEnum.schema.ts
+
+export const SessionsScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'expiresAt', 'token', 'ipAddress', 'userAgent', 'userId'])
+
+export type SessionsScalarFieldEnum = z.infer<typeof SessionsScalarFieldEnumSchema>;
 
 // File: AccountsScalarFieldEnum.schema.ts
 
@@ -164,9 +170,29 @@ export const UsersSchema = z.object({
   email: z.string(),
   emailVerified: z.boolean(),
   image: z.string().nullish(),
+  role: z.string().default("user"),
+  banned: z.boolean(),
+  banReason: z.string().nullish(),
+  banExpires: z.date().nullish(),
 });
 
 export type UsersType = z.infer<typeof UsersSchema>;
+
+
+// File: Sessions.schema.ts
+
+export const SessionsSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  expiresAt: z.date(),
+  token: z.string(),
+  ipAddress: z.string().nullish(),
+  userAgent: z.string().nullish(),
+  userId: z.string(),
+});
+
+export type SessionsType = z.infer<typeof SessionsSchema>;
 
 
 // File: Accounts.schema.ts
