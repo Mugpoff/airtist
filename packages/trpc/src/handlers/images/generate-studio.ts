@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto"
 import { cacheClient } from "@repo/cache"
+import { config } from "@repo/config"
 import { db } from "@repo/db"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
@@ -12,7 +13,6 @@ import { sanitizeFileName, uploadImage } from "../../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
   EthnicitySchema,
-  STUDIO_AGE_RANGES,
   StudioBackgroundSchema,
   StudioCategorySchema,
 } from "../../utils/studio-constants"
@@ -69,7 +69,7 @@ export const imagesGenerateStudioHandler = protectedProcedure
     const age = ageNum
     const height = heightNum
 
-    const ageRange = STUDIO_AGE_RANGES[category]
+    const ageRange = config.generationSettings.preset.ageRanges[category]
     if (ageRange && (age < ageRange.min || age > ageRange.max)) {
       throw new TRPCError({
         code: "BAD_REQUEST",

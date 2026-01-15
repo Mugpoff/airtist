@@ -1,6 +1,6 @@
 import { PaintBoardIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { type config, ETHNICITY_VALUES } from "@repo/config"
+import { config } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import {
   type PopoverCreateHandle,
@@ -43,7 +43,7 @@ export const GenerateSettingsEthnicity = ({ handle }: Props) => {
 const Payload = () => {
   const t = useTranslations("global.ethnicity")
   const [settings, setSettings] = useAtom(settingsAtom)
-  const items = ETHNICITY_VALUES.map((value) => ({
+  const items = config.generationSettings.ethnicity.values.map((value) => ({
     label: t(value),
     value,
   }))

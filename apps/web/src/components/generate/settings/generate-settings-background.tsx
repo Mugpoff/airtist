@@ -1,6 +1,6 @@
 import { BackgroundIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { BACKGROUND_VALUES, type config } from "@repo/config"
+import { config } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import {
   type PopoverCreateHandle,
@@ -43,7 +43,7 @@ export const GenerateSettingsBackground = ({ handle }: Props) => {
 const Payload = () => {
   const t = useTranslations("global.background")
   const [settings, setSettings] = useAtom(settingsAtom)
-  const items = BACKGROUND_VALUES.map((value) => ({
+  const items = config.generationSettings.background.values.map((value) => ({
     label: t(value),
     value,
   }))

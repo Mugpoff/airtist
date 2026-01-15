@@ -5,8 +5,7 @@ import {
   WomanIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { config } from "@repo/config"
-import { STUDIO_AGE_RANGES } from "@repo/trpc/constants"
+import { config, type GenerationPreset } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import { Field, FieldLabel } from "@repo/ui/base/field"
 import {
@@ -29,6 +28,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/base/select"
+import { isPresetAdult } from "@repo/utils/is-preset-adult"
+import { isPresetBaby } from "@repo/utils/is-preset-baby"
 import { useAtom, useAtomValue } from "jotai"
 import { useTranslations } from "next-intl"
 import type { Settings } from "@/atoms/settings-atom"
@@ -73,28 +74,15 @@ const Payload = () => {
     value,
   }))
   const showAge =
-    settings.preset === "MAN_ADULT" ||
-    settings.preset === "WOMAN_ADULT" ||
-    settings.preset === "MAN_BABY" ||
-    settings.preset === "WOMAN_BABY"
+    isPresetBaby(settings.preset) || isPresetAdult(settings.preset)
 
-  const handlePresetChange = (
-    value: (typeof config.generationSettings.preset.values)[number] | null,
-  ) => {
+  const handlePresetChange = (value: GenerationPreset | null) => {
     if (!value) return
-    const range = STUDIO_AGE_RANGES[value as keyof typeof STUDIO_AGE_RANGES]
-    const nextAge = value.includes("BABY")
-      ? 1
-      : value.includes("ADULT")
-        ? 22
-        : range
-          ? range.min
-          : null
 
     setSettings((prev: Settings) => ({
       ...prev,
       preset: value,
-      age: nextAge ?? prev.age,
+      age: config.generationSettings.preset.ageRanges[value].min,
     }))
   }
 
@@ -123,8 +111,12 @@ const Payload = () => {
           <FieldLabel>{t("age")}</FieldLabel>
           <NumberField
             value={settings.age}
-            min={STUDIO_AGE_RANGES[settings.preset].min}
-            max={STUDIO_AGE_RANGES[settings.preset].max}
+            min={
+              config.generationSettings.preset.ageRanges[settings.preset].min
+            }
+            max={
+              config.generationSettings.preset.ageRanges[settings.preset].max
+            }
             onValueChange={(value) => {
               if (value !== null)
                 setSettings((prev: Settings) => ({ ...prev, age: value }))

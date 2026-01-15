@@ -1,4 +1,4 @@
-import { STUDIO_AGE_RANGES } from "@repo/trpc/constants"
+import { config, type GenerationPreset } from "@repo/config"
 import { useEffect, useState } from "react"
 
 const ethnicities = [
@@ -36,7 +36,8 @@ export const useGenerateForm = (modelsInfo: ModelsInfoShape) => {
   const [imageUrls, setImageUrls] = useState<string[]>([])
 
   useEffect(() => {
-    const range = STUDIO_AGE_RANGES[category as keyof typeof STUDIO_AGE_RANGES]
+    const range =
+      config.generationSettings.preset.ageRanges[category as GenerationPreset]
     if (!range) return
     setAge(range.min.toString())
     if (category.includes("BABY")) setHeight("80")

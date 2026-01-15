@@ -1,4 +1,4 @@
-import { config, PRESET_METADATA } from "@repo/config"
+import { config } from "@repo/config"
 import { z } from "zod"
 
 export const StudioCategorySchema = z.enum(
@@ -7,19 +7,6 @@ export const StudioCategorySchema = z.enum(
 
 export type StudioCategory = z.infer<typeof StudioCategorySchema>
 
-const presetMetadata = PRESET_METADATA as Record<
-  StudioCategory,
-  {
-    ageRange: { min: number; max: number }
-  }
->
-
-export const STUDIO_AGE_RANGES = Object.fromEntries(
-  Object.entries(presetMetadata).map(([preset, metadata]) => [
-    preset,
-    metadata.ageRange,
-  ]),
-) as Record<StudioCategory, { min: number; max: number }>
 export const StudioBackgroundSchema = z.enum(
   config.generationSettings.background.values,
 )

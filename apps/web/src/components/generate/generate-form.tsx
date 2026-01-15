@@ -1,6 +1,6 @@
 "use client"
 
-import { STUDIO_AGE_RANGES } from "@repo/trpc/constants"
+import { config, type GenerationPreset } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import {
   Card,
@@ -91,7 +91,9 @@ export function GenerateForm({ modelsInfo, onGenerate }: Props) {
 
     const ageNum = parseInt(form.age, 10)
     const range =
-      STUDIO_AGE_RANGES[form.category as keyof typeof STUDIO_AGE_RANGES]
+      config.generationSettings.preset.ageRanges[
+        form.category as GenerationPreset
+      ]
     if (range && (ageNum < range.min || ageNum > range.max)) {
       toastManager.add({
         title: "Âge non autorisé",
