@@ -17,9 +17,17 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth/sign-in", request.url))
   }
 
+  // Non-admin users trying to access dashboard pages → redirect to home
+  if (
+    session?.user.role !== "admin" &&
+    request.nextUrl.pathname.startsWith("/dashboard")
+  ) {
+    return NextResponse.redirect(new URL("/", request.url))
+  }
+
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/", "/demo-openrouter", "/auth/:path*"],
+  matcher: ["/", "/demo-openrouter", "/auth/:path*", "/dashboard/:path*"],
 }

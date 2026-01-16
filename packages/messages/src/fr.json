@@ -4,6 +4,9 @@
     "password": "Mot de passe",
     "english": "English",
     "french": "Français",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système",
     "weight": {
       "title": "Poids",
       "description": "Définissez le poids corporel du modèle généré en kilogrammes. Cela affecte la forme et les proportions du corps."
@@ -49,7 +52,11 @@
     },
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "saving": "Enregistrement en cours..."
+    "saving": "Enregistrement en cours...",
+    "settings": "Paramètres",
+    "language": "Langue",
+    "theme": "Thème",
+    "signOut": "Se déconnecter"
   },
   "validation": {
     "email": {
@@ -111,6 +118,15 @@
         "title": "Rien ici pour l'instant...",
         "button": "Remonter ?"
       }
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "description": "Bienvenue sur votre tableau de bord. Ici vous pouvez gérer vos comptes et paramètres.",
+    "users": {
+      "title": "Utilisateurs",
+      "description": "Gérez vos utilisateurs ici.",
+      "list": "Liste des utilisateurs"
     }
   },
   "notFound": {

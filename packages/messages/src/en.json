@@ -4,6 +4,9 @@
     "password": "Password",
     "english": "English",
     "french": "Français",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
     "weight": {
       "title": "Weight",
       "description": "Set the body weight of the generated model in kilograms. This affects the body shape and proportions."
@@ -49,7 +52,11 @@
     },
     "cancel": "Cancel",
     "save": "Save",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "settings": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "signOut": "Sign out"
   },
   "validation": {
     "email": {
@@ -111,6 +118,15 @@
         "title": "Nothing here yet...",
         "button": "Go up?"
       }
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Welcome to your dashboard. Here you can manage your account and settings.",
+    "users": {
+      "title": "Users",
+      "description": "Manage your users here.",
+      "list": "List of users"
     }
   },
   "notFound": {
