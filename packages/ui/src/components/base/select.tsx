@@ -55,7 +55,7 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
 function SelectPopup({
   className,
   children,
-  sideOffset = 4,
+  sideOffset = 8,
   alignItemWithTrigger = true,
   ...props
 }: SelectPrimitive.Popup.Props & {

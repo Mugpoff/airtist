@@ -16,7 +16,7 @@ function PopoverPopup({
   className,
   side = "bottom",
   align = "center",
-  sideOffset = 4,
+  sideOffset = 8,
   alignOffset = 0,
   tooltipStyle = false,
   ...props

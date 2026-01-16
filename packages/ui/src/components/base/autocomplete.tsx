@@ -62,7 +62,7 @@ function AutocompleteInput({
 function AutocompletePopup({
   className,
   children,
-  sideOffset = 4,
+  sideOffset = 8,
   ...props
 }: AutocompletePrimitive.Popup.Props & {
   sideOffset?: number
