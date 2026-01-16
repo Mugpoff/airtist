@@ -1,5 +1,6 @@
 # check=skip=SecretsUsedInArgOrEnv
 FROM oven/bun:1.3.5 AS base
+RUN apt-get update && apt-get install -y curl
 WORKDIR /app
 
 FROM base AS builder
@@ -30,7 +31,9 @@ ENV DATABASE_URL=$DATABASE_URL \
     OPENROUTER_API_KEY=$OPENROUTER_API_KEY \
     OPENROUTER_APP_TITLE=$OPENROUTER_APP_TITLE \
     OPENROUTER_HTTP_REFERER=$OPENROUTER_HTTP_REFERER \
-    NODE_ENV=production
+    NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    TURBO_TELEMETRY_DISABLED=1
 
 COPY . .
 RUN bun install --frozen-lockfile
@@ -40,13 +43,14 @@ RUN bun x turbo build --filter=web...
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+ENV PATH="/app/node_modules/.bin:/app/apps/web/node_modules/.bin:${PATH}"
 
 COPY --from=builder /app/apps/web/.next ./apps/web/.next
 COPY --from=builder /app/apps/web/public ./apps/web/public
 COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/packages/db/src/prisma ./packages/db/src/prisma
+COPY --from=builder /app/packages ./packages
 
 EXPOSE 3000
-CMD ["bun", "run", "-F", "web", "start"]
+CMD ["bun", "run", "--cwd", "apps/web", "start"]
