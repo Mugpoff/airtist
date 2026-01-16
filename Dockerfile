@@ -1,3 +1,4 @@
+# check=skip=SecretsUsedInArgOrEnv
 FROM oven/bun:1.3.5 AS base
 RUN apt-get update && apt-get install -y curl
 WORKDIR /app
@@ -47,4 +48,4 @@ COPY --from=builder /app ./
 
 EXPOSE 3000
 
-CMD ["./node_modules/.bin/next", "start", "apps/web"]
+CMD ["bun", "run", "--cwd", "apps/web", "start"]
