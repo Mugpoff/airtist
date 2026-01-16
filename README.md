@@ -11,10 +11,12 @@ airtist/
 ├── packages/
 │   ├── auth/                # Authentication (better-auth)
 │   ├── cache/               # Caching layer (Dragonfly/Redis)
-│   ├── config/              # Shared configuration
+│   ├── config/              # Shared configuration constants
 │   ├── db/                  # Database layer (Prisma + PostgreSQL)
+│   ├── messages/            # i18n translation files (en, fr)
 │   ├── trpc/                # Typesafe API layer (tRPC)
-│   ├── ui/                  # UI component library (coss-ui + Base UI)
+│   ├── ui/                  # UI component library
+│   ├── utils/               # Shared utility functions
 │   └── typescript-config/   # Shared TypeScript configs
 └── docker-compose.yml       # Local infrastructure
 ```
@@ -23,13 +25,20 @@ airtist/
 
 ### Frontend
 
-| Technology                                    | Description                     |
-| --------------------------------------------- | ------------------------------- |
-| [Next.js 16](https://nextjs.org/)             | React framework with App Router |
-| [React 19](https://react.dev/)                | UI library                      |
-| [coss-ui](https://github.com/coss-ui/coss-ui) | Component library               |
-| [Base UI](https://base-ui.com/)               | Headless UI primitives          |
-| [next-intl](https://next-intl.dev/)           | Internationalization            |
+| Technology                                      | Description                     |
+| ----------------------------------------------- | ------------------------------- |
+| [Next.js 16](https://nextjs.org/)               | React framework with App Router |
+| [React 19](https://react.dev/)                  | UI library                      |
+| [Tailwind CSS 4](https://tailwindcss.com/)      | Utility-first CSS framework     |
+| [coss-ui](https://github.com/coss-ui/coss-ui)   | Component                       |
+| library                                         |
+| [Base UI](https://base-ui.com/)                 | Headless UI                     |
+| primitives                                      |
+| [Motion](https://motion.dev/)                   | Animation library               |
+| [next-intl](https://next-intl.dev/)             | Internationalization            |
+| [Jotai](https://jotai.org/)                     | Atomic state management         |
+| [Zustand](https://zustand.docs.pmnd.rs/)        | State management                |
+| [React Hook Form](https://react-hook-form.com/) | Form handling                   |
 
 ### Backend
 
@@ -38,14 +47,21 @@ airtist/
 | [tRPC](https://trpc.io/)                    | End-to-end typesafe APIs |
 | [Prisma](https://www.prisma.io/)            | Database ORM             |
 | [better-auth](https://www.better-auth.com/) | Authentication library   |
+| [Zod](https://zod.dev/)                     | Schema validation        |
 
 ### Infrastructure
 
-| Technology                                | Description                    |
-| ----------------------------------------- | ------------------------------ |
-| [PostgreSQL](https://www.postgresql.org/) | Primary database               |
-| [Dragonfly](https://www.dragonflydb.io/)  | Redis-compatible cache         |
-| S3-compatible storage                     | Object storage (MinIO locally) |
+| Technology                                   | Description                    |
+| -------------------------------------------- | ------------------------------ |
+| [PostgreSQL 18](https://www.postgresql.org/) | Primary database               |
+| [Dragonfly](https://www.dragonflydb.io/)     | Redis-compatible cache         |
+| S3-compatible storage                        | Object storage (MinIO locally) |
+
+## Requirements
+
+- **Node.js** >= 25
+- **Bun** >= 1.3.6
+- **Docker** (for local infrastructure)
 
 ## Quick Start
 
@@ -80,7 +96,7 @@ This starts PostgreSQL, Dragonfly, and MinIO.
 
 ### 5. Create default MinIO bucket
 
-You'll need to configure the MinIO instance and create the default bucket with the following commands.
+Configure the MinIO instance and create the default bucket:
 
 ```bash
 # Configure the local alias
@@ -99,7 +115,7 @@ source .env && docker exec -it airtist-minio-1 mc anonymous set download local/$
 bun db migrate dev
 ```
 
-This will execute all pending database migrations, if any or init your database.
+This will execute all pending database migrations or initialize your database.
 
 ### 7. Start development servers
 
@@ -118,6 +134,23 @@ The web app will be available at [http://localhost:3000](http://localhost:3000).
 | `bun typecheck` | Run TypeScript type checking  |
 | `bun check:ws`  | Run Biome linting             |
 | `bun clean`     | Clean all node_modules        |
+| `bun db <cmd>`  | Run Prisma commands           |
+| `bun knip`      | Find unused code              |
+
+## Testing
+
+Run tests using Bun's built-in test runner:
+
+```bash
+# Run all tests
+bun test
+
+# Run tests for a specific package
+bun test packages/utils
+
+# Run tests in watch mode
+bun test --watch
+```
 
 ## License
 
