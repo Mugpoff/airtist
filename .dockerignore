@@ -1,8 +1,6 @@
-data
 node_modules
-.turbo
 .next
+.git
 dist
 build
-.mc
-*.png
+.turbo
