@@ -118,7 +118,7 @@ function ComboboxTrigger({
 function ComboboxPopup({
   className,
   children,
-  sideOffset = 4,
+  sideOffset = 8,
   ...props
 }: ComboboxPrimitive.Popup.Props & {
   sideOffset?: number

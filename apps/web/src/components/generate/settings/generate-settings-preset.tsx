@@ -5,7 +5,7 @@ import {
   WomanIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { config } from "@repo/config"
+import { config, type GenerationPreset } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import { Field, FieldLabel } from "@repo/ui/base/field"
 import {
@@ -28,8 +28,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/base/select"
+import { isPresetAdult } from "@repo/utils/is-preset-adult"
+import { isPresetBaby } from "@repo/utils/is-preset-baby"
 import { useAtom, useAtomValue } from "jotai"
 import { useTranslations } from "next-intl"
+import type { Settings } from "@/atoms/settings-atom"
 import { settingsAtom } from "@/atoms/settings-atom"
 
 type Props = {
@@ -46,8 +49,10 @@ export const GenerateSettingsPreset = ({ handle }: Props) => {
       handle={handle}
       payload={Payload}
     >
-      {settings.preset === "MAN_CHILD" && <HugeiconsIcon icon={Baby01Icon} />}
-      {settings.preset === "WOMAN_CHILD" && <HugeiconsIcon icon={Baby01Icon} />}
+      {settings.preset === "MAN_BABY" && <HugeiconsIcon icon={Baby01Icon} />}
+      {settings.preset === "WOMAN_BABY" && <HugeiconsIcon icon={Baby01Icon} />}
+      {settings.preset === "MAN_CHILD" && <HugeiconsIcon icon={ChildIcon} />}
+      {settings.preset === "WOMAN_CHILD" && <HugeiconsIcon icon={ChildIcon} />}
       {settings.preset === "MAN_PRETEEN" && <HugeiconsIcon icon={ChildIcon} />}
       {settings.preset === "WOMAN_PRETEEN" && (
         <HugeiconsIcon icon={ChildIcon} />
@@ -69,7 +74,17 @@ const Payload = () => {
     value,
   }))
   const showAge =
-    settings.preset === "MAN_ADULT" || settings.preset === "WOMAN_ADULT"
+    isPresetBaby(settings.preset) || isPresetAdult(settings.preset)
+
+  const handlePresetChange = (value: GenerationPreset | null) => {
+    if (!value) return
+
+    setSettings((prev: Settings) => ({
+      ...prev,
+      preset: value,
+      age: config.generationSettings.preset.metadata[value].age.min,
+    }))
+  }
 
   return (
     <>
@@ -78,12 +93,7 @@ const Payload = () => {
         <PopoverDescription>{t("preset.description")}</PopoverDescription>
       </div>
       <div>
-        <Select
-          value={settings.preset}
-          onValueChange={(value) => {
-            if (value) setSettings((prev) => ({ ...prev, preset: value }))
-          }}
-        >
+        <Select value={settings.preset} onValueChange={handlePresetChange}>
           <SelectTrigger>
             <SelectValue>{t(`preset.${settings.preset}`)}</SelectValue>
           </SelectTrigger>
@@ -101,8 +111,15 @@ const Payload = () => {
           <FieldLabel>{t("age")}</FieldLabel>
           <NumberField
             value={settings.age}
+            min={
+              config.generationSettings.preset.metadata[settings.preset].age.min
+            }
+            max={
+              config.generationSettings.preset.metadata[settings.preset].age.max
+            }
             onValueChange={(value) => {
-              if (value) setSettings((prev) => ({ ...prev, age: value }))
+              if (value !== null)
+                setSettings((prev: Settings) => ({ ...prev, age: value }))
             }}
           >
             <NumberFieldGroup>

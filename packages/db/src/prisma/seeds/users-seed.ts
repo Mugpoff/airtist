@@ -4,10 +4,12 @@ const SEED_USERS = [
   {
     name: "John Doe",
     email: "john@example.com",
+    role: "admin",
   },
   {
     name: "Jane Smith",
     email: "jane@example.com",
+    role: "user",
   },
 ]
 

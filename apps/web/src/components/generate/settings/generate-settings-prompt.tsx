@@ -10,6 +10,7 @@ import {
 import { Textarea } from "@repo/ui/base/textarea"
 import { useAtom } from "jotai"
 import { useTranslations } from "next-intl"
+import type { Settings } from "@/atoms/settings-atom"
 import { settingsAtom } from "@/atoms/settings-atom"
 
 type Props = {
@@ -45,7 +46,10 @@ const Payload = () => {
         <Textarea
           value={settings.prompt}
           onChange={(e) =>
-            setSettings((prev) => ({ ...prev, prompt: e.target.value }))
+            setSettings((prev: Settings) => ({
+              ...prev,
+              prompt: e.target.value,
+            }))
           }
           placeholder={t("placeholder")}
         />

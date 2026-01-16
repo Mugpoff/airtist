@@ -40,9 +40,13 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
     createTRPCClient<AppRouter>({
       links: [
         loggerLink({
-          enabled: (op) =>
-            env.NODE_ENV === "development" ||
-            (op.direction === "down" && op.result instanceof Error),
+          enabled: (op) => {
+            if (op.direction !== "down" || !(op.result instanceof Error)) {
+              return false
+            }
+            const errorResult = op.result as { data?: { code?: string } }
+            return errorResult.data?.code !== "BAD_REQUEST"
+          },
         }),
         splitLink({
           condition: (op) => op.type === "subscription",

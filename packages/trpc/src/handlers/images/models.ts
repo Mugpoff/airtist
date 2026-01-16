@@ -1,10 +1,8 @@
 import { cacheClient } from "@repo/cache"
+import { config } from "@repo/config"
 import { publicProcedure } from "../../trpc"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../../utils/image-models"
-import {
-  STUDIO_BACKGROUNDS,
-  STUDIO_CATEGORIES,
-} from "../../utils/studio-constants"
+import { STUDIO_BACKGROUNDS } from "../../utils/studio-constants"
 
 export const imagesModelsHandler = publicProcedure.query(async () => {
   try {
@@ -14,10 +12,10 @@ export const imagesModelsHandler = publicProcedure.query(async () => {
 
   const result = {
     defaultModel: DEFAULT_IMAGE_MODEL,
+    promptDefault: config.generationSettings.prompt.default,
     models: ImageModelSchema.options,
-    categories: Object.entries(STUDIO_CATEGORIES).map(([id, label]) => ({
+    categories: config.generationSettings.preset.values.map((id) => ({
       id,
-      label,
     })),
     backgrounds: Object.entries(STUDIO_BACKGROUNDS).map(([id, label]) => ({
       id,

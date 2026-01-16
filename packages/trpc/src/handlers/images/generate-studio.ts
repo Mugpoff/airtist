@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto"
 import { cacheClient } from "@repo/cache"
+import { config } from "@repo/config"
 import { db } from "@repo/db"
+import { sanitizeFileName } from "@repo/utils/sanitize-file-name"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { protectedProcedure } from "../../trpc"
@@ -8,11 +10,10 @@ import { generateStudioHash, type StudioHashInput } from "../../utils/hash"
 import { DEFAULT_IMAGE_MODEL, ImageModelSchema } from "../../utils/image-models"
 import { callOpenRouterForImage } from "../../utils/openrouter-image"
 import { pushStatus } from "../../utils/redis-stream"
-import { sanitizeFileName, uploadImage } from "../../utils/storage-client"
+import { uploadImage } from "../../utils/storage-client"
 import {
   BACKGROUND_PROMPTS,
   EthnicitySchema,
-  STUDIO_CATEGORIES,
   StudioBackgroundSchema,
   StudioCategorySchema,
 } from "../../utils/studio-constants"
@@ -68,6 +69,37 @@ export const imagesGenerateStudioHandler = protectedProcedure
 
     const age = ageNum
     const height = heightNum
+
+    const ageRange = config.generationSettings.preset.metadata[category].age
+    if (ageRange && (age < ageRange.min || age > ageRange.max)) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: `Âge ${age} incompatible avec ${category} (${ageRange.min}-${ageRange.max}).`,
+      })
+    }
+
+    const isMinorCategory =
+      category.includes("CHILD") ||
+      category.includes("PRETEEN") ||
+      category.includes("TEEN")
+    const isAdultCategory = category.includes("ADULT")
+    const adultKeywords =
+      /\b(adult|woman|women|man|men|mature|lingerie|sexy|voluptuous|voluptueuse|voluptueux|bra|bikini|underwear)\b/i
+    const childKeywords = /\b(baby|infant|toddler|child|kid|newborn)\b/i
+
+    if (isMinorCategory && adultKeywords.test(prompt)) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Prompt incompatible avec un preset enfant/adolescent.",
+      })
+    }
+
+    if (isAdultCategory && childKeywords.test(prompt)) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Prompt incompatible avec un preset adulte.",
+      })
+    }
 
     const files = input.getAll("images").filter(isFile)
     const imageUrls = parseStringArray(input.get("imageUrls"))
@@ -148,12 +180,13 @@ export const imagesGenerateStudioHandler = protectedProcedure
               )
             : imageUrls
 
-        const catLabel = STUDIO_CATEGORIES[category].toLowerCase()
+        const presetPrompt =
+          config.generationSettings.preset.metadata[category].prompt
         const ethLabel = ethnicity.toLowerCase()
         const bgPrompt = BACKGROUND_PROMPTS[background]
         const fixedPrompt =
           "Professional high-end fashion photography. Soft lighting."
-        const dynamicPrompt = `Full body shot of a ${ethLabel} ${catLabel}, ${age}yo, ${height}cm. ${bgPrompt}. ${prompt}`
+        const dynamicPrompt = `Full body shot of a ${ethLabel} ${presetPrompt}, ${age}yo, ${height}cm. ${bgPrompt}. ${prompt}`
 
         await pushStatus(jobId, { step: "generating" })
 

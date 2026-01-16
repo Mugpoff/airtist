@@ -1,6 +1,6 @@
 "use client"
 
-import { STUDIO_AGE_RANGES } from "@repo/trpc/constants"
+import { config, type GenerationPreset } from "@repo/config"
 import { Button } from "@repo/ui/base/button"
 import {
   Card,
@@ -20,6 +20,7 @@ import {
 import { toastManager } from "@repo/ui/base/toast"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { useAtomValue } from "jotai"
+import { useTranslations } from "next-intl"
 import { Suspense } from "react"
 import { isGeneratingAtom } from "@/atoms/is-generating-atom"
 import { useTRPC } from "@/trpc/react"
@@ -67,6 +68,7 @@ function DriveSection({
 }
 
 export function GenerateForm({ modelsInfo, onGenerate }: Props) {
+  const t = useTranslations("global")
   const isGenerating = useAtomValue(isGeneratingAtom)
   const form = useGenerateForm(modelsInfo)
 
@@ -89,7 +91,9 @@ export function GenerateForm({ modelsInfo, onGenerate }: Props) {
 
     const ageNum = parseInt(form.age, 10)
     const range =
-      STUDIO_AGE_RANGES[form.category as keyof typeof STUDIO_AGE_RANGES]
+      config.generationSettings.preset.metadata[
+        form.category as GenerationPreset
+      ].age
     if (range && (ageNum < range.min || ageNum > range.max)) {
       toastManager.add({
         title: "Âge non autorisé",
@@ -157,7 +161,7 @@ export function GenerateForm({ modelsInfo, onGenerate }: Props) {
               <SelectContent>
                 {modelsInfo.categories.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
-                    {c.label}
+                    {t(`preset.${c.id}` as "preset.MAN_ADULT")}
                   </SelectItem>
                 ))}
               </SelectContent>

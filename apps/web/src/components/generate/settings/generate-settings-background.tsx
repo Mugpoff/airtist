@@ -17,6 +17,7 @@ import {
 } from "@repo/ui/base/select"
 import { useAtom, useAtomValue } from "jotai"
 import { useTranslations } from "next-intl"
+import type { Settings } from "@/atoms/settings-atom"
 import { settingsAtom } from "@/atoms/settings-atom"
 
 type Props = {
@@ -57,7 +58,12 @@ const Payload = () => {
         <Select
           value={settings.background}
           onValueChange={(value) => {
-            if (value) setSettings((prev) => ({ ...prev, background: value }))
+            if (value)
+              setSettings((prev: Settings) => ({
+                ...prev,
+                background:
+                  value as (typeof config.generationSettings.background.values)[number],
+              }))
           }}
         >
           <SelectTrigger>

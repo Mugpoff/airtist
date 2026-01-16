@@ -4,6 +4,9 @@
     "password": "Mot de passe",
     "english": "English",
     "french": "Français",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système",
     "weight": {
       "title": "Poids",
       "description": "Définissez le poids corporel du modèle généré en kilogrammes. Cela affecte la forme et les proportions du corps."
@@ -21,10 +24,12 @@
     "preset": {
       "title": "Préréglage",
       "description": "Choisissez le genre et la catégorie d'âge du modèle généré. Cela détermine le type de corps et l'apparence de la personne dans l'image finale.",
+      "MAN_BABY": "Homme Bébé",
       "MAN_CHILD": "Homme Enfant",
       "MAN_PRETEEN": "Homme Préadolescent",
       "MAN_TEEN": "Homme Adolescent",
       "MAN_ADULT": "Homme Adulte",
+      "WOMAN_BABY": "Femme Bébé",
       "WOMAN_CHILD": "Femme Enfant",
       "WOMAN_PRETEEN": "Femme Préadolescente",
       "WOMAN_TEEN": "Femme Adolescente",
@@ -47,7 +52,11 @@
     },
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "saving": "Enregistrement en cours..."
+    "saving": "Enregistrement en cours...",
+    "settings": "Paramètres",
+    "language": "Langue",
+    "theme": "Thème",
+    "signOut": "Se déconnecter"
   },
   "validation": {
     "email": {
@@ -101,7 +110,7 @@
     "generate": {
       "title": "Paramètres de génération",
       "description": "Faites des modifications aux paramètres de génération ici. Cliquez sur enregistrer lorsque vous avez terminé.",
-      "settings": "{preset, select, MAN_CHILD {Homme Enfant} MAN_PRETEEN {Homme Préadolescent} MAN_TEEN {Homme Adolescent} MAN_ADULT {Homme Adulte} WOMAN_CHILD {Femme Enfant} WOMAN_PRETEEN {Femme Préadolescente} WOMAN_TEEN {Femme Adolescente} other {Femme Adulte}}, {ethnicity, select, WHITE {Blanc} BLACK {Noir} ASIAN {Asiatique} LATINO {Latino} other {Mixte}}, {weight} kg, {background, select, STUDIO_WHITE {Studio Blanc} STUDIO_GREY {Studio Gris} STUDIO_DARK_GREY {Studio Gris Foncé} STUDIO_BLACK {Studio Noir} other {Studio Beige}}",
+      "settings": "{preset, select, MAN_BABY {Homme Bébé} MAN_CHILD {Homme Enfant} MAN_PRETEEN {Homme Préadolescent} MAN_TEEN {Homme Adolescent} MAN_ADULT {Homme Adulte} WOMAN_BABY {Femme Bébé} WOMAN_CHILD {Femme Enfant} WOMAN_PRETEEN {Femme Préadolescente} WOMAN_TEEN {Femme Adolescente} other {Femme Adulte}}, {ethnicity, select, WHITE {Blanc} BLACK {Noir} ASIAN {Asiatique} LATINO {Latino} other {Mixte}}, {weight} kg, {background, select, STUDIO_WHITE {Studio Blanc} STUDIO_GREY {Studio Gris} STUDIO_DARK_GREY {Studio Gris Foncé} STUDIO_BLACK {Studio Noir} other {Studio Beige}}",
       "error": "Une erreur est survenue lors de la génération. Veuillez réessayer ou contacter nos équipes."
     },
     "canvas": {
@@ -109,6 +118,15 @@
         "title": "Rien ici pour l'instant...",
         "button": "Remonter ?"
       }
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "description": "Bienvenue sur votre tableau de bord. Ici vous pouvez gérer vos comptes et paramètres.",
+    "users": {
+      "title": "Utilisateurs",
+      "description": "Gérez vos utilisateurs ici.",
+      "list": "Liste des utilisateurs"
     }
   },
   "notFound": {

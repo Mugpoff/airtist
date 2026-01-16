@@ -1,5 +1,7 @@
 "use client"
 
+import { config } from "@repo/config"
+import type { AppRouter } from "@repo/trpc"
 import { LightRays } from "@repo/ui/backgrounds/light-rays"
 import { toastManager } from "@repo/ui/base/toast"
 import {
@@ -11,6 +13,7 @@ import {
 } from "@repo/ui/base/tooltip"
 import { ShimmerButton } from "@repo/ui/buttons/shimmer-button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import type { TRPCClientErrorLike } from "@trpc/client"
 import { useSubscription } from "@trpc/tanstack-react-query"
 import { useAtomValue, useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
@@ -26,6 +29,20 @@ import { GenerateDropzone } from "./generate-dropzone"
 import { GenerateSettings } from "./settings/generate-settings"
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>()
+
+const toFriendlyError = (error: TRPCClientErrorLike<AppRouter>) => {
+  const message = error.message.toLowerCase()
+  if (message.includes("âge") || message.includes("age")) {
+    return "Âge incompatible avec ce preset. Ajuste l’âge ou la catégorie."
+  }
+  if (message.includes("prompt incompatible")) {
+    return "Le prompt ne correspond pas au preset choisi. Modifie le prompt ou la catégorie."
+  }
+  if (message.includes("images requises")) {
+    return "Ajoute au moins une image de vêtement pour générer."
+  }
+  return ""
+}
 
 export const GenerateContent = () => {
   const t = useTranslations("home")
@@ -74,7 +91,7 @@ export const GenerateContent = () => {
     formData.set("background", settings.background)
     formData.set("ethnicity", settings.ethnicity)
     formData.set("age", settings.age.toString())
-    formData.set("model", "google/gemini-3-pro-image-preview")
+    formData.set("model", config.generationSettings.model.default)
     formData.set("height", "170")
     formData.set("aspectRatio", "1:1")
 
@@ -87,12 +104,11 @@ export const GenerateContent = () => {
         setActiveJobId(data.jobId)
       },
       onError: (error) => {
+        const friendlyMessage = toFriendlyError(error)
         toastManager.add({
-          title: t("generate.error"),
+          title: friendlyMessage || t("generate.error"),
           type: "error",
         })
-
-        console.error(error)
       },
     })
   }

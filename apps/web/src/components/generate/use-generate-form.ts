@@ -1,4 +1,4 @@
-import { STUDIO_AGE_RANGES } from "@repo/trpc/constants"
+import { config, type GenerationPreset } from "@repo/config"
 import { useEffect, useState } from "react"
 
 const ethnicities = [
@@ -14,15 +14,14 @@ export type Ethnicity = (typeof ethnicities)[number]
 
 export type ModelsInfoShape = {
   defaultModel: string
+  promptDefault: string
   models: string[]
-  categories: Array<{ id: string; label: string }>
+  categories: Array<{ id: string }>
   backgrounds: Array<{ id: string; label: string }>
 }
 
 export const useGenerateForm = (modelsInfo: ModelsInfoShape) => {
-  const [prompt, setPrompt] = useState(
-    "Studio fashion model wearing the outfit",
-  )
+  const [prompt, setPrompt] = useState(modelsInfo.promptDefault)
   const [model, setModel] = useState<string>(modelsInfo.defaultModel)
   const [category, setCategory] = useState<string>(
     modelsInfo.categories[0]?.id ?? "",
@@ -32,15 +31,18 @@ export const useGenerateForm = (modelsInfo: ModelsInfoShape) => {
   )
   const [ethnicity, setEthnicity] = useState<Ethnicity>("WHITE")
   const [height, setHeight] = useState("175")
-  const [age, setAge] = useState("25")
+  const [age, setAge] = useState("22")
   const [files, setFiles] = useState<File[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
 
   useEffect(() => {
-    const range = STUDIO_AGE_RANGES[category as keyof typeof STUDIO_AGE_RANGES]
+    const range =
+      config.generationSettings.preset.metadata[category as GenerationPreset]
+        .age
     if (!range) return
     setAge(range.min.toString())
-    if (category.includes("CHILD")) setHeight("130")
+    if (category.includes("BABY")) setHeight("80")
+    else if (category.includes("CHILD")) setHeight("130")
     else if (category.includes("PRETEEN")) setHeight("155")
     else if (category.includes("TEEN")) setHeight("165")
     else setHeight("175")

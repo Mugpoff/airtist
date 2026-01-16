@@ -16,7 +16,7 @@ function TooltipTrigger(props: TooltipPrimitive.Trigger.Props) {
 function TooltipPopup({
   className,
   align = "center",
-  sideOffset = 4,
+  sideOffset = 8,
   side = "top",
   children,
   ...props

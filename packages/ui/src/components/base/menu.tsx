@@ -17,7 +17,7 @@ function MenuTrigger(props: MenuPrimitive.Trigger.Props) {
 function MenuPopup({
   children,
   className,
-  sideOffset = 4,
+  sideOffset = 8,
   align = "center",
   alignOffset,
   side = "bottom",

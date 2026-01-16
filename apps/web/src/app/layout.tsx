@@ -58,7 +58,7 @@ export default async function RootLayout(props: { children: ReactNode }) {
     <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
-          "overflow-hidden bg-sidebar font-sans text-foreground antialiased",
+          "relative isolate overflow-hidden bg-sidebar font-sans text-foreground antialiased",
           inter.variable,
           calSans.variable,
         )}

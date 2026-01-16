@@ -2,7 +2,7 @@ export const config = {
   general: {
     name: "Airtist",
     description: "Generate stunning AI-powered images with ease",
-    url: "https://aipicture.app",
+    url: "https://studio.regardbeauty.xyz",
   },
   metadata: {
     keywords: [
@@ -35,20 +35,64 @@ export const config = {
     preset: {
       default: "MAN_ADULT",
       values: [
+        "MAN_BABY",
         "MAN_CHILD",
         "MAN_PRETEEN",
         "MAN_TEEN",
         "MAN_ADULT",
+        "WOMAN_BABY",
         "WOMAN_CHILD",
         "WOMAN_PRETEEN",
         "WOMAN_TEEN",
         "WOMAN_ADULT",
       ],
+      metadata: {
+        MAN_BABY: {
+          age: { min: 1, max: 3 },
+          prompt: "baby boy",
+        },
+        MAN_CHILD: {
+          age: { min: 5, max: 12 },
+          prompt: "young boy",
+        },
+        MAN_PRETEEN: {
+          age: { min: 13, max: 15 },
+          prompt: "preteen boy",
+        },
+        MAN_TEEN: {
+          age: { min: 16, max: 18 },
+          prompt: "teen boy",
+        },
+        MAN_ADULT: {
+          age: { min: 22, max: 99 },
+          prompt: "adult man",
+        },
+        WOMAN_BABY: {
+          age: { min: 1, max: 3 },
+          prompt: "baby girl",
+        },
+        WOMAN_CHILD: {
+          age: { min: 5, max: 12 },
+          prompt: "young girl",
+        },
+        WOMAN_PRETEEN: {
+          age: { min: 13, max: 15 },
+          prompt: "preteen girl",
+        },
+        WOMAN_TEEN: {
+          age: { min: 16, max: 18 },
+          prompt: "teen girl",
+        },
+        WOMAN_ADULT: {
+          age: { min: 22, max: 99 },
+          prompt: "adult woman",
+        },
+      },
     },
     age: {
-      default: 25,
+      default: 22,
       min: 1,
-      max: 100,
+      max: 99,
     },
     weight: {
       default: 70,
@@ -69,6 +113,12 @@ export const config = {
         "STUDIO_BEIGE",
       ],
     },
+    model: {
+      default: "google/gemini-3-pro-image-preview",
+    },
+    prompt: {
+      default: "Studio fashion model wearing the outfit",
+    },
     acceptedFiles: {
       "image/png": [".png"],
       "image/jpeg": [".jpg", ".jpeg"],
@@ -76,5 +126,9 @@ export const config = {
       "application/zip": [".zip"],
     },
     acceptedImages: new Set(["image/png", "image/jpeg", "image/webp"]),
+    studioModes: ["ECOMMERCE", "FASHION"],
   },
 } as const
+
+export type GenerationPreset =
+  (typeof config.generationSettings.preset.values)[number]

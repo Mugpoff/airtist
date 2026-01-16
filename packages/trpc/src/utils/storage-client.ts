@@ -15,30 +15,6 @@ const s3 = new S3Client({
   forcePathStyle: true,
 })
 
-/**
- * Sanitizes a file name for safe storage and URL usage.
- * - Normalizes accents (é → e, ñ → n)
- * - Replaces spaces with underscores
- * - Removes unsafe URL characters and emojis
- * - Preserves file extension
- * - Falls back to "file" if name becomes empty
- */
-export const sanitizeFileName = (name: string): string => {
-  const lastDot = name.lastIndexOf(".")
-  const baseName = lastDot > 0 ? name.slice(0, lastDot) : name
-  const extension = lastDot > 0 ? name.slice(lastDot) : ""
-
-  const sanitized = baseName
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replaceAll(" ", "_")
-    .replace(/[^a-zA-Z0-9_-]/g, "")
-    .replace(/[_-]+/g, "_")
-    .replace(/^[_-]+|[_-]+$/g, "")
-
-  return (sanitized || "file") + extension.toLowerCase()
-}
-
 const ALLOWED_IMAGE_MIME_TYPES = new Set([
   "image/png",
   "image/jpeg",

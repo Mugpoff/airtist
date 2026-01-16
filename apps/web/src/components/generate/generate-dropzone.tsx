@@ -8,6 +8,7 @@ import { useAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
+import type { Settings } from "@/atoms/settings-atom"
 import { settingsAtom } from "@/atoms/settings-atom"
 import { GenerateDropzoneMasonry } from "./generate-dropzone-masonry"
 
@@ -58,7 +59,7 @@ export const GenerateDropzone = ({ isGenerating }: Props) => {
         await zipReader.close()
       }
 
-      setSettings((prev) => ({
+      setSettings((prev: Settings) => ({
         ...prev,
         files: newFiles,
       }))
@@ -69,9 +70,9 @@ export const GenerateDropzone = ({ isGenerating }: Props) => {
 
   const deleteFile = useCallback(
     (index: number) => {
-      setSettings((prev) => ({
+      setSettings((prev: Settings) => ({
         ...prev,
-        files: prev.files.filter((_, i) => i !== index),
+        files: prev.files.filter((_: File, i: number) => i !== index),
       }))
     },
     [setSettings],
