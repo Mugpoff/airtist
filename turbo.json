@@ -27,5 +27,19 @@
       "outputs": [".cache/tsbuildinfo.json"]
     }
   },
-  "globalPassThroughEnv": ["MINIO_PUBLIC_ENDPOINT", "MINIO_BUCKET"]
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
+    "BETTER_AUTH_SECRET",
+    "BETTER_AUTH_URL",
+    "DRAGONFLY_URL",
+    "MINIO_BUCKET",
+    "MINIO_ENDPOINT",
+    "MINIO_PUBLIC_ENDPOINT",
+    "MINIO_ACCESS_KEY",
+    "MINIO_REGION",
+    "MINIO_SECRET_KEY",
+    "OPENROUTER_API_KEY",
+    "OPENROUTER_APP_TITLE",
+    "OPENROUTER_HTTP_REFERER"
+  ]
 }
