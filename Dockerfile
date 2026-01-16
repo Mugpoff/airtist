@@ -1,4 +1,3 @@
-# check=skip=SecretsUsedInArgOrEnv
 FROM oven/bun:1.3.5 AS base
 WORKDIR /app
 
@@ -18,24 +17,16 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
 
-COPY package.json bun.lock ./
-COPY packages/db/package.json ./packages/db/
-COPY apps/web/package.json ./apps/web/
+COPY . .
 RUN bun install --frozen-lockfile
 
-COPY . .
 RUN bun run -F @repo/db prisma generate
 RUN bun x turbo build --filter=web...
 
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /app/apps/web/.next ./apps/web/.next
-COPY --from=builder /app/apps/web/public ./apps/web/public
-COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/packages ./packages
+COPY --from=builder /app ./
 
 EXPOSE 3000
-CMD ["bun", "run", "-F", "web", "start"]s
+CMD ["bun", "run", "-F", "web", "start"]
