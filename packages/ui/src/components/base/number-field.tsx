@@ -106,6 +106,7 @@ function NumberFieldInput({
 function NumberFieldScrubArea({
   className,
   label,
+  "aria-required": required,
   ...props
 }: NumberFieldPrimitive.ScrubArea.Props & {
   label: string
@@ -124,7 +125,11 @@ function NumberFieldScrubArea({
       data-slot="number-field-scrub-area"
       {...props}
     >
-      <Label className="cursor-ew-resize" htmlFor={context.fieldId}>
+      <Label
+        className="cursor-ew-resize"
+        htmlFor={context.fieldId}
+        aria-required={required}
+      >
         {label}
       </Label>
       <NumberFieldPrimitive.ScrubAreaCursor className="drop-shadow-[0_1px_1px_#0008] filter">

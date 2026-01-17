@@ -43,7 +43,10 @@ export const NumberInputField = <
             {...field}
             {...props}
           >
-            <NumberFieldScrubArea label={label} />
+            <NumberFieldScrubArea
+              label={label}
+              aria-required={props.required}
+            />
             <NumberFieldGroup
               aria-invalid={invalid || undefined}
               data-touched={isTouched || undefined}
