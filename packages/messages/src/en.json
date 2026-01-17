@@ -56,7 +56,12 @@
     "settings": "Settings",
     "language": "Language",
     "theme": "Theme",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "search": "Search",
+    "name": "Name",
+    "role": "Role",
+    "banned": "Banned",
+    "ban": "Ban"
   },
   "validation": {
     "email": {
@@ -126,7 +131,15 @@
     "users": {
       "title": "Users",
       "description": "Manage your users here.",
-      "list": "List of users"
+      "list": "List of users",
+      "ban": {
+        "title": "Are you absolutely sure?",
+        "description": "This action will ban the user from the platform. They will no longer be able to log in or use any features.",
+        "submitButton": "Ban",
+        "submitting": "Banning...",
+        "success": "User banned successfully",
+        "error": "Failed to ban user"
+      }
     }
   },
   "notFound": {

@@ -56,7 +56,12 @@
     "settings": "Paramètres",
     "language": "Langue",
     "theme": "Thème",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "search": "Rechercher",
+    "name": "Nom",
+    "role": "Rôle",
+    "banned": "Banni",
+    "ban": "Bannir"
   },
   "validation": {
     "email": {
@@ -126,7 +131,15 @@
     "users": {
       "title": "Utilisateurs",
       "description": "Gérez vos utilisateurs ici.",
-      "list": "Liste des utilisateurs"
+      "list": "Liste des utilisateurs",
+      "ban": {
+        "title": "Êtes-vous absolument sûr et certain ?",
+        "description": "Cette action bannira l'utilisateur de la plateforme. Il ne pourra plus se connecter ni utiliser les fonctionnalités.",
+        "submitButton": "Bannir",
+        "submitting": "Bannissement...",
+        "success": "Utilisateur banni avec succès",
+        "error": "Échec du bannissement de l'utilisateur"
+      }
     }
   },
   "notFound": {
