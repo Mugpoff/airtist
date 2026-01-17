@@ -28,13 +28,9 @@ export const DashboardUsersTable = () => {
   const [query] = useQueryState("q", { defaultValue: "" })
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["users-list", query],
-    queryFn: async () => {
-      const users = await authClient.admin.listUsers({
-        query: { searchValue: query },
-      })
-
-      return users.data
-    },
+    queryFn: () =>
+      authClient.admin.listUsers({ query: { searchValue: query } }),
+    select: ({ data }) => data,
   })
   const table = useReactTable({
     data: data?.users ?? [],

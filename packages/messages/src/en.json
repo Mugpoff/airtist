@@ -173,7 +173,7 @@
         "reasonDescription": "Provide a reason for banning this user. This will be visible to the user.",
         "confirm": {
           "title": "Are you absolutely sure?",
-          "description": "You are about to ban <name></name> for <duration></duration>. This action cannot be undone.",
+          "description": "You are about to ban <name></name> for <duration></duration>.",
           "submitButton": "Yes, ban"
         }
       },

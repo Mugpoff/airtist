@@ -27,7 +27,6 @@ export const DashboardUsersTableDeleteDialog = ({
   onOpenChange,
 }: Props) => {
   const t = useTranslations()
-
   const { mutate, isPending } = useMutation({
     mutationKey: ["users-delete", userId],
     mutationFn: () => authClient.admin.removeUser({ userId }),
@@ -44,9 +43,10 @@ export const DashboardUsersTableDeleteDialog = ({
       onOpenChange(false)
     },
     onError: (error) => {
+      console.error(error)
+
       toastManager.add({
-        title: t("dashboard.users.delete.error"),
-        description: error.message,
+        title: t("auth.errors.UNKNOWN"),
         type: "error",
       })
     },

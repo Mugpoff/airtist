@@ -173,7 +173,7 @@
         "reasonDescription": "Indiquez une raison pour le bannissement de cet utilisateur. Elle sera visible par l'utilisateur.",
         "confirm": {
           "title": "Êtes-vous absolument sûr ?",
-          "description": "Vous êtes sur le point de bannir <name></name> pour <duration></duration>. Cette action est irréversible.",
+          "description": "Vous êtes sur le point de bannir <name></name> pour <duration></duration>.",
           "submitButton": "Oui, bannir"
         }
       },

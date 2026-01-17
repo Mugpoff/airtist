@@ -12,7 +12,7 @@ import {
 import { TableCell, TableRow } from "@repo/ui/base/table"
 import { useTranslations } from "next-intl"
 import { useQueryState } from "nuqs"
-import { DashboardUsersTableCreateButton } from "./dashboard-users-table-create-button"
+import { DashboardUsersTableCreateDialog } from "./dashboard-users-table-create-dialog"
 
 export const DashboardUsersTableEmpty = () => {
   const [query, setQuery] = useQueryState("q", { defaultValue: "" })
@@ -33,7 +33,7 @@ export const DashboardUsersTableEmpty = () => {
           </EmptyHeader>
           <EmptyContent>
             <div className="flex flex-row gap-2">
-              <DashboardUsersTableCreateButton />
+              <DashboardUsersTableCreateDialog />
               {query.length > 0 && (
                 <Button variant="outline" onClick={() => setQuery("")}>
                   {t("global.resetQuery")}
