@@ -1,15 +1,16 @@
 import {
-  Cancel01Icon,
+  CheckmarkCircle03Icon,
   MoreHorizontalIcon,
-  Tick02Icon,
+  UnavailableIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import type { Session } from "@repo/auth/server"
+import { Badge } from "@repo/ui/base/badge"
 import { Button } from "@repo/ui/base/button"
 import { Checkbox } from "@repo/ui/base/checkbox"
 import { Menu, MenuPopup, MenuTrigger } from "@repo/ui/base/menu"
 import type { ColumnDef } from "@tanstack/react-table"
-import { DashboardUsersTableBanButton } from "@/app/dashboard/users/_components/dashboard-users-table-ban-button"
+import { useTranslations } from "next-intl"
 
 export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
   {
@@ -45,19 +46,31 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
     header: "role",
   },
   {
-    accessorKey: "banned",
-    header: "banned",
+    header: "status",
     cell: ({ row }) => {
       const user = row.original
+      const t = useTranslations("global")
 
       if (user.banned) {
         return (
-          <HugeiconsIcon icon={Tick02Icon} className="text-muted-foreground" />
+          <Badge className="rounded-full px-2 py-1" variant="outline">
+            <HugeiconsIcon
+              icon={UnavailableIcon}
+              className="size-3.5 text-destructive-foreground"
+            />
+            {t("banned")}
+          </Badge>
         )
       }
 
       return (
-        <HugeiconsIcon icon={Cancel01Icon} className="text-muted-foreground" />
+        <Badge className="rounded-full px-2 py-1" variant="outline">
+          <HugeiconsIcon
+            icon={CheckmarkCircle03Icon}
+            className="size-3.5 text-success-foreground"
+          />
+          {t("active")}
+        </Badge>
       )
     },
   },
