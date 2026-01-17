@@ -50,32 +50,33 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
                   variant="outline"
                 />
               }
+              nativeButton={false}
             >
               <HugeiconsIcon
                 icon={UnavailableIcon}
                 className="size-3.5 text-destructive-foreground"
               />
               {t("global.banned")}
-              <PopoverPopup className="max-w-80">
-                <div className="flex flex-col gap-4">
-                  <p className="text-sm">
-                    {t("dashboard.users.unban.unbanningIn", {
-                      relativeTime: format.relativeTime(user.banExpires, now),
-                      dateTime: format.dateTime(user.banExpires, {
-                        dateStyle: "long",
-                        timeStyle: "short",
-                      }),
-                    })}
-                  </p>
-                  <div className="flex flex-col text-sm">
-                    <p className="font-medium text-muted-foreground text-xs uppercase">
-                      {t("global.reason")}
-                    </p>
-                    <p>{user.banReason}</p>
-                  </div>
-                </div>
-              </PopoverPopup>
             </PopoverTrigger>
+            <PopoverPopup className="max-w-80">
+              <div className="flex flex-col gap-4">
+                <p className="text-sm">
+                  {t("dashboard.users.unban.unbanningIn", {
+                    relativeTime: format.relativeTime(user.banExpires, now),
+                    dateTime: format.dateTime(user.banExpires, {
+                      dateStyle: "long",
+                      timeStyle: "short",
+                    }),
+                  })}
+                </p>
+                <div className="flex flex-col text-sm">
+                  <p className="font-medium text-muted-foreground text-xs uppercase">
+                    {t("global.reason")}
+                  </p>
+                  <p>{user.banReason}</p>
+                </div>
+              </div>
+            </PopoverPopup>
           </Popover>
         )
       }

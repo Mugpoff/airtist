@@ -97,11 +97,6 @@
     "duration": {
       "min": "Duration must be at least {min} {min, plural, one {hour} other {hours}}",
       "max": "Duration must be less than {max} {max, plural, one {hour} other {hours}}"
-    },
-    "ban": {
-      "reason": {
-        "required": "Please provide a reason for banning this user"
-      }
     }
   },
   "auth": {

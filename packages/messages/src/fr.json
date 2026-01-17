@@ -97,11 +97,6 @@
     "duration": {
       "min": "La durée doit être d'au moins {min} {min, plural, one {heure} other {heures}}",
       "max": "La durée doit être inférieure à {max} {max, plural, one {heure} other {heures}}"
-    },
-    "ban": {
-      "reason": {
-        "required": "Veuillez fournir une raison pour le bannissement"
-      }
     }
   },
   "auth": {

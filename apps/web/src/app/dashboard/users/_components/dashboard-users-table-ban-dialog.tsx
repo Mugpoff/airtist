@@ -37,7 +37,7 @@ const banFormSchema = z.object({
     .number()
     .min(config.auth.minBanDuration, zodMessages.duration.min)
     .max(config.auth.maxBanDuration, zodMessages.duration.max),
-  reason: z.string().nonempty(zodMessages.ban.reason.required),
+  reason: z.string(),
 })
 
 type BanFormValues = z.infer<typeof banFormSchema>
@@ -112,10 +112,7 @@ export const DashboardUsersTableBanDialog = ({
           </DialogDescription>
         </DialogHeader>
         <DialogPanel>
-          <Form
-            form={form}
-            onSubmit={form.handleSubmit((data) => mutate(data))}
-          >
+          <Form form={form}>
             <NumberInputField
               name="duration"
               control={form.control}
