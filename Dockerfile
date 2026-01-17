@@ -48,4 +48,4 @@ COPY --from=builder /app ./
 
 EXPOSE 3000
 
-CMD ["bun", "run", "--cwd", "apps/web", "start"]
+CMD ["/bin/sh", "-c", "bun run -F @repo/db prisma migrate deploy && bun run --cwd apps/web start"]
