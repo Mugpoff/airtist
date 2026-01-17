@@ -65,6 +65,7 @@
     "active": "Active",
     "ban": "Ban",
     "unban": "Unban",
+    "delete": "Delete",
     "resetQuery": "Reset query",
     "retry": "Retry",
     "durationDays": "Duration (days)",
@@ -166,6 +167,16 @@
           "title": "Unban user?",
           "description": "You are about to restore access for <name></name>. They will be able to log in and use the platform again.",
           "submitButton": "Yes, unban"
+        }
+      },
+      "delete": {
+        "success": "<name></name> has been deleted",
+        "error": "Failed to delete user",
+        "submitting": "Deleting...",
+        "confirm": {
+          "title": "Delete user?",
+          "description": "You are about to permanently delete <name></name>. This action cannot be undone and all their data will be lost.",
+          "submitButton": "Yes, delete"
         }
       },
       "empty": {

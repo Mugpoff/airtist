@@ -1,9 +1,11 @@
 import { DashboardUsersTableBanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-ban-dialog"
+import { DashboardUsersTableDeleteDialog } from "@/app/dashboard/users/_components/dashboard-users-table-delete-dialog"
 import { DashboardUsersTableUnbanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-unban-dialog"
 import { useAuth } from "@/stores/auth-store"
 import {
   Cancel01Icon,
   CheckmarkCircle03Icon,
+  Delete01Icon,
   LegalHammerIcon,
   MoreHorizontalIcon,
   UnavailableIcon,
@@ -107,6 +109,7 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
     cell: ({ row }) => {
       const [banDialogOpen, setBanDialogOpen] = useState(false)
       const [unbanDialogOpen, setUnbanDialogOpen] = useState(false)
+      const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
       const { user: currentUser } = useAuth()
       const t = useTranslations("global")
       const user = row.original
@@ -137,6 +140,13 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
                   {t("ban")}
                 </MenuItem>
               )}
+              <MenuItem
+                variant="destructive"
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                <HugeiconsIcon icon={Delete01Icon} />
+                {t("delete")}
+              </MenuItem>
             </MenuPopup>
           </Menu>
           <DashboardUsersTableBanDialog
@@ -150,6 +160,12 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
             userName={user.name}
             open={unbanDialogOpen}
             onOpenChange={setUnbanDialogOpen}
+          />
+          <DashboardUsersTableDeleteDialog
+            userId={user.id}
+            userName={user.name}
+            open={deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
           />
         </>
       )

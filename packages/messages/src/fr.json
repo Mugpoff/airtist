@@ -65,6 +65,7 @@
     "active": "Actif",
     "ban": "Bannir",
     "unban": "Débannir",
+    "delete": "Supprimer",
     "resetQuery": "Réinitialiser la recherche",
     "retry": "Réessayer",
     "durationDays": "Durée (jours)",
@@ -166,6 +167,16 @@
           "title": "Débannir l'utilisateur ?",
           "description": "Vous êtes sur le point de restaurer l'accès pour <name></name>. Il pourra se connecter et utiliser la plateforme à nouveau.",
           "submitButton": "Oui, débannir"
+        }
+      },
+      "delete": {
+        "success": "<name></name> a été supprimé",
+        "error": "Échec de la suppression de l'utilisateur",
+        "submitting": "Suppression...",
+        "confirm": {
+          "title": "Supprimer l'utilisateur ?",
+          "description": "Vous êtes sur le point de supprimer définitivement <name></name>. Cette action est irréversible et toutes ses données seront perdues.",
+          "submitButton": "Oui, supprimer"
         }
       },
       "empty": {
