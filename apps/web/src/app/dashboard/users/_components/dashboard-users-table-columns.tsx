@@ -1,4 +1,5 @@
 import {
+  Cancel01Icon,
   CheckmarkCircle03Icon,
   LegalHammerIcon,
   MoreHorizontalIcon,
@@ -8,34 +9,15 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import type { Session } from "@repo/auth/server"
 import { Badge } from "@repo/ui/base/badge"
 import { Button } from "@repo/ui/base/button"
-import { Checkbox } from "@repo/ui/base/checkbox"
 import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@repo/ui/base/menu"
 import type { ColumnDef } from "@tanstack/react-table"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { DashboardUsersTableBanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-ban-dialog"
+import { DashboardUsersTableUnbanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-unban-dialog"
+import { useAuth } from "@/stores/auth-store"
 
 export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        indeterminate={
-          table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-  },
   {
     accessorKey: "name",
     header: "name",
@@ -81,7 +63,14 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
     id: "actions",
     cell: ({ row }) => {
       const [banDialogOpen, setBanDialogOpen] = useState(false)
+      const [unbanDialogOpen, setUnbanDialogOpen] = useState(false)
+      const { user: currentUser } = useAuth()
       const t = useTranslations("global")
+      const user = row.original
+
+      if (currentUser?.id === user.id) {
+        return null
+      }
 
       return (
         <>
@@ -90,20 +79,34 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
               <HugeiconsIcon icon={MoreHorizontalIcon} />
             </MenuTrigger>
             <MenuPopup>
-              <MenuItem
-                variant="destructive"
-                onClick={() => setBanDialogOpen(true)}
-              >
-                <HugeiconsIcon icon={LegalHammerIcon} />
-                {t("ban")}
-              </MenuItem>
+              {user.banned && (
+                <MenuItem onClick={() => setUnbanDialogOpen(true)}>
+                  <HugeiconsIcon icon={Cancel01Icon} />
+                  {t("unban")}
+                </MenuItem>
+              )}
+              {!user.banned && (
+                <MenuItem
+                  variant="destructive"
+                  onClick={() => setBanDialogOpen(true)}
+                >
+                  <HugeiconsIcon icon={LegalHammerIcon} />
+                  {t("ban")}
+                </MenuItem>
+              )}
             </MenuPopup>
           </Menu>
           <DashboardUsersTableBanDialog
-            userId={row.original.id}
-            userName={row.original.name}
+            userId={user.id}
+            userName={user.name}
             open={banDialogOpen}
             onOpenChange={setBanDialogOpen}
+          />
+          <DashboardUsersTableUnbanDialog
+            userId={user.id}
+            userName={user.name}
+            open={unbanDialogOpen}
+            onOpenChange={setUnbanDialogOpen}
           />
         </>
       )

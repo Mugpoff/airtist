@@ -64,6 +64,7 @@
     "banned": "Banned",
     "active": "Active",
     "ban": "Ban",
+    "unban": "Unban",
     "resetQuery": "Reset query",
     "retry": "Retry",
     "durationHours": "Duration (hours)",
@@ -157,6 +158,16 @@
           "title": "Are you absolutely sure?",
           "description": "You are about to ban <name></name> for <duration></duration>. This action cannot be undone.",
           "submitButton": "Yes, ban"
+        }
+      },
+      "unban": {
+        "success": "<name></name> has been unbanned",
+        "error": "Failed to unban <name></name>",
+        "submitting": "Unbanning...",
+        "confirm": {
+          "title": "Unban user?",
+          "description": "You are about to restore access for <name></name>. They will be able to log in and use the platform again.",
+          "submitButton": "Yes, unban"
         }
       },
       "empty": {

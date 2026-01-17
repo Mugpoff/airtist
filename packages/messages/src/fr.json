@@ -64,6 +64,7 @@
     "banned": "Banni",
     "active": "Actif",
     "ban": "Bannir",
+    "unban": "Débannir",
     "resetQuery": "Réinitialiser la recherche",
     "retry": "Réessayer",
     "durationHours": "Durée (heures)",
@@ -157,6 +158,16 @@
           "title": "Êtes-vous absolument sûr ?",
           "description": "Vous êtes sur le point de bannir <name></name> pour <duration></duration>. Cette action est irréversible.",
           "submitButton": "Oui, bannir"
+        }
+      },
+      "unban": {
+        "success": "<name></name> a été débanni",
+        "error": "Échec du débannissement de <name></name>",
+        "submitting": "Débannissement...",
+        "confirm": {
+          "title": "Débannir l'utilisateur ?",
+          "description": "Vous êtes sur le point de restaurer l'accès pour <name></name>. Il pourra se connecter et utiliser la plateforme à nouveau.",
+          "submitButton": "Oui, débannir"
         }
       },
       "empty": {
