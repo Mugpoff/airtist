@@ -60,8 +60,15 @@
     "search": "Rechercher",
     "name": "Nom",
     "role": "Rôle",
+    "status": "Statut",
     "banned": "Banni",
-    "ban": "Bannir"
+    "active": "Actif",
+    "ban": "Bannir",
+    "resetQuery": "Réinitialiser la recherche",
+    "retry": "Réessayer",
+    "durationHours": "Durée (heures)",
+    "reason": "Raison",
+    "hours": "heures"
   },
   "validation": {
     "email": {
@@ -85,7 +92,16 @@
     "ethnicity": {
       "invalid": "Veuillez sélectionner une ethnie valide"
     },
-    "selectOption": "Veuillez sélectionner une option"
+    "selectOption": "Veuillez sélectionner une option",
+    "duration": {
+      "min": "La durée doit être d'au moins {min} {min, plural, one {heure} other {heures}}",
+      "max": "La durée doit être inférieure à {max} {max, plural, one {heure} other {heures}}"
+    },
+    "ban": {
+      "reason": {
+        "required": "Veuillez fournir une raison pour le bannissement"
+      }
+    }
   },
   "auth": {
     "errors": {
@@ -132,13 +148,30 @@
       "title": "Utilisateurs",
       "description": "Gérez vos utilisateurs ici.",
       "list": "Liste des utilisateurs",
+      "create": "Créer un utilisateur",
       "ban": {
-        "title": "Êtes-vous absolument sûr et certain ?",
-        "description": "Cette action bannira l'utilisateur de la plateforme. Il ne pourra plus se connecter ni utiliser les fonctionnalités.",
-        "submitButton": "Bannir",
+        "title": "Bannir l'utilisateur",
+        "description": "Cette action bannira <name></name> de la plateforme. Il ne pourra plus se connecter ni utiliser les fonctionnalités.",
+        "submitButton": "Bannir l'utilisateur",
         "submitting": "Bannissement...",
-        "success": "Utilisateur banni avec succès",
-        "error": "Échec du bannissement de l'utilisateur"
+        "success": "<name></name> banni avec succès",
+        "error": "Échec du bannissement de <name></name>",
+        "durationDescription": "Combien de temps l'utilisateur doit-il être banni ? Entrez la durée en heures.",
+        "reasonPlaceholder": "Violation des conditions d'utilisation...",
+        "reasonDescription": "Indiquez une raison pour le bannissement de cet utilisateur. Elle sera visible par l'utilisateur.",
+        "confirm": {
+          "title": "Êtes-vous absolument sûr ?",
+          "description": "Vous êtes sur le point de bannir <name></name> pour <duration></duration>. Cette action est irréversible.",
+          "submitButton": "Oui, bannir"
+        }
+      },
+      "empty": {
+        "title": "Aucun utilisateur trouvé",
+        "description": "Essayez d'ajuster votre recherche ou créez un nouvel utilisateur pour commencer."
+      },
+      "error": {
+        "title": "Une erreur est survenue",
+        "description": "Impossible de charger les utilisateurs. Veuillez réessayer."
       }
     }
   },

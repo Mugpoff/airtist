@@ -21,6 +21,18 @@ export const config = {
   auth: {
     minPasswordLength: 8,
     maxPasswordLength: 50,
+    /**
+     * In hours
+     */
+    minBanDuration: 1,
+    /**
+     * In hours
+     */
+    maxBanDuration: 24 * 7,
+    /**
+     * In hours
+     */
+    defaultBanDuration: 24,
     cookieMaxAge: 7 * 24 * 60 * 60,
   },
   i18n: {

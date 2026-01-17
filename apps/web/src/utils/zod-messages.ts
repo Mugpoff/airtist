@@ -20,4 +20,13 @@ export const zodMessages = {
   ethnicity: {
     invalid: "validation.ethnicity.invalid",
   },
+  duration: {
+    min: "validation.duration.min",
+    max: "validation.duration.max",
+  },
+  ban: {
+    reason: {
+      required: "validation.ban.reason.required",
+    },
+  },
 } as const

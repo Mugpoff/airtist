@@ -1,5 +1,6 @@
 import {
   CheckmarkCircle03Icon,
+  LegalHammerIcon,
   MoreHorizontalIcon,
   UnavailableIcon,
 } from "@hugeicons/core-free-icons"
@@ -8,9 +9,11 @@ import type { Session } from "@repo/auth/server"
 import { Badge } from "@repo/ui/base/badge"
 import { Button } from "@repo/ui/base/button"
 import { Checkbox } from "@repo/ui/base/checkbox"
-import { Menu, MenuPopup, MenuTrigger } from "@repo/ui/base/menu"
+import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@repo/ui/base/menu"
 import type { ColumnDef } from "@tanstack/react-table"
 import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { DashboardUsersTableBanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-ban-dialog"
 
 export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
   {
@@ -76,15 +79,34 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => (
-      <Menu>
-        <MenuTrigger render={<Button variant="ghost" size="icon" />}>
-          <HugeiconsIcon icon={MoreHorizontalIcon} />
-        </MenuTrigger>
-        <MenuPopup>
-          <DashboardUsersTableBanButton userId={row.original.id} />
-        </MenuPopup>
-      </Menu>
-    ),
+    cell: ({ row }) => {
+      const [banDialogOpen, setBanDialogOpen] = useState(false)
+      const t = useTranslations("global")
+
+      return (
+        <>
+          <Menu>
+            <MenuTrigger render={<Button variant="ghost" size="icon" />}>
+              <HugeiconsIcon icon={MoreHorizontalIcon} />
+            </MenuTrigger>
+            <MenuPopup>
+              <MenuItem
+                variant="destructive"
+                onClick={() => setBanDialogOpen(true)}
+              >
+                <HugeiconsIcon icon={LegalHammerIcon} />
+                {t("ban")}
+              </MenuItem>
+            </MenuPopup>
+          </Menu>
+          <DashboardUsersTableBanDialog
+            userId={row.original.id}
+            userName={row.original.name}
+            open={banDialogOpen}
+            onOpenChange={setBanDialogOpen}
+          />
+        </>
+      )
+    },
   },
 ]
