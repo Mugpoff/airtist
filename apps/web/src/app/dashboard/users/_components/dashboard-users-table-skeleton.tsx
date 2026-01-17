@@ -1,7 +1,6 @@
 import { MoreHorizontalIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Button } from "@repo/ui/base/button"
-import { Checkbox } from "@repo/ui/base/checkbox"
 import { Frame } from "@repo/ui/base/frame"
 import { Skeleton } from "@repo/ui/base/skeleton"
 import {
@@ -22,9 +21,6 @@ export const DashboardUsersTableSkeleton = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>
-              <Checkbox disabled />
-            </TableHead>
             <TableHead>{t("name")}</TableHead>
             <TableHead>{t("email")}</TableHead>
             <TableHead>{t("role")}</TableHead>
@@ -37,19 +33,16 @@ export const DashboardUsersTableSkeleton = () => {
             // biome-ignore lint/suspicious/noArrayIndexKey: we don't have a unique key
             <TableRow key={index}>
               <TableCell>
-                <Checkbox />
+                <Skeleton className="h-4 w-24" />
               </TableCell>
               <TableCell>
-                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-56" />
               </TableCell>
               <TableCell>
-                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-12" />
               </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-full" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="size-6" />
+              <TableCell className="w-fit">
+                <Skeleton className="h-5 w-18 rounded-full" />
               </TableCell>
               <TableCell>
                 <Button variant="ghost" size="icon" disabled>
