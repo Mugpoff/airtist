@@ -164,6 +164,7 @@
         "success": "<name></name> has been unbanned",
         "error": "Failed to unban <name></name>",
         "submitting": "Unbanning...",
+        "unbanningIn": "Access to the platform will be restored {relativeTime}, on {dateTime}.",
         "confirm": {
           "title": "Unban user?",
           "description": "You are about to restore access for <name></name>. They will be able to log in and use the platform again.",

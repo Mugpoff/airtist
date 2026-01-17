@@ -68,7 +68,7 @@
     "resetQuery": "Réinitialiser la recherche",
     "retry": "Réessayer",
     "durationHours": "Durée (heures)",
-    "reason": "Raison",
+    "reason": "Motif",
     "hours": "heures"
   },
   "validation": {
@@ -164,6 +164,7 @@
         "success": "<name></name> a été débanni",
         "error": "Échec du débannissement de <name></name>",
         "submitting": "Débannissement...",
+        "unbanningIn": "L'accès à la plateforme sera restauré {relativeTime}, le {dateTime}.",
         "confirm": {
           "title": "Débannir l'utilisateur ?",
           "description": "Vous êtes sur le point de restaurer l'accès pour <name></name>. Il pourra se connecter et utiliser la plateforme à nouveau.",

@@ -10,8 +10,9 @@ import type { Session } from "@repo/auth/server"
 import { Badge } from "@repo/ui/base/badge"
 import { Button } from "@repo/ui/base/button"
 import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@repo/ui/base/menu"
+import { Popover, PopoverPopup, PopoverTrigger } from "@repo/ui/base/popover"
 import type { ColumnDef } from "@tanstack/react-table"
-import { useTranslations } from "next-intl"
+import { useFormatter, useNow, useTranslations } from "next-intl"
 import { useState } from "react"
 import { DashboardUsersTableBanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-ban-dialog"
 import { DashboardUsersTableUnbanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-unban-dialog"
@@ -34,27 +35,58 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
     header: "status",
     cell: ({ row }) => {
       const user = row.original
-      const t = useTranslations("global")
+      const t = useTranslations()
+      const format = useFormatter()
+      const now = useNow()
 
-      if (user.banned) {
+      if (user.banned && user.banReason && user.banExpires) {
         return (
-          <Badge className="rounded-full px-2 py-1" variant="outline">
-            <HugeiconsIcon
-              icon={UnavailableIcon}
-              className="size-3.5 text-destructive-foreground"
-            />
-            {t("banned")}
-          </Badge>
+          <Popover>
+            <PopoverTrigger
+              openOnHover
+              render={
+                <Badge
+                  className="cursor-help select-none rounded-full px-2 py-1"
+                  variant="outline"
+                />
+              }
+            >
+              <HugeiconsIcon
+                icon={UnavailableIcon}
+                className="size-3.5 text-destructive-foreground"
+              />
+              {t("global.banned")}
+              <PopoverPopup className="max-w-80">
+                <div className="flex flex-col gap-4">
+                  <p className="text-sm">
+                    {t("dashboard.users.unban.unbanningIn", {
+                      relativeTime: format.relativeTime(user.banExpires, now),
+                      dateTime: format.dateTime(user.banExpires, {
+                        dateStyle: "long",
+                        timeStyle: "short",
+                      }),
+                    })}
+                  </p>
+                  <div className="flex flex-col text-sm">
+                    <p className="font-medium text-muted-foreground text-xs uppercase">
+                      {t("global.reason")}
+                    </p>
+                    <p>{user.banReason}</p>
+                  </div>
+                </div>
+              </PopoverPopup>
+            </PopoverTrigger>
+          </Popover>
         )
       }
 
       return (
-        <Badge className="rounded-full px-2 py-1" variant="outline">
+        <Badge className="select-none rounded-full px-2 py-1" variant="outline">
           <HugeiconsIcon
             icon={CheckmarkCircle03Icon}
             className="size-3.5 text-success-foreground"
           />
-          {t("active")}
+          {t("global.active")}
         </Badge>
       )
     },
