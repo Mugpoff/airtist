@@ -1,5 +1,11 @@
 "use client"
 
+import { pageIndexAtom } from "@/atoms/canvas-atom"
+import { settingsAtom } from "@/atoms/settings-atom"
+import { LanguageSelector } from "@/components/ui/language-selector"
+import { SignOutButton } from "@/components/ui/sign-out-button"
+import { ThemeSwitch } from "@/components/ui/theme-switch"
+import { useTRPC } from "@/trpc/react"
 import { config } from "@repo/config"
 import type { AppRouter } from "@repo/trpc"
 import { LightRays } from "@repo/ui/backgrounds/light-rays"
@@ -19,12 +25,6 @@ import { useAtomValue, useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import type React from "react"
 import { useState } from "react"
-import { pageIndexAtom } from "@/atoms/canvas-atom"
-import { settingsAtom } from "@/atoms/settings-atom"
-import { LanguageSelector } from "@/components/ui/language-selector"
-import { SignOutButton } from "@/components/ui/sign-out-button"
-import { ThemeSwitch } from "@/components/ui/theme-switch"
-import { useTRPC } from "@/trpc/react"
 import { GenerateDropzone } from "./generate-dropzone"
 import { GenerateSettings } from "./settings/generate-settings"
 
@@ -106,7 +106,7 @@ export const GenerateContent = () => {
       onError: (error) => {
         const friendlyMessage = toFriendlyError(error)
         toastManager.add({
-          title: friendlyMessage || t("generate.error"),
+          title: friendlyMessage || t("generationError"),
           type: "error",
         })
       },

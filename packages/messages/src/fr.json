@@ -116,6 +116,7 @@
     }
   },
   "home": {
+    "generationError": "Une erreur est survenue lors de la génération. Veuillez réessayer ou contacter nos équipes.",
     "dropzone": {
       "title": "Téléverser un fichier",
       "description": "Glissez-déposez ou cliquez pour téléverser",
@@ -127,12 +128,6 @@
       "theme": "Changer le thème",
       "language": "Changer la langue",
       "signOut": "Déconnexion"
-    },
-    "generate": {
-      "title": "Paramètres de génération",
-      "description": "Faites des modifications aux paramètres de génération ici. Cliquez sur enregistrer lorsque vous avez terminé.",
-      "settings": "{preset, select, MAN_BABY {Homme Bébé} MAN_CHILD {Homme Enfant} MAN_PRETEEN {Homme Préadolescent} MAN_TEEN {Homme Adolescent} MAN_ADULT {Homme Adulte} WOMAN_BABY {Femme Bébé} WOMAN_CHILD {Femme Enfant} WOMAN_PRETEEN {Femme Préadolescente} WOMAN_TEEN {Femme Adolescente} other {Femme Adulte}}, {ethnicity, select, WHITE {Blanc} BLACK {Noir} ASIAN {Asiatique} LATINO {Latino} other {Mixte}}, {weight} kg, {background, select, STUDIO_WHITE {Studio Blanc} STUDIO_GREY {Studio Gris} STUDIO_DARK_GREY {Studio Gris Foncé} STUDIO_BLACK {Studio Noir} other {Studio Beige}}",
-      "error": "Une erreur est survenue lors de la génération. Veuillez réessayer ou contacter nos équipes."
     },
     "canvas": {
       "empty": {
@@ -146,8 +141,7 @@
     "description": "Bienvenue sur votre tableau de bord. Ici vous pouvez gérer vos comptes et paramètres.",
     "users": {
       "title": "Utilisateurs",
-      "description": "Gérez vos utilisateurs ici.",
-      "list": "Liste des utilisateurs",
+      "description": "Consultez, recherchez et gérez les comptes utilisateurs. Bannissez les utilisateurs qui enfreignent les règles de la plateforme.",
       "create": "Créer un utilisateur",
       "ban": {
         "title": "Bannir l'utilisateur",

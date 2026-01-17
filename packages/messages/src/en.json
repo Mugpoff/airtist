@@ -116,6 +116,7 @@
     }
   },
   "home": {
+    "generationError": "An error occurred during generation. Please try again or contact our team.",
     "dropzone": {
       "title": "Upload a file",
       "description": "Drag and drop or click to upload",
@@ -127,12 +128,6 @@
       "theme": "Toggle theme",
       "language": "Change language",
       "signOut": "Sign out"
-    },
-    "generate": {
-      "title": "Generation Settings",
-      "description": "Make changes to the generation settings here. Click save when you're done.",
-      "settings": "{preset, select, MAN_BABY {Man Baby} MAN_CHILD {Man Child} MAN_PRETEEN {Man Preteen} MAN_TEEN {Man Teen} MAN_ADULT {Man Adult} WOMAN_BABY {Woman Baby} WOMAN_CHILD {Woman Child} WOMAN_PRETEEN {Woman Preteen} WOMAN_TEEN {Woman Teen} other {Woman Adult}}, {ethnicity, select, white {White} black {Black} asian {Asian} latino {Latino} other {Mixed}}, {weight} kg, {background, select, STUDIO_WHITE {Studio White} STUDIO_GREY {Studio Grey} STUDIO_DARK_GREY {Studio Dark Grey} STUDIO_BLACK {Studio Black} other {Studio Beige}}",
-      "error": "An error occurred during generation. Please try again or contact our team."
     },
     "canvas": {
       "empty": {
@@ -146,8 +141,7 @@
     "description": "Welcome to your dashboard. Here you can manage your account and settings.",
     "users": {
       "title": "Users",
-      "description": "Manage your users here.",
-      "list": "List of users",
+      "description": "View, search, and manage user accounts. Ban users who violate platform policies.",
       "create": "Create a user",
       "ban": {
         "title": "Ban User",
