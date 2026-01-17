@@ -58,27 +58,29 @@ export default async function RootLayout(props: { children: ReactNode }) {
     <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
-          "relative isolate overflow-hidden bg-sidebar font-sans text-foreground antialiased",
+          "relative overflow-hidden bg-sidebar font-sans text-foreground antialiased",
           inter.variable,
           calSans.variable,
         )}
       >
-        <ThemeProvider attribute="class">
-          <NextIntlClientProvider messages={messages}>
-            <ToastProvider>
-              <AnchoredToastProvider>
-                <AuthStoreProvider session={session}>
-                  <NuqsAdapter>
-                    <TRPCReactProvider>
-                      <MobileForbidden />
-                      {props.children}
-                    </TRPCReactProvider>
-                  </NuqsAdapter>
-                </AuthStoreProvider>
-              </AnchoredToastProvider>
-            </ToastProvider>
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <div className="isolate">
+          <ThemeProvider attribute="class">
+            <NextIntlClientProvider messages={messages}>
+              <ToastProvider>
+                <AnchoredToastProvider>
+                  <AuthStoreProvider session={session}>
+                    <NuqsAdapter>
+                      <TRPCReactProvider>
+                        <MobileForbidden />
+                        {props.children}
+                      </TRPCReactProvider>
+                    </NuqsAdapter>
+                  </AuthStoreProvider>
+                </AnchoredToastProvider>
+              </ToastProvider>
+            </NextIntlClientProvider>
+          </ThemeProvider>
+        </div>
       </body>
     </html>
   )
