@@ -44,7 +44,7 @@ export const DashboardUsersTableSkeleton = () => {
               <TableCell className="w-fit">
                 <Skeleton className="h-5 w-18 rounded-full" />
               </TableCell>
-              <TableCell>
+              <TableCell className="flex justify-end">
                 <Button variant="ghost" size="icon" disabled>
                   <HugeiconsIcon icon={MoreHorizontalIcon} />
                 </Button>
