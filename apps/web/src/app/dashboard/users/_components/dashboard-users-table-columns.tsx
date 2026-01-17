@@ -1,3 +1,6 @@
+import { DashboardUsersTableBanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-ban-dialog"
+import { DashboardUsersTableUnbanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-unban-dialog"
+import { useAuth } from "@/stores/auth-store"
 import {
   Cancel01Icon,
   CheckmarkCircle03Icon,
@@ -14,9 +17,6 @@ import { Popover, PopoverPopup, PopoverTrigger } from "@repo/ui/base/popover"
 import type { ColumnDef } from "@tanstack/react-table"
 import { useFormatter, useNow, useTranslations } from "next-intl"
 import { useState } from "react"
-import { DashboardUsersTableBanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-ban-dialog"
-import { DashboardUsersTableUnbanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-unban-dialog"
-import { useAuth } from "@/stores/auth-store"
 
 export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
   {
@@ -30,6 +30,16 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
   {
     accessorKey: "role",
     header: "role",
+    cell: ({ row }) => {
+      const user = row.original
+      const t = useTranslations()
+
+      return (
+        <Badge className="select-none rounded-full px-2 py-1" variant="outline">
+          {user.role === "admin" ? t("global.admin") : t("global.user")}
+        </Badge>
+      )
+    },
   },
   {
     header: "status",

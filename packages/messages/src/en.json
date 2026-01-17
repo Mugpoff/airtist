@@ -69,7 +69,9 @@
     "retry": "Retry",
     "durationDays": "Duration (days)",
     "reason": "Reason",
-    "days": "days"
+    "days": "days",
+    "user": "User",
+    "admin": "Admin"
   },
   "validation": {
     "email": {
