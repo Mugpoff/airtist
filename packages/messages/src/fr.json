@@ -2,6 +2,7 @@
   "global": {
     "email": "E-mail",
     "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
     "english": "English",
     "french": "Français",
     "light": "Clair",
@@ -75,12 +76,23 @@
     "admin": "Administrateur"
   },
   "validation": {
+    "name": {
+      "required": "Le nom est requis",
+      "placeholder": "John Doe"
+    },
     "email": {
       "required": "L'e-mail est requis",
-      "invalid": "Veuillez entrer une adresse e-mail valide"
+      "invalid": "Veuillez entrer une adresse e-mail valide",
+      "placeholder": "john.doe@example.com"
     },
     "password": {
-      "required": "Le mot de passe est requis"
+      "required": "Le mot de passe est requis",
+      "min": "Le mot de passe doit contenir au moins 8 caractères",
+      "placeholder": "********"
+    },
+    "confirmPassword": {
+      "invalid": "Les mots de passe ne correspondent pas",
+      "placeholder": "********"
     },
     "weight": {
       "invalid": "Veuillez entrer un poids valide",
@@ -105,6 +117,7 @@
   "auth": {
     "errors": {
       "INVALID_EMAIL_OR_PASSWORD": "E-mail ou mot de passe invalide",
+      "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Cet e-mail est déjà utilisé. Veuillez utiliser un autre e-mail.",
       "UNKNOWN": "Une erreur inattendue s'est produite. Veuillez réessayer."
     },
     "signIn": {
@@ -141,7 +154,13 @@
     "users": {
       "title": "Utilisateurs",
       "description": "Consultez, recherchez et gérez les comptes utilisateurs. Bannissez les utilisateurs qui enfreignent les règles de la plateforme.",
-      "create": "Créer un utilisateur",
+      "create": {
+        "title": "Créer un utilisateur",
+        "description": "Créez un nouveau compte utilisateur. Cet utilisateur pourra se connecter et utiliser la plateforme.",
+        "submitButton": "Créer l'utilisateur",
+        "submitting": "Création de l'utilisateur...",
+        "success": "Utilisateur créé avec succès"
+      },
       "ban": {
         "title": "Bannir l'utilisateur",
         "description": "Cette action bannira <name></name> de la plateforme. Il ne pourra plus se connecter ni utiliser les fonctionnalités.",

@@ -34,6 +34,10 @@ export const config = {
      */
     defaultBanDuration: 7,
     cookieMaxAge: 7 * 24 * 60 * 60,
+    roles: {
+      USER: "user",
+      ADMIN: "admin",
+    },
   },
   i18n: {
     availableLocales: ["en", "fr"],

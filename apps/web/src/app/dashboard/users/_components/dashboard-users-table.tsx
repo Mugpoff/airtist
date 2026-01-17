@@ -18,10 +18,10 @@ import {
 } from "@tanstack/react-table"
 import { type AppConfig, type MessageKeys, useTranslations } from "next-intl"
 import { useQueryState } from "nuqs"
-import { dashboardUsersTableColumns } from "@/app/dashboard/users/_components/dashboard-users-table-columns"
-import { DashboardUsersTableEmpty } from "@/app/dashboard/users/_components/dashboard-users-table-empty"
-import { DashboardUsersTableError } from "@/app/dashboard/users/_components/dashboard-users-table-error"
-import { DashboardUsersTableSkeleton } from "@/app/dashboard/users/_components/dashboard-users-table-skeleton"
+import { dashboardUsersTableColumns } from "./dashboard-users-table-columns"
+import { DashboardUsersTableEmpty } from "./dashboard-users-table-empty"
+import { DashboardUsersTableError } from "./dashboard-users-table-error"
+import { DashboardUsersTableSkeleton } from "./dashboard-users-table-skeleton"
 
 export const DashboardUsersTable = () => {
   const t = useTranslations("global")

@@ -52,6 +52,8 @@ export const SignInForm = () => {
             return
           }
 
+          console.error(ctx.error)
+
           toastManager.add({
             title: t("auth.errors.UNKNOWN"),
             type: "error",

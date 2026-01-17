@@ -2,6 +2,7 @@
   "global": {
     "email": "Email",
     "password": "Password",
+    "confirmPassword": "Confirm Password",
     "english": "English",
     "french": "Français",
     "light": "Light",
@@ -75,12 +76,23 @@
     "admin": "Admin"
   },
   "validation": {
+    "name": {
+      "required": "Name is required",
+      "placeholder": "John Doe"
+    },
     "email": {
       "required": "Email is required",
-      "invalid": "Please enter a valid email address"
+      "invalid": "Please enter a valid email address",
+      "placeholder": "john.doe@example.com"
     },
     "password": {
-      "required": "Password is required"
+      "required": "Password is required",
+      "min": "Password must be at least 8 characters long",
+      "placeholder": "********"
+    },
+    "confirmPassword": {
+      "invalid": "The passwords do not match",
+      "placeholder": "********"
     },
     "weight": {
       "invalid": "Please enter a valid weight",
@@ -105,6 +117,7 @@
   "auth": {
     "errors": {
       "INVALID_EMAIL_OR_PASSWORD": "Invalid email or password",
+      "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "This email is already in use. Please use another email.",
       "UNKNOWN": "An unexpected error occurred. Please try again."
     },
     "signIn": {
@@ -141,7 +154,13 @@
     "users": {
       "title": "Users",
       "description": "View, search, and manage user accounts. Ban users who violate platform policies.",
-      "create": "Create a user",
+      "create": {
+        "title": "Create a user",
+        "description": "Create a new user account. This user will be able to log in and use the platform.",
+        "submitButton": "Create user",
+        "submitting": "Creating user...",
+        "success": "User created successfully"
+      },
       "ban": {
         "title": "Ban User",
         "description": "This action will ban <name></name> from the platform. They will no longer be able to log in or use any features.",

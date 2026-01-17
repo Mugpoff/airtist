@@ -1,10 +1,17 @@
 export const zodMessages = {
+  name: {
+    required: "validation.name.required",
+  },
   email: {
     required: "validation.email.required",
     invalid: "validation.email.invalid",
   },
   password: {
     required: "validation.password.required",
+    min: "validation.password.min",
+  },
+  confirmPassword: {
+    invalid: "validation.confirmPassword.invalid",
   },
   preset: {
     invalid: "validation.preset.invalid",

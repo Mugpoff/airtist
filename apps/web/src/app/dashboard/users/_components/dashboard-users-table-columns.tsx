@@ -1,7 +1,3 @@
-import { DashboardUsersTableBanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-ban-dialog"
-import { DashboardUsersTableDeleteDialog } from "@/app/dashboard/users/_components/dashboard-users-table-delete-dialog"
-import { DashboardUsersTableUnbanDialog } from "@/app/dashboard/users/_components/dashboard-users-table-unban-dialog"
-import { useAuth } from "@/stores/auth-store"
 import {
   Cancel01Icon,
   CheckmarkCircle03Icon,
@@ -19,6 +15,10 @@ import { Popover, PopoverPopup, PopoverTrigger } from "@repo/ui/base/popover"
 import type { ColumnDef } from "@tanstack/react-table"
 import { useFormatter, useNow, useTranslations } from "next-intl"
 import { useState } from "react"
+import { useAuth } from "@/stores/auth-store"
+import { DashboardUsersTableBanDialog } from "./dashboard-users-table-ban-dialog"
+import { DashboardUsersTableDeleteDialog } from "./dashboard-users-table-delete-dialog"
+import { DashboardUsersTableUnbanDialog } from "./dashboard-users-table-unban-dialog"
 
 export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
   {
@@ -120,35 +120,38 @@ export const dashboardUsersTableColumns: ColumnDef<Session["user"]>[] = [
 
       return (
         <>
-          <Menu>
-            <MenuTrigger render={<Button variant="ghost" size="icon" />}>
-              <HugeiconsIcon icon={MoreHorizontalIcon} />
-            </MenuTrigger>
-            <MenuPopup>
-              {user.banned && (
-                <MenuItem onClick={() => setUnbanDialogOpen(true)}>
-                  <HugeiconsIcon icon={Cancel01Icon} />
-                  {t("unban")}
-                </MenuItem>
-              )}
-              {!user.banned && (
+          <div className="flex justify-end">
+            <Menu>
+              <MenuTrigger render={<Button variant="ghost" size="icon" />}>
+                <HugeiconsIcon icon={MoreHorizontalIcon} />
+              </MenuTrigger>
+              <MenuPopup>
+                {user.banned && (
+                  <MenuItem onClick={() => setUnbanDialogOpen(true)}>
+                    <HugeiconsIcon icon={Cancel01Icon} />
+                    {t("unban")}
+                  </MenuItem>
+                )}
+                {!user.banned && (
+                  <MenuItem
+                    variant="destructive"
+                    onClick={() => setBanDialogOpen(true)}
+                  >
+                    <HugeiconsIcon icon={LegalHammerIcon} />
+                    {t("ban")}
+                  </MenuItem>
+                )}
                 <MenuItem
                   variant="destructive"
-                  onClick={() => setBanDialogOpen(true)}
+                  onClick={() => setDeleteDialogOpen(true)}
                 >
-                  <HugeiconsIcon icon={LegalHammerIcon} />
-                  {t("ban")}
+                  <HugeiconsIcon icon={Delete01Icon} />
+                  {t("delete")}
                 </MenuItem>
-              )}
-              <MenuItem
-                variant="destructive"
-                onClick={() => setDeleteDialogOpen(true)}
-              >
-                <HugeiconsIcon icon={Delete01Icon} />
-                {t("delete")}
-              </MenuItem>
-            </MenuPopup>
-          </Menu>
+              </MenuPopup>
+            </Menu>
+          </div>
+
           <DashboardUsersTableBanDialog
             userId={user.id}
             userName={user.name}
