@@ -19,11 +19,14 @@ import {
 import { type AppConfig, type MessageKeys, useTranslations } from "next-intl"
 import { useQueryState } from "nuqs"
 import { dashboardUsersTableColumns } from "@/app/dashboard/users/_components/dashboard-users-table-columns"
+import { DashboardUsersTableEmpty } from "@/app/dashboard/users/_components/dashboard-users-table-empty"
+import { DashboardUsersTableError } from "@/app/dashboard/users/_components/dashboard-users-table-error"
+import { DashboardUsersTableSkeleton } from "@/app/dashboard/users/_components/dashboard-users-table-skeleton"
 
 export const DashboardUsersTable = () => {
   const t = useTranslations("global")
   const [query] = useQueryState("q", { defaultValue: "" })
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["users-list", query],
     queryFn: async () => {
       const users = await authClient.admin.listUsers({
@@ -39,13 +42,8 @@ export const DashboardUsersTable = () => {
     getCoreRowModel: getCoreRowModel(),
   })
 
-  console.log(data, isLoading, error)
-
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
-  if (!data) return <div>No data</div>
-
-  console.log(data)
+  if (isLoading) return <DashboardUsersTableSkeleton />
+  if (error) return <DashboardUsersTableError onRetry={refetch} />
 
   return (
     <Frame>
@@ -89,6 +87,9 @@ export const DashboardUsersTable = () => {
                 ))}
               </TableRow>
             ))}
+          {table.getRowModel().rows?.length === 0 && (
+            <DashboardUsersTableEmpty />
+          )}
         </TableBody>
       </Table>
     </Frame>
