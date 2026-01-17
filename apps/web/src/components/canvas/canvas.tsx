@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { RippleEffect } from "@repo/ui/backgrounds/ripple-effect"
 import { Button } from "@repo/ui/base/button"
 import { Separator } from "@repo/ui/base/separator"
+import { FramedCard, FramedCardContent } from "@repo/ui/stylistic/framed-card"
 import { useQuery } from "@tanstack/react-query"
 import { useAtomValue } from "jotai"
 import Image from "next/image"
@@ -42,8 +43,8 @@ export const Canvas = () => {
     <div className="flex size-full max-w-6xl justify-center p-16">
       <CanvasSidebar />
       <Separator orientation="vertical" className="mr-8 ml-4" />
-      <div className="after:-inset-[5px] after:-z-1 relative ml-0 flex min-w-0 flex-1 flex-col rounded-2xl border bg-muted/50 bg-clip-padding shadow-black/5 shadow-sm after:pointer-events-none after:absolute after:rounded-[calc(var(--radius-2xl)+4px)] after:border after:border-border/50 after:bg-clip-padding dark:after:bg-background/72">
-        <div className="group -m-px relative flex h-auto shrink grow basis-auto justify-end overflow-hidden rounded-t-2xl border bg-background p-8 before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-2xl)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] max-lg:before:hidden dark:before:shadow-[0_-1px_--theme(--color-white/8%)]">
+      <FramedCard>
+        <FramedCardContent className="h-auto shrink grow basis-auto justify-end">
           <div className="-m-8 mask-l-from-70% mask-b-from-20% mask-intersect relative size-full">
             <RippleEffect cols={20} rows={20} />
           </div>
@@ -62,9 +63,9 @@ export const Canvas = () => {
           >
             <HugeiconsIcon icon={Download04Icon} />
           </Button>
-        </div>
+        </FramedCardContent>
         <CanvasFooter prompt={selectedImage.prompt} />
-      </div>
+      </FramedCard>
     </div>
   )
 }

@@ -40,7 +40,7 @@ export const DashboardSidebar = () => {
           <SidebarContent>
             <SidebarMenuItem>
               <SidebarMenuButton
-                render={<Link href="/" />}
+                render={<Link href="/dashboard" />}
                 isActive={pathname === "/dashboard"}
               >
                 <HugeiconsIcon icon={AnalyticsUpIcon} />
@@ -52,8 +52,8 @@ export const DashboardSidebar = () => {
               <SidebarGroupContent>
                 <SidebarMenuItem>
                   <SidebarMenuButton
-                    render={<Link href="/" />}
-                    isActive={pathname === "/users"}
+                    render={<Link href="/dashboard/users" />}
+                    isActive={pathname === "/dashboard/users"}
                   >
                     <HugeiconsIcon icon={UserListIcon} />
                     Liste des utilisateurs
