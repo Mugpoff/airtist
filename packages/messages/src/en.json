@@ -67,9 +67,9 @@
     "unban": "Unban",
     "resetQuery": "Reset query",
     "retry": "Retry",
-    "durationHours": "Duration (hours)",
+    "durationDays": "Duration (days)",
     "reason": "Reason",
-    "hours": "hours"
+    "days": "days"
   },
   "validation": {
     "email": {
@@ -95,8 +95,8 @@
     },
     "selectOption": "Please select an option",
     "duration": {
-      "min": "Duration must be at least {min} {min, plural, one {hour} other {hours}}",
-      "max": "Duration must be less than {max} {max, plural, one {hour} other {hours}}"
+      "min": "Duration must be at least {min} {min, plural, one {day} other {days}}",
+      "max": "Duration must be less than {max} {max, plural, one {day} other {days}}"
     }
   },
   "auth": {
@@ -146,7 +146,7 @@
         "submitting": "Banning...",
         "success": "<name></name> banned successfully",
         "error": "Failed to ban <name></name>",
-        "durationDescription": "How long should the user be banned? Enter duration in hours.",
+        "durationDescription": "How long should the user be banned? Enter duration in days.",
         "reasonPlaceholder": "Violation of terms of service...",
         "reasonDescription": "Provide a reason for banning this user. This will be visible to the user.",
         "confirm": {

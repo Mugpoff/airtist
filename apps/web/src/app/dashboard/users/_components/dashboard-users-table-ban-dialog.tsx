@@ -40,8 +40,6 @@ const banFormSchema = z.object({
   reason: z.string(),
 })
 
-type BanFormValues = z.infer<typeof banFormSchema>
-
 type Props = {
   userId: string
   userName: string
@@ -56,7 +54,7 @@ export const DashboardUsersTableBanDialog = ({
   onOpenChange,
 }: Props) => {
   const t = useTranslations()
-  const form = useForm<BanFormValues, unknown, BanFormValues>({
+  const form = useForm({
     resolver: zodResolver(banFormSchema),
     defaultValues: {
       duration: config.auth.defaultBanDuration,
@@ -65,14 +63,14 @@ export const DashboardUsersTableBanDialog = ({
   })
   const { mutate, isPending } = useMutation({
     mutationKey: ["users-ban", userId],
-    mutationFn: (data: BanFormValues) =>
+    mutationFn: (values: z.infer<typeof banFormSchema>) =>
       authClient.admin.banUser({
         userId,
-        banReason: data.reason,
+        banReason: values.reason,
         /**
-         * banExpiresIn has to be in seconds
+         * banExpiresIn has to be in seconds (convert days to seconds)
          */
-        banExpiresIn: data.duration * 60 * 60,
+        banExpiresIn: values.duration * 24 * 60 * 60,
       }),
     onSuccess: async (_, __, ___, ctx) => {
       await ctx.client.invalidateQueries({ queryKey: ["users-list"] })
@@ -116,7 +114,7 @@ export const DashboardUsersTableBanDialog = ({
             <NumberInputField
               name="duration"
               control={form.control}
-              label={t("global.durationHours")}
+              label={t("global.durationDays")}
               description={t("dashboard.users.ban.durationDescription")}
               min={config.auth.minBanDuration}
               max={config.auth.maxBanDuration}
@@ -153,7 +151,7 @@ export const DashboardUsersTableBanDialog = ({
                     ),
                     duration: () => (
                       <span className="font-semibold">
-                        {form.getValues("duration")} {t("global.hours")}
+                        {form.getValues("duration")} {t("global.days")}
                       </span>
                     ),
                   })}

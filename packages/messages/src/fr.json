@@ -67,9 +67,9 @@
     "unban": "Débannir",
     "resetQuery": "Réinitialiser la recherche",
     "retry": "Réessayer",
-    "durationHours": "Durée (heures)",
+    "durationDays": "Durée (jours)",
     "reason": "Motif",
-    "hours": "heures"
+    "days": "jours"
   },
   "validation": {
     "email": {
@@ -95,8 +95,8 @@
     },
     "selectOption": "Veuillez sélectionner une option",
     "duration": {
-      "min": "La durée doit être d'au moins {min} {min, plural, one {heure} other {heures}}",
-      "max": "La durée doit être inférieure à {max} {max, plural, one {heure} other {heures}}"
+      "min": "La durée doit être d'au moins {min} {min, plural, one {jour} other {jours}}",
+      "max": "La durée doit être inférieure à {max} {max, plural, one {jour} other {jours}}"
     }
   },
   "auth": {
@@ -146,7 +146,7 @@
         "submitting": "Bannissement...",
         "success": "<name></name> banni avec succès",
         "error": "Échec du bannissement de <name></name>",
-        "durationDescription": "Combien de temps l'utilisateur doit-il être banni ? Entrez la durée en heures.",
+        "durationDescription": "Combien de temps l'utilisateur doit-il être banni ? Entrez la durée en jours.",
         "reasonPlaceholder": "Violation des conditions d'utilisation...",
         "reasonDescription": "Indiquez une raison pour le bannissement de cet utilisateur. Elle sera visible par l'utilisateur.",
         "confirm": {

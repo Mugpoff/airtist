@@ -8,7 +8,6 @@ export default async function Page() {
 
   return (
     <DashboardCard title={t("title")} description={t("description")}>
-      <p>erguherguh egiuhe egiuhiuhgieuhr giuehgie hgiehguieh</p>
       <DashboardUsersTableHeader />
       <DashboardUsersTable />
     </DashboardCard>
