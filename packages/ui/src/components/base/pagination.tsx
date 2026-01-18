@@ -6,6 +6,7 @@ import {
   MoreHorizontalIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
+import { useTranslations } from "next-intl"
 import type * as React from "react"
 import { cn } from "../../lib/utils"
 import { type Button, buttonVariants } from "./button"
@@ -38,18 +39,18 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
   return <li data-slot="pagination-item" {...props} />
 }
 
-type PaginationLinkProps = {
+type PaginationButtonProps = {
   isActive?: boolean
   size?: React.ComponentProps<typeof Button>["size"]
-} & useRender.ComponentProps<"a">
+} & useRender.ComponentProps<"button">
 
-function PaginationLink({
+function PaginationButton({
   className,
   isActive,
   size = "icon",
   render,
   ...props
-}: PaginationLinkProps) {
+}: PaginationButtonProps) {
   const defaultProps = {
     "aria-current": isActive ? ("page" as const) : undefined,
     className: render
@@ -66,8 +67,8 @@ function PaginationLink({
   }
 
   return useRender({
-    defaultTagName: "a",
-    props: mergeProps<"a">(defaultProps, props),
+    defaultTagName: "button",
+    props: mergeProps<"button">(defaultProps, props),
     render,
   })
 }
@@ -75,34 +76,38 @@ function PaginationLink({
 function PaginationPrevious({
   className,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+}: React.ComponentProps<typeof PaginationButton>) {
+  const t = useTranslations("global")
+
   return (
-    <PaginationLink
-      aria-label="Go to previous page"
+    <PaginationButton
+      aria-label={t("goToPreviousPage")}
       className={cn("max-sm:aspect-square max-sm:p-0", className)}
       size="default"
       {...props}
     >
       <HugeiconsIcon icon={ArrowLeft01Icon} className="sm:-ms-1" />
-      <span className="max-sm:hidden">Previous</span>
-    </PaginationLink>
+      <span className="max-sm:hidden">{t("previous")}</span>
+    </PaginationButton>
   )
 }
 
 function PaginationNext({
   className,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+}: React.ComponentProps<typeof PaginationButton>) {
+  const t = useTranslations("global")
+
   return (
-    <PaginationLink
-      aria-label="Go to next page"
+    <PaginationButton
+      aria-label={t("goToNextPage")}
       className={cn("max-sm:aspect-square max-sm:p-0", className)}
       size="default"
       {...props}
     >
-      <span className="max-sm:hidden">Next</span>
+      <span className="max-sm:hidden">{t("next")}</span>
       <HugeiconsIcon icon={ArrowRight01Icon} className="sm:-me-1" />
-    </PaginationLink>
+    </PaginationButton>
   )
 }
 
@@ -117,7 +122,7 @@ function PaginationEllipsis({
       data-slot="pagination-ellipsis"
       {...props}
     >
-      <HugeiconsIcon icon={MoreHorizontalIcon} className="size-4" />
+      <HugeiconsIcon icon={MoreHorizontalIcon} className="size-5 sm:size-4" />
       <span className="sr-only">More pages</span>
     </span>
   )
@@ -125,10 +130,10 @@ function PaginationEllipsis({
 
 export {
   Pagination,
+  PaginationButton,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 }

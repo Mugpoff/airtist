@@ -1,6 +1,8 @@
 "use client"
 
+import { DataTablePagination } from "@/app/dashboard/users/_components/data-table-pagination"
 import { authClient } from "@repo/auth/client"
+import { config } from "@repo/config"
 import { Frame } from "@repo/ui/base/frame"
 import {
   Table,
@@ -10,32 +12,54 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/base/table"
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 import { type AppConfig, type MessageKeys, useTranslations } from "next-intl"
-import { useQueryState } from "nuqs"
+import { parseAsInteger, useQueryState } from "nuqs"
 import { dashboardUsersTableColumns } from "./dashboard-users-table-columns"
 import { DashboardUsersTableEmpty } from "./dashboard-users-table-empty"
 import { DashboardUsersTableError } from "./dashboard-users-table-error"
 import { DashboardUsersTableSkeleton } from "./dashboard-users-table-skeleton"
 
 export const DashboardUsersTable = () => {
-  const t = useTranslations("global")
+  const t = useTranslations()
   const [query] = useQueryState("q", { defaultValue: "" })
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1))
+  const [perPage] = useQueryState(
+    "perPage",
+    parseAsInteger.withDefault(config.pagination.defaultPerPage),
+  )
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["users-list", query],
+    queryKey: ["users-list", query, page, perPage],
     queryFn: () =>
-      authClient.admin.listUsers({ query: { searchValue: query } }),
+      authClient.admin.listUsers({
+        query: {
+          searchValue: query,
+          limit: perPage,
+          offset: (page - 1) * perPage,
+        },
+      }),
     select: ({ data }) => data,
+    placeholderData: keepPreviousData,
   })
   const table = useReactTable({
     data: data?.users ?? [],
     columns: dashboardUsersTableColumns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    rowCount: data?.total ?? 0,
+    manualPagination: true,
+    state: {
+      pagination: {
+        pageIndex: page - 1,
+        pageSize: perPage,
+      },
+    },
   })
 
   if (isLoading) return <DashboardUsersTableSkeleton />
@@ -54,7 +78,8 @@ export const DashboardUsersTable = () => {
                       ? null
                       : typeof header.column.columnDef.header === "string"
                         ? t(
-                            header.column.columnDef.header as MessageKeys<
+                            ("global." +
+                              header.column.columnDef.header) as MessageKeys<
                               AppConfig["Messages"],
                               "global"
                             >,
@@ -87,6 +112,12 @@ export const DashboardUsersTable = () => {
             <DashboardUsersTableEmpty />
           )}
         </TableBody>
+        <DataTablePagination
+          table={table}
+          totalText={t("dashboard.users.total", {
+            total: table.getRowCount().toString(),
+          })}
+        />
       </Table>
     </Frame>
   )

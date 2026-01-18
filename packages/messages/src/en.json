@@ -73,7 +73,11 @@
     "reason": "Reason",
     "days": "days",
     "user": "User",
-    "admin": "Admin"
+    "admin": "Admin",
+    "previous": "Previous",
+    "next": "Next",
+    "goToPreviousPage": "Go to previous page",
+    "goToNextPage": "Go to next page"
   },
   "validation": {
     "name": {
@@ -154,6 +158,7 @@
     "users": {
       "title": "Users",
       "description": "View, search, and manage user accounts. Ban users who violate platform policies.",
+      "total": "{total} users found",
       "create": {
         "title": "Create a user",
         "description": "Create a new user account. This user will be able to log in and use the platform.",
@@ -167,7 +172,6 @@
         "submitButton": "Ban User",
         "submitting": "Banning...",
         "success": "<name></name> banned successfully",
-        "error": "Failed to ban <name></name>",
         "durationDescription": "How long should the user be banned? Enter duration in days.",
         "reasonPlaceholder": "Violation of terms of service...",
         "reasonDescription": "Provide a reason for banning this user. This will be visible to the user.",
@@ -190,7 +194,6 @@
       },
       "delete": {
         "success": "<name></name> has been deleted",
-        "error": "Failed to delete user",
         "submitting": "Deleting...",
         "confirm": {
           "title": "Delete user?",

@@ -73,7 +73,11 @@
     "reason": "Motif",
     "days": "jours",
     "user": "Utilisateur",
-    "admin": "Administrateur"
+    "admin": "Administrateur",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "goToPreviousPage": "Aller à la page précédente",
+    "goToNextPage": "Aller à la page suivante"
   },
   "validation": {
     "name": {
@@ -154,6 +158,7 @@
     "users": {
       "title": "Utilisateurs",
       "description": "Consultez, recherchez et gérez les comptes utilisateurs. Bannissez les utilisateurs qui enfreignent les règles de la plateforme.",
+      "total": "{total} utilisateurs trouvés",
       "create": {
         "title": "Créer un utilisateur",
         "description": "Créez un nouveau compte utilisateur. Cet utilisateur pourra se connecter et utiliser la plateforme.",
@@ -167,7 +172,6 @@
         "submitButton": "Bannir l'utilisateur",
         "submitting": "Bannissement...",
         "success": "<name></name> banni avec succès",
-        "error": "Échec du bannissement de <name></name>",
         "durationDescription": "Combien de temps l'utilisateur doit-il être banni ? Entrez la durée en jours.",
         "reasonPlaceholder": "Violation des conditions d'utilisation...",
         "reasonDescription": "Indiquez une raison pour le bannissement de cet utilisateur. Elle sera visible par l'utilisateur.",
@@ -179,7 +183,6 @@
       },
       "unban": {
         "success": "<name></name> a été débanni",
-        "error": "Échec du débannissement de <name></name>",
         "submitting": "Débannissement...",
         "unbanningIn": "L'accès à la plateforme sera restauré {relativeTime}, le {dateTime}.",
         "confirm": {

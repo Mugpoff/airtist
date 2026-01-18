@@ -144,6 +144,10 @@ export const config = {
     acceptedImages: new Set(["image/png", "image/jpeg", "image/webp"]),
     studioModes: ["ECOMMERCE", "FASHION"],
   },
+  pagination: {
+    defaultPerPage: 10,
+    perPageOptions: [10, 20, 50, 100],
+  },
 } as const
 
 export type GenerationPreset =

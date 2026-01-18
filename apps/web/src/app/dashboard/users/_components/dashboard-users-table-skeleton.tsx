@@ -7,6 +7,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -52,6 +53,25 @@ export const DashboardUsersTableSkeleton = () => {
             </TableRow>
           ))}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={1}>
+              <Skeleton className="h-4 w-32" />
+            </TableCell>
+            <TableCell colSpan={99}>
+              <div className="flex items-center justify-end gap-4">
+                <Skeleton className="h-8 w-20" />
+                <div className="flex gap-1">
+                  <Skeleton className="h-8 w-32" />
+                  <Skeleton className="size-8" />
+                  <Skeleton className="size-8" />
+                  <Skeleton className="size-8" />
+                  <Skeleton className="h-8 w-32" />
+                </div>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </Frame>
   )
