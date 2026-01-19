@@ -3,7 +3,6 @@ import { config } from "@repo/config"
 import { db } from "@repo/db"
 import { sanitizeFileName } from "@repo/utils/sanitize-file-name"
 import { TRPCError } from "@trpc/server"
-import { createHash } from "node:crypto"
 import { z } from "zod"
 import { protectedProcedure } from "../../trpc"
 import { generateStudioHash, type StudioHashInput } from "../../utils/hash"
@@ -18,19 +17,11 @@ import {
   StudioCategorySchema,
 } from "../../utils/studio-constants"
 
-type FormDataValue = string | File
-const parseNumber = (v: FormDataValue | null) =>
-  typeof v === "string" && Number.isFinite(Number(v)) ? Number(v) : null
-const parseString = (v: FormDataValue | null) =>
-  typeof v === "string" && v.trim() ? v.trim() : null
-const isFile = (v: unknown): v is File =>
-  typeof File !== "undefined" && v instanceof File
 
-const sha256Hex = (buf: Buffer) =>
-  createHash("sha256").update(buf).digest("hex")
+import { zfd } from "zod-form-data"
 
-const parseStringArray = (v: FormDataValue | null) => {
-  if (typeof v !== "string") return []
+const parseImageUrls = (v: string | undefined) => {
+  if (!v) return []
   try {
     const parsed = JSON.parse(v)
     return Array.isArray(parsed) && parsed.every((x) => typeof x === "string")
@@ -44,65 +35,35 @@ const parseStringArray = (v: FormDataValue | null) => {
   }
 }
 
+const sha256Hex = (buf: Buffer) =>
+  createHash("sha256").update(buf).digest("hex")
+
+const generateStudioSchema = zfd.formData({
+  prompt: zfd.text(),
+  ethnicity: zfd.text(EthnicitySchema),
+  category: zfd.text(StudioCategorySchema),
+  background: zfd.text(StudioBackgroundSchema.optional().default("STUDIO_WHITE")),
+  model: zfd.text(ImageModelSchema.optional().default(DEFAULT_IMAGE_MODEL)),
+  age: zfd.numeric(z.number()),
+  height: zfd.numeric(z.number()),
+  images: zfd.repeatable(z.array(z.instanceof(File))),
+  imageUrls: zfd.text().optional().transform(parseImageUrls),
+})
+
 export const imagesGenerateStudioHandler = protectedProcedure
-  .input(z.instanceof(FormData))
+  .input(generateStudioSchema)
   .mutation(async ({ input, ctx }) => {
-    const prompt = parseString(input.get("prompt"))
-    const ethnicity = EthnicitySchema.parse(input.get("ethnicity"))
-    const category = StudioCategorySchema.parse(input.get("category"))
-    const background = StudioBackgroundSchema.parse(
-      input.get("background") ?? "STUDIO_WHITE",
-    )
-    const model = ImageModelSchema.parse(
-      input.get("model") ?? DEFAULT_IMAGE_MODEL,
-    )
-
-    const ageNum = parseNumber(input.get("age"))
-    const heightNum = parseNumber(input.get("height"))
-
-    if (!prompt || ageNum === null || heightNum === null) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Paramètres manquants",
-      })
-    }
-
-    const age = ageNum
-    const height = heightNum
-
-    const ageRange = config.generationSettings.preset.metadata[category].age
-    if (ageRange && (age < ageRange.min || age > ageRange.max)) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: `Âge ${age} incompatible avec ${category} (${ageRange.min}-${ageRange.max}).`,
-      })
-    }
-
-    const isMinorCategory =
-      category.includes("CHILD") ||
-      category.includes("PRETEEN") ||
-      category.includes("TEEN")
-    const isAdultCategory = category.includes("ADULT")
-    const adultKeywords =
-      /\b(adult|woman|women|man|men|mature|lingerie|sexy|voluptuous|voluptueuse|voluptueux|bra|bikini|underwear)\b/i
-    const childKeywords = /\b(baby|infant|toddler|child|kid|newborn)\b/i
-
-    if (isMinorCategory && adultKeywords.test(prompt)) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Prompt incompatible avec un preset enfant/adolescent.",
-      })
-    }
-
-    if (isAdultCategory && childKeywords.test(prompt)) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Prompt incompatible avec un preset adulte.",
-      })
-    }
-
-    const files = input.getAll("images").filter(isFile)
-    const imageUrls = parseStringArray(input.get("imageUrls"))
+    const {
+      prompt,
+      ethnicity,
+      category,
+      background,
+      model,
+      age,
+      height,
+      images: files,
+      imageUrls,
+    } = input
 
     if (files.length === 0 && imageUrls.length === 0) {
       throw new TRPCError({ code: "BAD_REQUEST", message: "Images requises" })
