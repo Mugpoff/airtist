@@ -26,7 +26,8 @@
     "@trpc/server": "11.7.2",
     "googleapis": "^170.0.0",
     "superjson": "^2.2.6",
-    "zod": "^4.3.5"
+    "zod": "^4.3.5",
+    "zod-form-data": "^3.0.1"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
