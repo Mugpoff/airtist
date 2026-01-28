@@ -1,4 +1,3 @@
-import { zodMessages } from "@/utils/zod-messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@repo/auth/client"
 import { config } from "@repo/config"
@@ -33,6 +32,7 @@ import { useTranslations } from "next-intl"
 import { useId } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { zodMessages } from "@/utils/zod-messages"
 
 const banFormSchema = z.object({
   duration: z

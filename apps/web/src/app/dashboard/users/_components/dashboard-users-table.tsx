@@ -1,6 +1,5 @@
 "use client"
 
-import { DataTablePagination } from "@/app/dashboard/users/_components/data-table-pagination"
 import { authClient } from "@repo/auth/client"
 import { config } from "@repo/config"
 import { Frame } from "@repo/ui/base/frame"
@@ -21,6 +20,7 @@ import {
 } from "@tanstack/react-table"
 import { type AppConfig, type MessageKeys, useTranslations } from "next-intl"
 import { parseAsInteger, useQueryState } from "nuqs"
+import { DataTablePagination } from "@/app/dashboard/users/_components/data-table-pagination"
 import { dashboardUsersTableColumns } from "./dashboard-users-table-columns"
 import { DashboardUsersTableEmpty } from "./dashboard-users-table-empty"
 import { DashboardUsersTableError } from "./dashboard-users-table-error"
